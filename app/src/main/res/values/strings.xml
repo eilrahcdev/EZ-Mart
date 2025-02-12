@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">EZ Mart</string>
+    <string-array name="gender_array">
+        <item>Select Gender</item>
+        <item>Male</item>
+        <item>Female</item>
+        <item>Prefer not to say</item>
+    </string-array>
+</resources>
