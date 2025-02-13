@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/onboard_activity"
-    android:background="@color/blue">
+    android:background="@drawable/splash">
 
     <TextView
         android:id="@+id/textView"
@@ -55,6 +55,7 @@
         android:textColor="@color/blue"
         android:textSize="20sp"
         android:fontFamily="@font/inter_bold"
+        app:cornerRadius="@dimen/dimens"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -70,6 +71,7 @@
         android:textSize="20sp"
         android:fontFamily="@font/inter_bold"
         android:backgroundTint="@color/blue"
+        app:cornerRadius="@dimen/dimens"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

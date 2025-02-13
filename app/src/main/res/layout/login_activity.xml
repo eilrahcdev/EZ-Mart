@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:aandroid="http://schemas.android.com/tools"
     android:id="@+id/login_activity">
 
     <androidx.cardview.widget.CardView
@@ -35,11 +35,12 @@
         android:id="@+id/cardview4"
         android:layout_width="330dp"
         android:layout_height="450dp"
+        android:layout_marginTop="170dp"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="10dp"
         app:cardElevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -61,10 +62,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="100dp"
-            android:text="*Email Address"
             android:fontFamily="@font/inter_bold"
-            android:textSize="13sp"
-            android:textColor="@color/black" />
+            android:text="*Email Address"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailLayout"
@@ -74,11 +75,11 @@
             android:layout_marginTop="120dp"
             android:layout_marginEnd="20dp"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/blue"
-            app:boxCornerRadiusTopStart="10dp"
-            app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
             app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:boxStrokeColor="@color/blue"
             app:startIconDrawable="@drawable/email_24">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -96,10 +97,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="190dp"
-            android:text="*Password"
             android:fontFamily="@font/inter_bold"
-            android:textSize="13sp"
-            android:textColor="@color/black" />
+            android:text="*Password"
+            android:textColor="@color/black"
+            android:textSize="13sp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordLayout"
@@ -108,13 +109,13 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="210dp"
             android:layout_marginEnd="20dp"
-            app:passwordToggleEnabled="true"
             app:boxBackgroundMode="outline"
-            app:boxStrokeColor="@color/blue"
-            app:boxCornerRadiusTopStart="10dp"
-            app:boxCornerRadiusTopEnd="10dp"
-            app:boxCornerRadiusBottomStart="10dp"
             app:boxCornerRadiusBottomEnd="10dp"
+            app:boxCornerRadiusBottomStart="10dp"
+            app:boxCornerRadiusTopEnd="10dp"
+            app:boxCornerRadiusTopStart="10dp"
+            app:boxStrokeColor="@color/blue"
+            app:passwordToggleEnabled="true"
             app:startIconDrawable="@drawable/lock_24">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -131,10 +132,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="180dp"
             android:layout_marginTop="260dp"
-            android:text="Forgot Password?"
-            android:fontFamily="@font/inter_bold"
-            android:textColor="@color/black"
             android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/inter_bold"
+            android:text="Forgot Password?"
+            android:textColor="@color/black"
             android:textSize="11sp" />
 
         <Button
@@ -144,39 +145,32 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="300dp"
             android:layout_marginEnd="20dp"
-            android:background="@drawable/button_bg"
+            android:backgroundTint="@color/blue"
             android:fontFamily="@font/inter_bold"
+            android:padding="12dp"
             android:text="Log In"
-            android:textColor="@color/white" />
+            android:textColor="@color/white"
+            android:translationZ="10dp"
+            aandroid:elevation="15dp"
+            app:cornerRadius="@dimen/dimens" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="350dp"
+            android:layout_marginStart="70dp"
+            android:layout_marginTop="360dp"
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView5"
-                android:layout_width="30dp"
+                android:id="@+id/registerTv_login"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="53dp"
                 android:layout_weight="1"
-                android:text="Don't have an account?"
                 android:fontFamily="@font/inter_bold"
-                android:textSize="12sp"
-                android:textColor="@color/black" />
+                android:text="Don't have an account?  Register"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
 
-            <Button
-                android:id="@+id/registerBtn_login"
-                android:layout_width="1dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="25dp"
-                android:layout_weight="1"
-                android:text="Register"
-                android:fontFamily="@font/inter_bold"
-                android:textSize="12sp"
-                android:textColor="@color/blue"
-                android:background="?attr/selectableItemBackground" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

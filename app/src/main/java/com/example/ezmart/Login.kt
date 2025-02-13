@@ -2,12 +2,17 @@ package com.example.ezmart
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.util.Patterns
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.util.PatternsCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.material.textfield.TextInputEditText
@@ -30,7 +35,17 @@ class Login : AppCompatActivity() {
         val passwordField = findViewById<TextInputEditText>(R.id.passwordEt_login)
         val loginButton = findViewById<Button>(R.id.loginBtn)
         val forgotPasswordButton = findViewById<Button>(R.id.forgotpassbtn)
-        val signupButton = findViewById<Button>(R.id.registerBtn_login)
+        val registerTextView = findViewById<TextView>(R.id.registerTv_login)
+
+        // Set Spannable text for signupTextView
+        val registerSpannable = SpannableString("Don't have an account? Register")
+        registerSpannable.setSpan(
+            ForegroundColorSpan(Color.BLUE),
+            registerSpannable.indexOf("Register"),
+            registerSpannable.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        registerTextView.text = registerSpannable
 
         // Set login button click listener
         loginButton.setOnClickListener {
@@ -44,7 +59,7 @@ class Login : AppCompatActivity() {
         }
 
         // Set navigation for Sign Up and Forgot Password buttons
-        setupNavigationButtons(forgotPasswordButton, loginButton, signupButton)
+        setupNavigationButtons(forgotPasswordButton, loginButton, registerTextView)
     }
 
     // Function to validate email
@@ -52,7 +67,7 @@ class Login : AppCompatActivity() {
         return if (email.isEmpty()) {
             showToast("Email field cannot be empty.")
             false
-        } else if (!PatternsCompat.EMAIL_ADDRESS.matcher(email).matches()) {
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             showToast("Please enter a valid email address.")
             false
         } else {
@@ -82,18 +97,14 @@ class Login : AppCompatActivity() {
     private fun setupNavigationButtons(
         forgotPasswordButton: Button,
         loginButton: Button,
-        signupButton: Button
+        registerTextview: TextView
     ) {
         forgotPasswordButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
-        loginButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
 
-        signupButton.setOnClickListener {
+        registerTextview.setOnClickListener {
             val intent = Intent(this, Register::class.java)
             startActivity(intent)
         }

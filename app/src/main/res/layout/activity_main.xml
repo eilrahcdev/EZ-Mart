@@ -21,7 +21,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="10dp"
-            app:srcCompat="@drawable/ezmart_corners" />
+            app:srcCompat="@drawable/ez_logo" />
 
         <TextView
             android:id="@+id/textView4"

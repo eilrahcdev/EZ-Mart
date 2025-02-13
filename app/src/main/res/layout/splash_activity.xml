@@ -4,7 +4,7 @@
     android:id="@+id/splash_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue">
+    android:background="@drawable/splash">
 
     <ImageView
         android:id="@+id/imageView"
@@ -16,6 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.499"
-        app:srcCompat="@drawable/ezmart_corners" />
+        app:srcCompat="@drawable/ez_logo_bg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

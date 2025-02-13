@@ -2,9 +2,14 @@ package com.example.ezmart
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Patterns
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
@@ -25,7 +30,17 @@ class Register : AppCompatActivity() {
         val phoneEt = findViewById<TextInputEditText>(R.id.phonenumEt_register)
         val addressEt = findViewById<TextInputEditText>(R.id.addressEt_register)
         val signupBtn = findViewById<Button>(R.id.registerBtn)
-        val loginBtn = findViewById<Button>(R.id.loginBtn_register)
+        val loginTv = findViewById<TextView>(R.id.loginTv_register)
+
+        // Apply SpannableString to loginTv
+        val spannable = SpannableString("Already have an account? Login")
+        spannable.setSpan(
+            ForegroundColorSpan(Color.BLUE),
+            spannable.indexOf("Login"),
+            spannable.length,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        loginTv.text = spannable
 
         signupBtn.setOnClickListener {
             val email = emailEt.text.toString().trim()
@@ -46,7 +61,7 @@ class Register : AppCompatActivity() {
         }
 
         // Handle navigation for Login button
-        loginBtn.setOnClickListener {
+        loginTv.setOnClickListener {
             val intent = Intent(this, Login::class.java)
             startActivity(intent)
         }
