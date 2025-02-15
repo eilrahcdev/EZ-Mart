@@ -3,42 +3,71 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:background="@drawable/auth_bg">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/register_activity">
+        android:layout_height="match_parent"
+        android:id="@+id/register_activity">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardview3"
-        android:layout_width="350dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="80dp"
-        app:cardBackgroundColor="@color/blue"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardview4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/cardview3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.16"
+            app:srcCompat="@drawable/ez_logo" />
 
         <TextView
-            android:id="@+id/textOnView2"
+            android:id="@+id/textView13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/inter_bold"
-            android:text="Welcome Customer!"
-            android:textColor="@android:color/white"
-            android:textSize="20sp" />
-    </androidx.cardview.widget.CardView>
+            android:layout_marginEnd="220dp"
+            android:fontFamily="@font/inter_black"
+            android:text="EZ MART"
+            android:textColor="@color/blue"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/cardview3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/imageView6"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.208" />
 
-    <androidx.cardview.widget.CardView
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardview3"
+            android:layout_width="350dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="150dp"
+            app:cardBackgroundColor="@color/blue"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/cardview4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textOnView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/inter_bold"
+                android:text="Welcome Customer!"
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
         android:id="@+id/cardview4"
         android:layout_width="330dp"
         android:layout_height="400dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="250dp"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="10dp"
         app:cardElevation="8dp"
