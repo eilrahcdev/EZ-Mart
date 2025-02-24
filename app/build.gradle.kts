@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.google.material)
     implementation(libs.androidx.gridlayout)
     implementation(libs.androidx.viewpager2)
+    implementation(libs.androidx.gridlayout)
+    implementation(libs.androidx.viewpager2)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
