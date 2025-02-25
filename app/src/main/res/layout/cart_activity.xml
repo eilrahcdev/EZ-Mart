@@ -249,15 +249,15 @@
 
                 <TextView
                     android:id="@+id/tvTotal_text"
-                    android:layout_width="142dp"
+                    android:layout_width="130dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:layout_marginRight="5dp"
                     android:fontFamily="@font/inter"
                     android:gravity="right"
                     android:text="Total:"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:layout_marginRight="5dp"/>
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/tvPrice"
@@ -269,6 +269,14 @@
                     android:text="₱50.01"
                     android:textColor="@color/blue"
                     android:textSize="24sp"/>
+
+                <Button
+                    android:id="@+id/btnCheckOut"
+                    android:layout_width="wrap_content"
+                    android:layout_height="58dp"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/blue"
+                    android:text="Checkout" />
             </LinearLayout>
 
 
