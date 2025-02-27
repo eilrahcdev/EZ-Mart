@@ -8,9 +8,8 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Patterns
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 
@@ -29,6 +28,7 @@ class Register : AppCompatActivity() {
         val birthdateEt = findViewById<TextInputEditText>(R.id.birthdateEt_register)
         val phoneEt = findViewById<TextInputEditText>(R.id.phonenumEt_register)
         val addressEt = findViewById<TextInputEditText>(R.id.addressEt_register)
+        val genderSpinner = findViewById<Spinner>(R.id.genderSpinner)
         val signupBtn = findViewById<Button>(R.id.registerBtn)
         val loginTv = findViewById<TextView>(R.id.loginTv_register)
 
@@ -42,6 +42,27 @@ class Register : AppCompatActivity() {
         )
         loginTv.text = spannable
 
+        // Gender selection validation function
+        fun validateGenderSelection(position: Int): Boolean {
+            return if (position == 0) {
+                false
+            } else {
+                true
+            }
+        }
+
+        // Initialize Spinner with validation
+        genderSpinner.setSelection(0)
+        genderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                validateGenderSelection(position)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Do nothing
+            }
+        }
+
         signupBtn.setOnClickListener {
             val email = emailEt.text.toString().trim()
             val password = passwordEt.text.toString().trim()
@@ -51,10 +72,11 @@ class Register : AppCompatActivity() {
             val birthdate = birthdateEt.text.toString().trim()
             val phone = phoneEt.text.toString().trim()
             val address = addressEt.text.toString().trim()
+            val gender = genderSpinner.selectedItem.toString()
 
-            if (validateInput(email, password, confirmPassword, firstName, lastName, birthdate, phone, address)) {
+            if (validateInput(email, password, confirmPassword, firstName, lastName, birthdate, phone, address, gender)) {
                 Toast.makeText(this, "Signup successful!", Toast.LENGTH_SHORT).show()
-                // Proceed with your signup logic (e.g., API call, saving to database)
+                // Proceed with signup logic
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
             }
@@ -75,13 +97,14 @@ class Register : AppCompatActivity() {
         lastName: String,
         birthdate: String,
         phone: String,
-        address: String
+        address: String,
+        gender: String
     ): Boolean {
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             showToast("Please enter a valid email address")
             return false
         }
-        if (password.length < 8 || password.length > 15) {
+        if (password.length !in 8..15) {
             showToast("Password must be between 8 and 15 characters")
             return false
         }
@@ -107,6 +130,10 @@ class Register : AppCompatActivity() {
         }
         if (address.isEmpty()) {
             showToast("Address is required")
+            return false
+        }
+        if (gender == "Select a gender") {
+            showToast("Please select a valid gender")
             return false
         }
         return true
