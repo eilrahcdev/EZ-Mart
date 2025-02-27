@@ -100,6 +100,10 @@ class Login : AppCompatActivity() {
         registerTextview: TextView
     ) {
         forgotPasswordButton.setOnClickListener {
+            val intent = Intent(this, ForgotPassword::class.java)
+            startActivity(intent)
+        }
+        loginButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }

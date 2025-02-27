@@ -40,7 +40,7 @@
             android:id="@+id/searchIbtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="150dp"
+            android:layout_marginStart="140dp"
             android:background="?attr/selectableItemBackground"
             app:srcCompat="@drawable/search_25" />
 
@@ -53,48 +53,15 @@
             app:srcCompat="@drawable/shopping_cart_25" />
     </LinearLayout>
 
-    <!-- ViewPager2 for Ads with Dots Indicator -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout2">
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/viewPager"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="70dp"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabIndicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/viewPager"
-            app:tabIndicatorColor="@color/black"
-            app:tabIndicatorHeight="4dp" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!-- Shop Notice -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/bg1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/constraintLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <ImageView
             android:id="@+id/imageView5"
@@ -119,14 +86,339 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Bottom Navigation -->
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout"
+        app:layout_constraintBottom_toTopOf="@id/customBottomNav"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- ViewPager2 and Tab Indicator -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:tabIndicatorColor="@color/black"
+                app:tabIndicatorHeight="4dp"
+                app:layout_constraintTop_toBottomOf="@id/viewPager"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/unbeatableSection"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:layout_margin="10dp"
+                android:padding="16dp"
+                android:background="@drawable/unbeatable_bg"
+                app:layout_constraintTop_toBottomOf="@id/tabIndicator"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/unbeatable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Unbeatable Prices"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/unbeatable_seemoreBtn"
+                    android:layout_width="143dp"
+                    android:layout_height="37dp"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableEnd="@drawable/keyboard_arrow_right_25"
+                    android:text="See More"
+                    android:fontFamily="@font/inter_bold"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/unbeatable"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/unbeatableRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/unbeatable"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/featured"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:layout_margin="10dp"
+                android:padding="16dp"
+                android:background="@drawable/featured_bg"
+                app:layout_constraintTop_toBottomOf="@id/unbeatableSection"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/featuredTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Featured Products"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/featured_seemoreBtn"
+                    android:layout_width="143dp"
+                    android:layout_height="37dp"
+                    android:text="See More"
+                    android:fontFamily="@font/inter_bold"
+                    android:textSize="13sp"
+                    android:textColor="@color/white"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableEnd="@drawable/keyboard_arrow_right_25"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/featruedRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/featuredTv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/snacks"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:layout_margin="10dp"
+                android:padding="16dp"
+                android:background="@drawable/snacks_bg"
+                app:layout_constraintTop_toBottomOf="@id/featured"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/snacksTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Snacks"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/snacks_seemoreBtn"
+                    android:layout_width="143dp"
+                    android:layout_height="37dp"
+                    android:text="See More"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/white"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableEnd="@drawable/keyboard_arrow_right_25"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/snacksRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/snacksTv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/pantry"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:layout_margin="10dp"
+                android:padding="16dp"
+                android:background="@drawable/pantry_bg"
+                app:layout_constraintTop_toBottomOf="@id/snacks"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <TextView
+                    android:id="@+id/pantryTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pantry"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/pantry_seemoreBtn"
+                    android:layout_width="143dp"
+                    android:layout_height="37dp"
+                    android:text="See More"
+                    android:textSize="13sp"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/white"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawableEnd="@drawable/keyboard_arrow_right_25"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/pantryRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/pantryTv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <!-- Bottom Navigation -->
+    <LinearLayout
+        android:id="@+id/customBottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
         android:layout_gravity="bottom"
-        app:menu="@menu/bottom_nav_menu"
-        app:itemIconTint="@color/nav_item_color"
-        app:itemTextColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Categories Tab -->
+        <LinearLayout
+            android:id="@+id/categoriesTab"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/categoriesIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/burger"
+                app:tint="@color/black" />
+
+            <TextView
+                android:id="@+id/categoriesText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Categories"
+                android:textColor="@color/black"
+                android:fontFamily="@font/inter"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Home Tab -->
+        <LinearLayout
+            android:id="@+id/homeTab"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/homeIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/home"
+                app:tint="@color/black" />
+
+            <TextView
+                android:id="@+id/homeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@color/black"
+                android:fontFamily="@font/inter"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Orders Tab -->
+        <LinearLayout
+            android:id="@+id/ordersTab"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/ordersIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/order"
+                app:tint="@color/black" />
+
+            <TextView
+                android:id="@+id/ordersText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Orders"
+                android:textColor="@color/black"
+                android:fontFamily="@font/inter"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Profile Tab -->
+        <LinearLayout
+            android:id="@+id/profileTab"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp">
+
+            <ImageView
+                android:id="@+id/profileIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/profile"
+                app:tint="@color/black" />
+
+            <TextView
+                android:id="@+id/profileText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textColor="@color/black"
+                android:fontFamily="@font/inter"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
