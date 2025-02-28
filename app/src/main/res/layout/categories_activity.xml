@@ -2,10 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
-    android:id="@+id/categories_activity">
+    android:id="@+id/categories_activity"
+    android:backgroundTint="#E7E7E7">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar_categories"
@@ -49,7 +51,7 @@
                     android:id="@+id/categoiresTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
+                    android:fontFamily="@font/henrysans_medium"
                     android:layout_gravity="center"
                     android:text="Categories"
                     android:textColor="@color/blue"
@@ -69,103 +71,115 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBar_categories">
 
+
         <Button
             android:id="@+id/featuredproductsBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="16dp"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
+            android:gravity="center_vertical"
+            android:paddingStart="55dp"
+            android:paddingEnd="50dp"
             android:text="Featured Products"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="21sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.057"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/freshproduceBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:background="?attr/selectableItemBackground"
+            android:background="attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
             android:text="Fresh Produce"
+            android:gravity="center_vertical"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="21sp"
+            android:paddingStart="55dp"
+            android:paddingEnd="50dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.051"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/featuredproductsBtn" />
 
         <Button
-            android:id="@+id/pantryBtn"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnPantry"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
             android:text="Pantry"
+            android:gravity="center_vertical"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="21sp"
+            android:paddingStart="55dp"
+            android:paddingEnd="50dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.043"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/freshproduceBtn" />
 
         <Button
-            android:id="@+id/snacksBtn"
-            android:layout_width="wrap_content"
+            android:id="@+id/Snacks"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
+            android:gravity="center_vertical"
+            android:paddingStart="55dp"
+            android:paddingEnd="50dp"
             android:text="Snacks"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="21sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.044"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pantryBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/btnPantry" />
 
         <Button
             android:id="@+id/meatsBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
+            android:gravity="center_vertical"
+            android:paddingStart="55dp"
+            android:paddingEnd="50dp"
             android:text="Meats"
             android:textColor="@color/black"
-            android:textSize="18sp"
+            android:textSize="21sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.043"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/snacksBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/Snacks" />
 
         <Button
             android:id="@+id/sweetsBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
+            android:gravity="center_vertical"
+            android:paddingStart="55dp"
+            android:paddingEnd="50dp"
             android:text="Sweets"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="21sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.044"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/meatsBtn"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/meatsBtn" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
