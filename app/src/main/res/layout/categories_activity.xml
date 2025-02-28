@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
-    android:id="@+id/categories_activity">
+    android:id="@+id/categories_activity"
+    android:backgroundTint="#E6E6E6">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar_categories"
