@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:srcCompat="@drawable/ez_logo" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:layout_marginStart="15dp"
+            android:fontFamily="@font/inter_black"
+            android:text="EZ MART"
+            android:textColor="@color/blue"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/searchIbtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="140dp"
+            android:background="?attr/selectableItemBackground"
+            app:srcCompat="@drawable/search_25" />
+
+        <ImageButton
+            android:id="@+id/cartIbtn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:background="?attr/selectableItemBackground"
+            app:srcCompat="@drawable/shopping_cart_25" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/actionLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:background="@color/lightpink"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="0.0"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/ivActionProduct1"
+            android:layout_width="213dp"
+            android:layout_height="270dp"
+            android:src="@drawable/century_tuna">
+        </ImageView>
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionLinearLayout"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:fontFamily="@font/henrysans_bold"
+            android:padding="15dp"
+            android:text="ActionProductNameHolder"
+            android:textColor="@color/blue"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:fontFamily="@font/henrysans_bold"
+            android:padding="15dp"
+            android:text="ActionProductPriceHolder"
+            android:textColor="@color/red"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.153"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
