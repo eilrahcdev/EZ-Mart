@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -24,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewPager: ViewPager2
     private lateinit var cartIbtn: ImageButton
-    private lateinit var searchBtn: ImageButton
+    private lateinit var searchEt: EditText
     private lateinit var sliderHandler: Handler
     private lateinit var sliderRunnable: Runnable
     private lateinit var recyclerView: RecyclerView
@@ -44,7 +46,72 @@ class MainActivity : AppCompatActivity() {
 
         // Initialize Buttons
         cartIbtn = findViewById(R.id.cartIbtn)
-        cartIbtn.setOnClickListener { navigateToCart() }
+        cartIbtn.setOnClickListener {
+            val intent = Intent(this, Cart::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        searchEt = findViewById(R.id.searchEt)
+        searchEt.setOnClickListener {
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        //See more buttons with functions
+        val unbeatableseemoreBtn = findViewById<Button>(R.id.unbeatable_seemoreBtn)
+        unbeatableseemoreBtn.setOnClickListener {
+            val intent = Intent(this, UnbeatablePrices::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        val featuredseemoreBtn = findViewById<Button>(R.id.featured_seemoreBtn)
+        featuredseemoreBtn.setOnClickListener {
+            val intent = Intent(this, FeaturedProducts::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        val snacksseemoreBtn = findViewById<Button>(R.id.snacks_seemoreBtn)
+        snacksseemoreBtn.setOnClickListener {
+            val intent = Intent(this, Snacks::class.java)
+            startActivity(intent)
+            finish()
+        }
+        val sweetssseemoreBtn = findViewById<Button>(R.id.sweets_seemoreBtn)
+        sweetssseemoreBtn.setOnClickListener {
+            val intent = Intent(this, Sweets::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        val pantryseemoreBtn = findViewById<Button>(R.id.pantry_seemoreBtn)
+        pantryseemoreBtn.setOnClickListener {
+            val intent = Intent(this, Pantry::class.java)
+            startActivity(intent)
+            finish()
+        }
+        val freshproduceseemoreBtn = findViewById<Button>(R.id.freshproduce_seemoreBtn)
+        freshproduceseemoreBtn.setOnClickListener {
+            val intent = Intent(this, FreshProduce::class.java)
+            startActivity(intent)
+            finish()
+        }
+        val meatsseemoreBtn = findViewById<Button>(R.id.meatsandseafoods_seemoreBtn)
+        meatsseemoreBtn.setOnClickListener {
+            val intent = Intent(this, MeatsandSeafoods::class.java)
+            startActivity(intent)
+            finish()
+        }
+        val householdseemoreBtn = findViewById<Button>(R.id.householdessentials_seemoreBtn)
+        householdseemoreBtn.setOnClickListener {
+            val intent = Intent(this, HouseholdEssentials::class.java)
+            startActivity(intent)
+            finish()
+        }
+
 
         // Navigation Items
         val homeTab = findViewById<LinearLayout>(R.id.homeTab)
@@ -142,56 +209,90 @@ class MainActivity : AppCompatActivity() {
         }
         sliderHandler.postDelayed(sliderRunnable, 2000)
 
-        // RecyclerView Product Listing
+        //Unbeatable Prices
         recyclerView = findViewById(R.id.unbeatableRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         productList = listOf(
-            Product(R.drawable.nissin_wafer, "Nissin Wafer Choco", "₱ 50.00"),
-            Product(R.drawable.knorr_sinigang, "Knorr Sinigang Mix", "₱ 15.00"),
+            Product("Nissin Wafer Choco", "₱ 50.00", R.drawable.nissin_wafer),
+            Product("Knorr Sinigang Mix", "₱ 15.00", R.drawable.knorr_sinigang_original_mix),
         )
-
         productAdapter = ProductAdapter(this, productList)
         recyclerView.adapter = productAdapter
 
+        //Featured Products
         recyclerView = findViewById(R.id.featruedRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         productList = listOf(
-            Product(R.drawable.century_tuna, "Century Tuna", "₱ 30.00"),
-            Product(R.drawable.sugar, "Sugar", "₱ 20.00"),
+            Product("Century Tuna", "₱ 30.00", R.drawable.century_tuna),
+            Product( "Sugar", "₱ 20.00", R.drawable.sugar),
         )
-
         productAdapter = ProductAdapter(this, productList)
         recyclerView.adapter = productAdapter
 
+        //Snacks
         recyclerView = findViewById(R.id.snacksRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         productList = listOf(
-            Product(R.drawable.skyflakes, "Skyflakes Bundle", "₱ 60.00"),
-            Product(R.drawable.cream_o, "Cream O Bundle", "₱ 75.00"),
+            Product("Skyflakes Bundle", "₱ 60.00", R.drawable.skyflakes),
+            Product("Cream O Bundle", "₱ 75.00", R.drawable.cream_o_vanilla),
         )
-
         productAdapter = ProductAdapter(this, productList)
         recyclerView.adapter = productAdapter
 
+        //Sweets
+        recyclerView = findViewById(R.id.sweetsRv)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+
+        productList = listOf(
+            Product("Toblerone", "₱ 260.00", R.drawable.toblerone),
+            Product("M&M's", "₱ 70.00", R.drawable.m_ms),
+        )
+        productAdapter = ProductAdapter(this, productList)
+        recyclerView.adapter = productAdapter
+
+        //Pantry
         recyclerView = findViewById(R.id.pantryRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         productList = listOf(
-            Product(R.drawable.youngstown, "Youngstown Sardines", "₱ 25.00"),
-            Product(R.drawable.cornbeef, "Purefoods Cornbeef", "₱ 45.00"),
+            Product("Youngstown Sardines", "₱ 25.00", R.drawable.youngstown),
+            Product( "Purefoods Cornbeef", "₱ 45.00", R.drawable.purefoods_cornedbeef),
         )
-
         productAdapter = ProductAdapter(this, productList)
         recyclerView.adapter = productAdapter
-    }
 
-    // Function to navigate to Cart Activity
-    private fun navigateToCart() {
-        val intent = Intent(this, Cart::class.java)
-        startActivity(intent)
+        //Fresh Produce
+        recyclerView = findViewById(R.id.freshproduceRv)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        productList = listOf(
+            Product("Eggplant", "₱ 25.00", R.drawable.eggplant),
+            Product( "Okra", "₱ 15.00", R.drawable.okra),
+        )
+        productAdapter = ProductAdapter(this, productList)
+        recyclerView.adapter = productAdapter
+
+        //Meats and Seafoods
+        recyclerView = findViewById(R.id.meatsandseafoodsRv)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        productList = listOf(
+            Product("Pork Chop", "₱ 300.00", R.drawable.pork_chop),
+            Product( "Beef Steak", "₱ 350.00", R.drawable.beef_steak),
+        )
+        productAdapter = ProductAdapter(this, productList)
+        recyclerView.adapter = productAdapter
+
+        //Household Essentials
+        recyclerView = findViewById(R.id.householdessentialsRv)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        productList = listOf(
+            Product("Safeguard Soap", "₱ 40.00", R.drawable.safeguard_soap),
+            Product( "Sanicare Tissue", "₱ 120.00", R.drawable.sanicare_tissue),
+        )
+        productAdapter = ProductAdapter(this, productList)
+        recyclerView.adapter = productAdapter
     }
 
     override fun onDestroy() {

@@ -31,10 +31,12 @@ class OnboardScreen : AppCompatActivity() {
         loginButton.setOnClickListener {
             val intent = Intent(this, Login::class.java)
             startActivity(intent)
+            finish()
         }
         signupButton.setOnClickListener {
             val intent = Intent(this, Register::class.java)
             startActivity(intent)
+            finish()
         }
     }
 }

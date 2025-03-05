@@ -408,7 +408,7 @@
                 android:id="@+id/addressEt_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Address"
+                android:hint="City, Province"
                 android:inputType="textPostalAddress" />
         </com.google.android.material.textfield.TextInputLayout>
 

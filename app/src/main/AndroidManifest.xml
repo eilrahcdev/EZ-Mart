@@ -39,6 +39,24 @@
             android:exported="true" />
         <activity android:name=".Cart"
             android:exported="true" />
+        <activity android:name=".FeaturedProducts"
+            android:exported="true" />
+        <activity android:name=".FreshProduce"
+            android:exported="true" />
+        <activity android:name=".MeatsandSeafoods"
+            android:exported="true" />
+        <activity android:name=".Pantry"
+            android:exported="true" />
+        <activity android:name=".Snacks"
+            android:exported="true" />
+        <activity android:name=".Sweets"
+            android:exported="true" />
+        <activity android:name=".UnbeatablePrices"
+            android:exported="true" />
+        <activity android:name=".HouseholdEssentials"
+            android:exported="true" />
+        <activity android:name=".SearchActivity"
+            android:exported="true" />
 
         <meta-data
             android:name="preloaded_fonts"

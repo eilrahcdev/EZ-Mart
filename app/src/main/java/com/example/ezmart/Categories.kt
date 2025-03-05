@@ -53,13 +53,19 @@ class Categories : AppCompatActivity() {
 
         val meatsBtn = findViewById<Button>(R.id.meatsBtn)
         meatsBtn.setOnClickListener {
-            startActivity(Intent(this, Meats::class.java))
+            startActivity(Intent(this, MeatsandSeafoods::class.java))
             finish()
         }
 
         val sweetsBtn = findViewById<Button>(R.id.sweetsBtn)
         sweetsBtn.setOnClickListener {
             startActivity(Intent(this, Sweets::class.java))
+            finish()
+        }
+
+        val householdBtn = findViewById<Button>(R.id.householdessentialsBtn)
+        householdBtn.setOnClickListener {
+            startActivity(Intent(this, HouseholdEssentials::class.java))
             finish()
         }
 

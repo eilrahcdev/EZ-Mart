@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/search_activity"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:orientation="horizontal"
+        android:background="@drawable/bg1"
+        android:elevation="10dp">
+
+        <ImageButton
+            android:id="@+id/backBtn_search"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/arrow_back_blue"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical" />
+
+        <EditText
+            android:id="@+id/searchEt"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/search_bg"
+            android:padding="10dp"
+            android:hint="Search products"
+            android:drawableStart="@drawable/search_25"
+            android:drawableTint="@color/blue"
+            android:drawablePadding="5dp"
+            android:inputType="text" />
+
+        <ImageButton
+            android:id="@+id/searchIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/search_25"
+            android:padding="5dp"
+            android:layout_gravity="center_vertical"
+            app:tint="@color/blue" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchHistoryRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:scrollbars="vertical" />
+
+    <TextView
+        android:id="@+id/clearHistoryBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear Search History"
+        android:textColor="@color/red"
+        android:gravity="center"
+        android:padding="10dp"/>
+
+    <!-- Product List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

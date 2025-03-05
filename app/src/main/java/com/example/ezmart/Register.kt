@@ -79,6 +79,7 @@ class Register : AppCompatActivity() {
                 // Proceed with signup logic
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
 

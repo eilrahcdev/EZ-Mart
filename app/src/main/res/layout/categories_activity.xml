@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
+    android:background="@color/greysmoke"
     android:id="@+id/categories_activity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -20,7 +20,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="4dp">
+            android:elevation="10dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/categoriesTb"
@@ -71,13 +71,14 @@
 
         <Button
             android:id="@+id/featuredproductsBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
             android:text="Featured Products"
+            android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -87,13 +88,14 @@
 
         <Button
             android:id="@+id/freshproduceBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
             android:text="Fresh Produce"
+            android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,13 +105,14 @@
 
         <Button
             android:id="@+id/pantryBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
             android:text="Pantry"
+            android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -119,13 +122,14 @@
 
         <Button
             android:id="@+id/snacksBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
             android:text="Snacks"
+            android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -135,13 +139,14 @@
 
         <Button
             android:id="@+id/meatsBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
-            android:text="Meats"
+            android:text="Meats &amp; Seafoods"
+            android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -151,13 +156,14 @@
 
         <Button
             android:id="@+id/sweetsBtn"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:background="?attr/selectableItemBackground"
             android:drawableEnd="@drawable/keyboard_arrow_right_gray"
             android:fontFamily="@font/inter"
             android:text="Sweets"
+            android:textAlignment="textStart"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -165,6 +171,25 @@
             app:layout_constraintHorizontal_bias="0.044"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/meatsBtn"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/householdessentialsBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="?attr/selectableItemBackground"
+            android:drawableEnd="@drawable/keyboard_arrow_right_gray"
+            android:fontFamily="@font/inter"
+            android:text="Household Essentials"
+            android:textAlignment="textStart"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.044"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sweetsBtn"
             app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

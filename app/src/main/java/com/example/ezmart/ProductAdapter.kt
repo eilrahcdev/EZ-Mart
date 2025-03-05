@@ -7,21 +7,22 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import android.content.SharedPreferences
+import android.util.Log
 
-class ProductAdapter(private val context: Context, private val productList: List<Product>) :
+class ProductAdapter(private val context: Context, private var productList: List<Product>) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
-    inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val productImage: ImageView = itemView.findViewById(R.id.productImage)
-        val productName: TextView = itemView.findViewById(R.id.productName)
-        val productPrice: TextView = itemView.findViewById(R.id.productPrice)
-        val addToCartButton: Button = itemView.findViewById(R.id.addToCartButton)
+    class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val productImage: ImageView = view.findViewById(R.id.productImage)
+        val productName: TextView = view.findViewById(R.id.productName)
+        val productPrice: TextView = view.findViewById(R.id.productPrice)
+        val addToCartBtn: Button = view.findViewById(R.id.addToCartButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_product, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_product, parent, false)
         return ProductViewHolder(view)
     }
 
@@ -31,10 +32,45 @@ class ProductAdapter(private val context: Context, private val productList: List
         holder.productName.text = product.name
         holder.productPrice.text = product.price
 
-        holder.addToCartButton.setOnClickListener {
-            Toast.makeText(context, "${product.name} added to cart!", Toast.LENGTH_SHORT).show()
+        holder.addToCartBtn.setOnClickListener {
+            CartManager.addToCart(context, product)
         }
     }
 
     override fun getItemCount(): Int = productList.size
+
+    // Function to update the adapter's data and refresh the RecyclerView
+    fun updateList(newList: List<Product>) {
+        productList = newList
+        notifyDataSetChanged()
+    }
+
+    // Function to handle product search and save query to history
+    fun searchProducts(query: String, allProducts: List<Product>) {
+        val filteredList = allProducts.filter { it.name.contains(query, ignoreCase = true) }
+        updateList(filteredList)
+        SearchHistoryManager.saveSearchQuery(context, query)
+    }
+}
+
+// Manages search history using SharedPreferences
+object SearchHistoryManager {
+    private const val PREFS_NAME = "search_history"
+    private const val KEY_HISTORY = "history"
+
+    fun saveSearchQuery(context: Context, query: String) {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        val historySet = prefs.getStringSet(KEY_HISTORY, mutableSetOf())?.toMutableSet() ?: mutableSetOf()
+
+        if (query.isNotBlank()) {
+            historySet.add(query) // Save unique searches
+            prefs.edit().putStringSet(KEY_HISTORY, historySet).apply()
+            Log.d("SearchHistory", "Saved Query: $query")
+        }
+    }
+
+    fun getSearchHistory(context: Context): List<String> {
+        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getStringSet(KEY_HISTORY, setOf())?.toList() ?: emptyList()
+    }
 }
