@@ -109,11 +109,11 @@ class SearchActivity : AppCompatActivity() {
         productList.clear()
 
         val sampleProducts = listOf(
-            Product("Nissin Wafer Choco", "₱ 50.00", R.drawable.nissin_wafer),
-            Product("Knorr Sinigang Mix", "₱ 15.00", R.drawable.knorr_sinigang_original_mix),
-            Product( "Sugar", "₱ 20.00", R.drawable.sugar),
-            Product("Skyflakes Bundle", "₱ 60.00", R.drawable.skyflakes),
-            Product("Toblerone", "₱ 260.00", R.drawable.toblerone),
+            Product("Nissin Wafer Choco", 50.00, R.drawable.nissin_wafer),
+            Product("Knorr Sinigang Mix", 15.00, R.drawable.knorr_sinigang_original_mix),
+            Product( "Sugar", 20.00, R.drawable.sugar),
+            Product("Skyflakes Bundle", 60.00, R.drawable.skyflakes),
+            Product("Toblerone", 260.00, R.drawable.toblerone),
         )
 
         // Filter products based on the search query

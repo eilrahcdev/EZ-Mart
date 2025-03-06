@@ -34,8 +34,8 @@ class Pantry : AppCompatActivity() {
 
         //Pantry
         productList = listOf(
-            Product("Youngstown Sardines", "₱ 25.00", R.drawable.youngstown),
-            Product( "Purefoods Cornbeef", "₱ 45.00", R.drawable.purefoods_cornedbeef),
+            Product("Youngstown Sardines", 25.00, R.drawable.youngstown),
+            Product( "Purefoods Cornbeef", 45.00, R.drawable.purefoods_cornedbeef),
         )
 
         recyclerView = findViewById(R.id.pantryRv)

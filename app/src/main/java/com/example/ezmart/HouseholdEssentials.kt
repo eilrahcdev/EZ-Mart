@@ -50,8 +50,8 @@ class HouseholdEssentials : AppCompatActivity() {
         recyclerView = findViewById(R.id.householdRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         productList = listOf(
-            Product("Safeguard Soap", "₱ 40.00", R.drawable.safeguard_soap),
-            Product( "Sanicare Tissue", "₱ 120.00", R.drawable.sanicare_tissue),
+            Product("Safeguard Soap", 40.00, R.drawable.safeguard_soap),
+            Product( "Sanicare Tissue", 120.00, R.drawable.sanicare_tissue),
         )
         productAdapter = ProductAdapter(this, productList)
         recyclerView.adapter = productAdapter

@@ -51,8 +51,8 @@ class FeaturedProducts : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         productList = listOf(
-            Product("Century Tuna", "₱ 30.00", R.drawable.century_tuna),
-            Product( "Sugar", "₱ 20.00", R.drawable.sugar),
+            Product("Century Tuna", 30.00, R.drawable.century_tuna),
+            Product( "Sugar", 20.00, R.drawable.sugar),
         )
         productAdapter = ProductAdapter(this, productList)
         recyclerView.adapter = productAdapter

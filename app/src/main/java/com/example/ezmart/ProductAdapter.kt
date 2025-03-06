@@ -1,5 +1,6 @@
 package com.example.ezmart
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -26,11 +27,14 @@ class ProductAdapter(private val context: Context, private var productList: List
         return ProductViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
         holder.productImage.setImageResource(product.imageResId)
         holder.productName.text = product.name
-        holder.productPrice.text = product.price
+
+        // Store price as Double internally but format it for display
+        holder.productPrice.text = "₱ %.2f".format(product.price)
 
         holder.addToCartBtn.setOnClickListener {
             CartManager.addToCart(context, product)

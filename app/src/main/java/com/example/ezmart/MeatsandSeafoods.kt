@@ -51,13 +51,13 @@ class MeatsandSeafoods : AppCompatActivity() {
         recyclerView = findViewById(R.id.meatsandseafoodsRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         productList = listOf(
-            Product("Pork Chop", "₱ 300.00", R.drawable.pork_chop),
-            Product("Pork Belly", "₱ 350.00", R.drawable.pork_belly),
-            Product( "Beef Steak", "₱ 450.00", R.drawable.beef_steak),
-            Product( "Beef Fillet Mignon", "₱ 400.00", R.drawable.beef_fillet_mignon),
-            Product( "Whole Chicken", "₱ 280.00", R.drawable.whole_chicken),
-            Product( "Shrimp", "₱ 340.00", R.drawable.shrimp),
-            Product( "Lapu-Lapu", "₱ 480.00", R.drawable.lapu_lapu),
+            Product("Pork Chop", 300.00, R.drawable.pork_chop),
+            Product("Pork Belly", 350.00, R.drawable.pork_belly),
+            Product( "Beef Steak", 450.00, R.drawable.beef_steak),
+            Product( "Beef Fillet Mignon", 400.00, R.drawable.beef_fillet_mignon),
+            Product( "Whole Chicken", 280.00, R.drawable.whole_chicken),
+            Product( "Shrimp", 340.00, R.drawable.shrimp),
+            Product( "Lapu-Lapu", 480.00, R.drawable.lapu_lapu),
         )
         productAdapter = ProductAdapter(this, productList)
         recyclerView.adapter = productAdapter
