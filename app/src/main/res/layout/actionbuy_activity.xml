@@ -14,40 +14,38 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="10dp"
-        android:background="@drawable/appbar_background">
-
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:srcCompat="@drawable/ez_logo" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginStart="15dp"
-            android:fontFamily="@font/inter_black"
-            android:text="EZ MART"
-            android:textColor="@color/blue"
-            android:textSize="20sp" />
+        android:padding="10dp">
 
         <ImageButton
-            android:id="@+id/searchIbtn"
+            android:id="@+id/backBtn_categories"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="140dp"
             android:background="?attr/selectableItemBackground"
-            app:srcCompat="@drawable/search_25" />
+            android:src="@drawable/arrow_back_blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/searchEt"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:hint="Search products"
+            android:focusable="false"
+            android:clickable="true"
+            android:background="@drawable/search_bg"
+            android:drawableStart="@drawable/search_25"
+            android:drawableTint="@color/blue"
+            android:drawablePadding="5dp"/>
+
 
         <ImageButton
             android:id="@+id/cartIbtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="3dp"
             android:background="?attr/selectableItemBackground"
             app:srcCompat="@drawable/shopping_cart_25" />
     </LinearLayout>
