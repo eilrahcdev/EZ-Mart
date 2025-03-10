@@ -12,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.material.appbar.AppBarLayout
 
 @Suppress("DEPRECATION")
 class Categories : AppCompatActivity() {
@@ -19,7 +20,7 @@ class Categories : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.categories_activity)
+        setContentView(R.layout.categories)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.categories_activity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())

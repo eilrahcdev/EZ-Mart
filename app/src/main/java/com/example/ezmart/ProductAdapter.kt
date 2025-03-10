@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
 
 class ProductAdapter(private val context: Context, private var productList: List<Product>) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
@@ -38,7 +39,12 @@ class ProductAdapter(private val context: Context, private var productList: List
 
         holder.addToCartBtn.setOnClickListener {
             CartManager.addToCart(context, product)
+            showToast("${product.name} added to cart")
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun getItemCount(): Int = productList.size

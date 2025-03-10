@@ -73,7 +73,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/unbeatable"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="670dp"
         android:layout_margin="10dp"
         android:background="@drawable/unbeatable_bg"
         android:padding="16dp"

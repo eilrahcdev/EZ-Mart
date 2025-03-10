@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
+    android:background="@color/white"
     android:id="@+id/profile_activity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -67,7 +67,7 @@
         android:id="@+id/cardview4"
         android:layout_width="match_parent"
         android:layout_height="612dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="100dp"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="20dp"
         app:cardElevation="8dp"
@@ -115,14 +115,18 @@
                     android:layout_weight="1"/>
 
                 <TextView
+                    android:id="@+id/firstnameTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="VashNameHolder"
+                    android:text="FirstName"
                     android:textSize="16sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
 
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -142,14 +146,18 @@
                     android:layout_weight="1"/>
 
                 <TextView
+                    android:id="@+id/lastnameTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="LastNameHolder"
+                    android:text="LastName"
                     android:textSize="16sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
 
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -169,15 +177,19 @@
                     android:layout_weight="1"/>
 
                 <TextView
+                    android:id="@+id/genderTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Male"
+                    android:text="Gender"
                     android:textSize="16sp"
-
-                    android:textColor="@color/blue"/>
+                    android:textColor="@color/blue"
+                    app:drawableEndCompat="@drawable/arrow_down_24" />
             </LinearLayout>
 
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -197,14 +209,18 @@
                     android:layout_weight="1"/>
 
                 <TextView
+                    android:id="@+id/dateofbirthTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="DateofBirthHolder"
+                    android:text="mm/dd/yyyy"
                     android:textSize="16sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
 
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -224,14 +240,18 @@
                     android:layout_weight="1"/>
 
                 <TextView
+                    android:id="@+id/emailTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="EmailHolder"
+                    android:text="Email"
                     android:textSize="16sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
 
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -251,9 +271,10 @@
                     android:layout_weight="1"/>
 
                 <TextView
+                    android:id="@+id/phonenumberTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="NumberHolder"
+                    android:text="9XXXXXXXXX"
                     android:textSize="16sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
@@ -278,14 +299,18 @@
                     android:layout_weight="1"/>
 
                 <TextView
+                    android:id="@+id/addressTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="AddressHolder"
+                    android:text="Address"
                     android:textSize="16sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
 
-            <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#E0E0E0"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey"/>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

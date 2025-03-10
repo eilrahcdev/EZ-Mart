@@ -8,7 +8,11 @@
     <color name="darkgrey">#52525B</color>
     <color name="red">#FF0000</color>
     <color name="lime">#2FE644</color>">
+    <color name="leafgreen">#076612</color>">
     <color name="pastelbluegreen">#96D8CE</color>
     <color name="pastelblue">#ACCAFF</color>
     <color name="lightpink">#EFE1E1</color>
+    <color name="violet">#BB00FF</color>
+    <color name="pastelred">#F93F3F</color>
+    <color name="mango">#F1A232</color>
 </resources>

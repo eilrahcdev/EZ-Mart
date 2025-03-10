@@ -71,9 +71,9 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/snacks"
+        android:id="@+id/meatsandseafoods"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="670dp"
         android:layout_margin="10dp"
         android:background="@drawable/meatsandseafoods_bg"
         android:padding="16dp"
@@ -87,7 +87,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/meatsandseafoodsRv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

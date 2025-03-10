@@ -69,6 +69,13 @@ class CartAdapter(
         }
     }
 
+    fun updateCart(newCartList: List<Product>) {
+        cartList.clear()
+        cartList.addAll(newCartList)
+        notifyDataSetChanged()
+        onTotalAmountUpdated(getTotalAmount())
+    }
+
     fun clearCart(context: Context) {
         cartList.clear()
         CartManager.clearCart(context)

@@ -58,6 +58,7 @@ class MeatsandSeafoods : AppCompatActivity() {
             Product( "Whole Chicken", 280.00, R.drawable.whole_chicken),
             Product( "Shrimp", 340.00, R.drawable.shrimp),
             Product( "Lapu-Lapu", 480.00, R.drawable.lapu_lapu),
+            Product( "Tilapia", 150.00, R.drawable.tilapia),
         )
         productAdapter = ProductAdapter(this, productList)
         recyclerView.adapter = productAdapter
