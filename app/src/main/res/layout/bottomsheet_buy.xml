@@ -71,14 +71,15 @@
 
 
         <TextView
+            android:id="@+id/textView16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:fontFamily="@font/henrysans_medium"
             android:text="Flavor"
             android:textColor="@color/black"
-            android:textSize="18sp"
 
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.044"
@@ -86,7 +87,25 @@
             app:layout_constraintTop_toBottomOf="@+id/productIv"
             app:layout_constraintVertical_bias="0.008" />
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:text="Quantity"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.045"
+            app:layout_constraintStart_toStartOf="parent"
+
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.543" />
+
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -132,12 +151,13 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/textView17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Original"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.126"
+            app:layout_constraintHorizontal_bias="0.121"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.447" />
@@ -152,7 +172,69 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.447" />
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/search_bg"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.89"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.544">
+
+            <ImageButton
+                android:id="@+id/btnMinus"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="10dp"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="fitCenter"
+                android:src="@drawable/minusbtn" />
+
+            <TextView
+                android:id="@+id/tvCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="1"
+                android:textSize="18sp" />
+
+            <ImageButton
+                android:id="@+id/btnPlus"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:background="?attr/selectableItemBackground"
+                android:scaleType="fitCenter"
+                android:src="@drawable/plusbtn" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/BuyBtn"
+            android:layout_width="340dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/red"
+            android:fontFamily="@font/inter_bold"
+            android:text="Buy Now"
+            android:textSize="15sp"
+            app:cornerRadius="@dimen/dimens"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.651" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 

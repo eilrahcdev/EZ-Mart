@@ -66,7 +66,7 @@
         android:gravity="center">
 
         <ImageView
-            android:id="@+id/product_imgIv"
+            android:id="@+id/action_productImgIv"
             android:layout_width="213dp"
             android:layout_height="270dp"
             android:src="@drawable/century_tuna">
@@ -86,7 +86,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
-            android:id="@+id/prodcutnameTv"
+            android:id="@+id/action_productNameTv"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:fontFamily="@font/henrysans_bold"
@@ -100,7 +100,7 @@
         </TextView>
 
         <TextView
-            android:id="@+id/productpriceTv"
+            android:id="@+id/action_productPriceTv"
             android:layout_width="wrap_content"
             android:layout_height="50sp"
             android:fontFamily="@font/henrysans_bold"
@@ -124,21 +124,24 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/addToCartBtn"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/action_addToCartBtn"
             android:layout_width="wrap_content"
             android:layout_height="55dp"
             android:layout_gravity="center"
+            android:backgroundTint="@color/blue"
             android:fontFamily="@font/inter_bold"
             android:text="Add to Cart"
             android:textSize="15sp"
-            android:drawableLeft="@drawable/addtocart_25"
             app:cornerRadius="@dimen/dimens"
-            android:backgroundTint="@color/blue"
+            app:icon="@drawable/addtocart_25"
+            app:iconPadding="10dp"
+            app:iconGravity="textStart"
             android:layout_marginStart="35dp"/>
 
+
         <Button
-            android:id="@+id/BuyBtn"
+            android:id="@+id/action_BuyBtn"
             android:layout_width="160dp"
             android:layout_height="55dp"
             android:layout_gravity="center"
