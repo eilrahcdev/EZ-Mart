@@ -16,36 +16,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="10dp">
 
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:srcCompat="@drawable/ez_logo" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginStart="15dp"
-            android:fontFamily="@font/inter_black"
-            android:text="EZ MART"
-            android:textColor="@color/blue"
-            android:textSize="20sp" />
-
         <ImageButton
-            android:id="@+id/searchIbtn"
+            android:id="@+id/backBtn_categories"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="140dp"
             android:background="?attr/selectableItemBackground"
-            app:srcCompat="@drawable/search_25" />
+            android:src="@drawable/arrow_back_blue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/searchEt"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:hint="Search products"
+            android:focusable="false"
+            android:clickable="true"
+            android:background="@drawable/search_bg"
+            android:drawableStart="@drawable/search_25"
+            android:drawableTint="@color/blue"
+            android:drawablePadding="5dp"/>
+
 
         <ImageButton
             android:id="@+id/cartIbtn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="3dp"
             android:background="?attr/selectableItemBackground"
             app:srcCompat="@drawable/shopping_cart_25" />
     </LinearLayout>
@@ -54,7 +54,7 @@
         android:id="@+id/actionLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="350dp"
-        android:background="@color/lightpink"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -64,7 +64,7 @@
         android:gravity="center">
 
         <ImageView
-            android:id="@+id/ivActionProduct1"
+            android:id="@+id/action_productImgIv"
             android:layout_width="213dp"
             android:layout_height="270dp"
             android:src="@drawable/century_tuna">
@@ -75,7 +75,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -84,7 +84,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/action_productNameTv"
             android:layout_width="wrap_content"
             android:layout_height="70dp"
             android:fontFamily="@font/henrysans_bold"
@@ -98,6 +98,7 @@
         </TextView>
 
         <TextView
+            android:id="@+id/action_productPriceTv"
             android:layout_width="wrap_content"
             android:layout_height="50sp"
             android:fontFamily="@font/henrysans_bold"
@@ -114,16 +115,44 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/bottomAppBarStyle"
+        android:layout_height="90dp"
+        android:background="@drawable/bottom_appbar_bg"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/action_addToCartBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/blue"
+            android:fontFamily="@font/inter_bold"
+            android:text="Add to Cart"
+            android:textSize="15sp"
+            app:cornerRadius="@dimen/dimens"
+            app:icon="@drawable/addtocart_25"
+            app:iconPadding="10dp"
+            app:iconGravity="textStart"
+            android:layout_marginStart="35dp"/>
 
 
+        <Button
+            android:id="@+id/action_BuyBtn"
+            android:layout_width="160dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:fontFamily="@font/inter_bold"
+            android:text="Buy Now"
+            android:textSize="15sp"
+            app:cornerRadius="@dimen/dimens"
+            android:backgroundTint="@color/red"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="35dp"/>
 
     </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
