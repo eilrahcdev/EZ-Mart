@@ -19,6 +19,7 @@ class Cart : AppCompatActivity() {
     private lateinit var checkoutBtn: Button
     private lateinit var deleteBtn: ImageButton
     private lateinit var selectAllCheckBox: CheckBox
+    private lateinit var totalAmountTextView: TextView
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,26 +33,33 @@ class Cart : AppCompatActivity() {
             insets
         }
 
-        val backButton = findViewById<ImageButton>(R.id.backBtn_cart)
-        backButton.setOnClickListener{
-            val Intent = Intent(this, MainActivity::class.java)
-            startActivity(Intent)
-            finish()
-        }
-
+        // Initialize UI Elements
         recyclerView = findViewById(R.id.cartRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val cartItems = CartManager.getCart(this).toMutableList()
-        cartAdapter = CartAdapter(cartItems)
-        recyclerView.adapter = cartAdapter
-
         checkoutBtn = findViewById(R.id.btnCheckout)
         deleteBtn = findViewById(R.id.Cart_btnDel)
         selectAllCheckBox = findViewById(R.id.checkBox)
+        totalAmountTextView = findViewById(R.id.tvTotalAmount) // Make sure this TextView exists in your layout
+
         selectAllCheckBox.buttonTintList = ContextCompat.getColorStateList(this, R.color.blue)
 
+        // Handle Back Button
+        val backButton = findViewById<ImageButton>(R.id.backBtn_cart)
+        backButton.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
+        // Setup RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val cartItems = CartManager.getCart(this).toMutableList()
+        cartAdapter = CartAdapter(cartItems) { totalAmount ->
+            updateTotalAmount(totalAmount)
+        }
+        recyclerView.adapter = cartAdapter
+
+        // Checkout Button Click
         checkoutBtn.setOnClickListener {
             if (cartAdapter.itemCount == 0) {
                 Toast.makeText(this, "Your cart is empty!", Toast.LENGTH_SHORT).show()
@@ -60,13 +68,25 @@ class Cart : AppCompatActivity() {
             }
         }
 
+        // Delete Button Click
         deleteBtn.setOnClickListener {
-            cartAdapter.clearCart(this@Cart)
+            cartAdapter.clearCart(this)
             Toast.makeText(this, "Cart emptied", Toast.LENGTH_SHORT).show()
+            updateTotalAmount(0.0) // Reset total amount
         }
 
+        // Select All Checkbox
         selectAllCheckBox.setOnCheckedChangeListener { _, isChecked ->
             cartAdapter.selectAllItems(isChecked)
+            updateTotalAmount(cartAdapter.getTotalAmount())
         }
+
+        // Initialize total amount display
+        updateTotalAmount(cartAdapter.getTotalAmount())
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateTotalAmount(totalAmount: Double) {
+        totalAmountTextView.text = "₱ %.2f".format(totalAmount) // Ensure peso sign is displayed
     }
 }

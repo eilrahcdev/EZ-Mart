@@ -52,8 +52,8 @@ class Snacks : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         productList = listOf(
-            Product("Skyflakes Bundle", "₱ 60.00", R.drawable.skyflakes),
-            Product("Cream O Bundle", "₱ 75.00", R.drawable.cream_o_vanilla),
+            Product("Skyflakes Bundle", 60.00, R.drawable.skyflakes),
+            Product("Cream O Bundle", 75.00, R.drawable.cream_o_vanilla),
         )
         productAdapter = ProductAdapter(this, productList)
         recyclerView.adapter = productAdapter

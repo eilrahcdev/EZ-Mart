@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.ezmart" />
+                  <option name="mobileSdkAppId" value="1:446082871770:android:b2854b167e52915a4090e3" />
+                  <option name="projectId" value="ez-mart-3ee2e" />
+                  <option name="projectNumber" value="446082871770" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

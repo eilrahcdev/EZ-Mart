@@ -51,9 +51,9 @@ class FreshProduce : AppCompatActivity() {
         recyclerView = findViewById(R.id.freshproduceRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
         productList = listOf(
-            Product("Eggplant", "₱ 25.00", R.drawable.eggplant),
-            Product( "Okra", "₱ 15.00", R.drawable.okra),
-            Product( "Squash", "₱ 35.00", R.drawable.squash),
+            Product("Eggplant", 25.00, R.drawable.eggplant),
+            Product( "Okra", 15.00, R.drawable.okra),
+            Product( "Squash", 35.00, R.drawable.squash),
         )
         productAdapter = ProductAdapter(this, productList)
         recyclerView.adapter = productAdapter

@@ -1,5 +1,6 @@
 package com.example.ezmart
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import android.content.SharedPreferences
 import android.util.Log
+import android.widget.Toast
 
 class ProductAdapter(private val context: Context, private var productList: List<Product>) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
@@ -26,15 +28,23 @@ class ProductAdapter(private val context: Context, private var productList: List
         return ProductViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
         holder.productImage.setImageResource(product.imageResId)
         holder.productName.text = product.name
-        holder.productPrice.text = product.price
+
+        // Store price as Double internally but format it for display
+        holder.productPrice.text = "₱ %.2f".format(product.price)
 
         holder.addToCartBtn.setOnClickListener {
             CartManager.addToCart(context, product)
+            showToast("${product.name} added to cart")
         }
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun getItemCount(): Int = productList.size

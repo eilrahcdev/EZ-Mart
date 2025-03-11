@@ -12,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EZMart"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ez_logo" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/blue" />
+
         <activity android:name=".SplashScreen"
             android:exported="true">
             <intent-filter>
@@ -57,6 +66,15 @@
             android:exported="true" />
         <activity android:name=".SearchActivity"
             android:exported="true" />
+
+        <service
+            android:name=".MyFirebaseMessagingService"
+            android:exported="false"
+            tools:ignore="Instantiatable">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <meta-data
             android:name="preloaded_fonts"

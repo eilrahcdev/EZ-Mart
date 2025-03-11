@@ -1,11 +1,16 @@
 package com.example.ezmart
 
-import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.widget.Button
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -13,13 +18,12 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -27,276 +31,230 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
     private lateinit var cartIbtn: ImageButton
     private lateinit var searchEt: EditText
-    private lateinit var sliderHandler: Handler
+    private lateinit var dotsLayout: LinearLayout
+    private val sliderHandler = Handler(Looper.getMainLooper())
     private lateinit var sliderRunnable: Runnable
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var productAdapter: ProductAdapter
-    private lateinit var productList: List<Product>
+    private val dots = mutableListOf<ImageView>()
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        setupWindowInsets()
+        setupButtons()
+        setupSeeMoreTextViews()
+        setupNavigation()
+        setupImageSlider()
+        setupProductCategories()
+    }
+
+    private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
 
-        // Initialize Buttons
+    private fun setupButtons() {
         cartIbtn = findViewById(R.id.cartIbtn)
         cartIbtn.setOnClickListener {
-            val intent = Intent(this, Cart::class.java)
-            startActivity(intent)
-            finish()
+            navigateTo(Cart::class.java)
         }
 
         searchEt = findViewById(R.id.searchEt)
         searchEt.setOnClickListener {
-            val intent = Intent(this, SearchActivity::class.java)
-            startActivity(intent)
-            finish()
+            navigateTo(SearchActivity::class.java)
+        }
+    }
+
+    private fun setupSeeMoreTextViews() {
+        val seeMoreMappings = mapOf(
+            R.id.unbeatable_seemoreTv to UnbeatablePrices::class.java,
+            R.id.featured_seemoreTv to FeaturedProducts::class.java,
+            R.id.snacks_seemoreTv to Snacks::class.java,
+            R.id.sweets_seemoreTv to Sweets::class.java,
+            R.id.pantry_seemoreTv to Pantry::class.java,
+            R.id.freshproduce_seemoreTv to FreshProduce::class.java,
+            R.id.meatsandseafoods_seemoreTv to MeatsandSeafoods::class.java,
+            R.id.household_seemoreTv to HouseholdEssentials::class.java
+        )
+
+        seeMoreMappings.forEach { (textViewId, destination) ->
+            makeSpannable(findViewById(textViewId), destination)
+        }
+    }
+
+    private fun makeSpannable(textView: TextView, destination: Class<*>) {
+        val spannableString = SpannableString("See More =>").apply {
+            setSpan(object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    navigateTo(destination)
+                }
+                override fun updateDrawState(ds: android.text.TextPaint) {
+                    ds.isUnderlineText = false
+                }
+            }, 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(ForegroundColorSpan(Color.BLUE), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
 
-        //See more buttons with functions
-        val unbeatableseemoreBtn = findViewById<Button>(R.id.unbeatable_seemoreBtn)
-        unbeatableseemoreBtn.setOnClickListener {
-            val intent = Intent(this, UnbeatablePrices::class.java)
-            startActivity(intent)
-            finish()
+        textView.apply {
+            text = spannableString
+            movementMethod = LinkMovementMethod.getInstance()
+            highlightColor = Color.TRANSPARENT
         }
+    }
 
-        val featuredseemoreBtn = findViewById<Button>(R.id.featured_seemoreBtn)
-        featuredseemoreBtn.setOnClickListener {
-            val intent = Intent(this, FeaturedProducts::class.java)
-            startActivity(intent)
-            finish()
+    private fun setupNavigation() {
+        val navigationItems = listOf(
+            R.id.homeTab to Pair(R.id.homeIcon, R.id.homeText),
+            R.id.categoriesTab to Pair(R.id.categoriesIcon, R.id.categoriesText),
+            R.id.ordersTab to Pair(R.id.ordersIcon, R.id.ordersText),
+            R.id.profileTab to Pair(R.id.profileIcon, R.id.profileText)
+        )
+
+        navigationItems.forEach { (tabId, iconTextPair) ->
+            val (iconId, textId) = iconTextPair
+            findViewById<LinearLayout>(tabId).setOnClickListener {
+                resetNavigationColors()
+                findViewById<ImageView>(iconId).setColorFilter(resources.getColor(R.color.blue))
+                findViewById<TextView>(textId).setTextColor(resources.getColor(R.color.blue))
+                navigateTo(getDestinationClass(tabId))
+            }
         }
+    }
 
-        val snacksseemoreBtn = findViewById<Button>(R.id.snacks_seemoreBtn)
-        snacksseemoreBtn.setOnClickListener {
-            val intent = Intent(this, Snacks::class.java)
-            startActivity(intent)
-            finish()
+    private fun getDestinationClass(tabId: Int): Class<*> {
+        return when (tabId) {
+            R.id.categoriesTab -> Categories::class.java
+            R.id.ordersTab -> Orders::class.java
+            R.id.profileTab -> Profile::class.java
+            else -> MainActivity::class.java
         }
-        val sweetssseemoreBtn = findViewById<Button>(R.id.sweets_seemoreBtn)
-        sweetssseemoreBtn.setOnClickListener {
-            val intent = Intent(this, Sweets::class.java)
-            startActivity(intent)
-            finish()
+    }
+
+    private fun resetNavigationColors() {
+        listOf(R.id.homeIcon, R.id.categoriesIcon, R.id.ordersIcon, R.id.profileIcon).forEach {
+            findViewById<ImageView>(it).setColorFilter(resources.getColor(R.color.black))
         }
-
-        val pantryseemoreBtn = findViewById<Button>(R.id.pantry_seemoreBtn)
-        pantryseemoreBtn.setOnClickListener {
-            val intent = Intent(this, Pantry::class.java)
-            startActivity(intent)
-            finish()
+        listOf(R.id.homeText, R.id.categoriesText, R.id.ordersText, R.id.profileText).forEach {
+            findViewById<TextView>(it).setTextColor(resources.getColor(R.color.black))
         }
-        val freshproduceseemoreBtn = findViewById<Button>(R.id.freshproduce_seemoreBtn)
-        freshproduceseemoreBtn.setOnClickListener {
-            val intent = Intent(this, FreshProduce::class.java)
-            startActivity(intent)
-            finish()
-        }
-        val meatsseemoreBtn = findViewById<Button>(R.id.meatsandseafoods_seemoreBtn)
-        meatsseemoreBtn.setOnClickListener {
-            val intent = Intent(this, MeatsandSeafoods::class.java)
-            startActivity(intent)
-            finish()
-        }
-        val householdseemoreBtn = findViewById<Button>(R.id.householdessentials_seemoreBtn)
-        householdseemoreBtn.setOnClickListener {
-            val intent = Intent(this, HouseholdEssentials::class.java)
-            startActivity(intent)
-            finish()
-        }
+    }
 
-
-        // Navigation Items
-        val homeTab = findViewById<LinearLayout>(R.id.homeTab)
-        val categoriesTab = findViewById<LinearLayout>(R.id.categoriesTab)
-        val ordersTab = findViewById<LinearLayout>(R.id.ordersTab)
-        val profileTab = findViewById<LinearLayout>(R.id.profileTab)
-
-        val homeIcon = findViewById<ImageView>(R.id.homeIcon)
-        val categoriesIcon = findViewById<ImageView>(R.id.categoriesIcon)
-        val ordersIcon = findViewById<ImageView>(R.id.ordersIcon)
-        val profileIcon = findViewById<ImageView>(R.id.profileIcon)
-
-        val homeText = findViewById<TextView>(R.id.homeText)
-        val categoriesText = findViewById<TextView>(R.id.categoriesText)
-        val ordersText = findViewById<TextView>(R.id.ordersText)
-        val profileText = findViewById<TextView>(R.id.profileText)
-
-        // Set default selected tab (Categories)
-        homeIcon.setColorFilter(resources.getColor(R.color.blue))
-        homeText.setTextColor(resources.getColor(R.color.blue))
-
-        fun resetColors() {
-            homeIcon.setColorFilter(resources.getColor(R.color.black))
-            categoriesIcon.setColorFilter(resources.getColor(R.color.black))
-            ordersIcon.setColorFilter(resources.getColor(R.color.black))
-            profileIcon.setColorFilter(resources.getColor(R.color.black))
-
-            homeText.setTextColor(resources.getColor(R.color.black))
-            categoriesText.setTextColor(resources.getColor(R.color.black))
-            ordersText.setTextColor(resources.getColor(R.color.black))
-            profileText.setTextColor(resources.getColor(R.color.black))
-        }
-
-        homeTab.setOnClickListener {
-            resetColors()
-            homeIcon.setColorFilter(resources.getColor(R.color.blue))
-            homeText.setTextColor(resources.getColor(R.color.blue))
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
-
-        categoriesTab.setOnClickListener {
-            resetColors()
-            categoriesIcon.setColorFilter(resources.getColor(R.color.blue))
-            categoriesText.setTextColor(resources.getColor(R.color.blue))
-            startActivity(Intent(this, Categories::class.java))
-            finish()
-        }
-
-        ordersTab.setOnClickListener {
-            resetColors()
-            ordersIcon.setColorFilter(resources.getColor(R.color.blue))
-            ordersText.setTextColor(resources.getColor(R.color.blue))
-            startActivity(Intent(this, Orders::class.java))
-            finish()
-        }
-
-        profileTab.setOnClickListener {
-            resetColors()
-            profileIcon.setColorFilter(resources.getColor(R.color.blue))
-            profileText.setTextColor(resources.getColor(R.color.blue))
-            startActivity(Intent(this, Profile::class.java))
-            finish()
-        }
-
-        // Image Slider Setup
+    private fun setupImageSlider() {
         val imageList = listOf(R.drawable.ad1, R.drawable.ad2, R.drawable.ad3)
         val loopedList = listOf(imageList.last()) + imageList + listOf(imageList.first())
 
         viewPager = findViewById(R.id.viewPager)
-        val tabIndicator: TabLayout = findViewById(R.id.tabIndicator)
-        val adapter = ImageSliderAdapter(loopedList)
-        viewPager.adapter = adapter
-        viewPager.setCurrentItem(1, false)
+        dotsLayout = findViewById(R.id.dotsLayout)
+        setupDotsIndicator(imageList.size)
 
-        TabLayoutMediator(tabIndicator, viewPager) { _, _ -> }.attach()
+        viewPager.adapter = ImageSliderAdapter(loopedList)
+        viewPager.setCurrentItem(1, false)
 
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
+                sliderHandler.removeCallbacks(sliderRunnable)
+                sliderHandler.postDelayed(sliderRunnable, 3000)
+
                 if (position == loopedList.size - 1) {
                     viewPager.post { viewPager.setCurrentItem(1, false) }
                 } else if (position == 0) {
                     viewPager.post { viewPager.setCurrentItem(loopedList.size - 2, false) }
                 }
+
+                updateDotsIndicator(position - 1)
             }
         })
 
-        sliderHandler = Handler(Looper.getMainLooper())
-        sliderRunnable = object : Runnable {
-            override fun run() {
-                viewPager.setCurrentItem(viewPager.currentItem + 1, true)
-                sliderHandler.postDelayed(this, 2000)
-            }
+        sliderRunnable = Runnable {
+            viewPager.setCurrentItem(viewPager.currentItem + 1, true)
+            sliderHandler.postDelayed(sliderRunnable, 3000)
         }
-        sliderHandler.postDelayed(sliderRunnable, 2000)
-
-        //Unbeatable Prices
-        recyclerView = findViewById(R.id.unbeatableRv)
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-
-        productList = listOf(
-            Product("Nissin Wafer Choco", "₱ 50.00", R.drawable.nissin_wafer),
-            Product("Knorr Sinigang Mix", "₱ 15.00", R.drawable.knorr_sinigang_original_mix),
-        )
-        productAdapter = ProductAdapter(this, productList)
-        recyclerView.adapter = productAdapter
-
-        //Featured Products
-        recyclerView = findViewById(R.id.featruedRv)
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-
-        productList = listOf(
-            Product("Century Tuna", "₱ 30.00", R.drawable.century_tuna),
-            Product( "Sugar", "₱ 20.00", R.drawable.sugar),
-        )
-        productAdapter = ProductAdapter(this, productList)
-        recyclerView.adapter = productAdapter
-
-        //Snacks
-        recyclerView = findViewById(R.id.snacksRv)
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-
-        productList = listOf(
-            Product("Skyflakes Bundle", "₱ 60.00", R.drawable.skyflakes),
-            Product("Cream O Bundle", "₱ 75.00", R.drawable.cream_o_vanilla),
-        )
-        productAdapter = ProductAdapter(this, productList)
-        recyclerView.adapter = productAdapter
-
-        //Sweets
-        recyclerView = findViewById(R.id.sweetsRv)
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-
-        productList = listOf(
-            Product("Toblerone", "₱ 260.00", R.drawable.toblerone),
-            Product("M&M's", "₱ 70.00", R.drawable.m_ms),
-        )
-        productAdapter = ProductAdapter(this, productList)
-        recyclerView.adapter = productAdapter
-
-        //Pantry
-        recyclerView = findViewById(R.id.pantryRv)
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-
-        productList = listOf(
-            Product("Youngstown Sardines", "₱ 25.00", R.drawable.youngstown),
-            Product( "Purefoods Cornbeef", "₱ 45.00", R.drawable.purefoods_cornedbeef),
-        )
-        productAdapter = ProductAdapter(this, productList)
-        recyclerView.adapter = productAdapter
-
-        //Fresh Produce
-        recyclerView = findViewById(R.id.freshproduceRv)
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productList = listOf(
-            Product("Eggplant", "₱ 25.00", R.drawable.eggplant),
-            Product( "Okra", "₱ 15.00", R.drawable.okra),
-        )
-        productAdapter = ProductAdapter(this, productList)
-        recyclerView.adapter = productAdapter
-
-        //Meats and Seafoods
-        recyclerView = findViewById(R.id.meatsandseafoodsRv)
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productList = listOf(
-            Product("Pork Chop", "₱ 300.00", R.drawable.pork_chop),
-            Product( "Beef Steak", "₱ 350.00", R.drawable.beef_steak),
-        )
-        productAdapter = ProductAdapter(this, productList)
-        recyclerView.adapter = productAdapter
-
-        //Household Essentials
-        recyclerView = findViewById(R.id.householdessentialsRv)
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productList = listOf(
-            Product("Safeguard Soap", "₱ 40.00", R.drawable.safeguard_soap),
-            Product( "Sanicare Tissue", "₱ 120.00", R.drawable.sanicare_tissue),
-        )
-        productAdapter = ProductAdapter(this, productList)
-        recyclerView.adapter = productAdapter
+        sliderHandler.postDelayed(sliderRunnable, 3000)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        sliderHandler.removeCallbacks(sliderRunnable)
+    private fun setupDotsIndicator(count: Int) {
+        dotsLayout.removeAllViews()
+        dots.clear()
+        repeat(count) {
+            val dot = ImageView(this).apply {
+                setImageDrawable(ContextCompat.getDrawable(this@MainActivity, R.drawable.non_active_dot))
+                layoutParams = LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+                ).apply { setMargins(8, 0, 8, 0) }
+            }
+            dotsLayout.addView(dot)
+            dots.add(dot)
+        }
+        dots.firstOrNull()?.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.active_dot))
+    }
+
+    private fun updateDotsIndicator(selectedIndex: Int) {
+        dots.forEachIndexed { index, imageView ->
+            imageView.setImageDrawable(
+                ContextCompat.getDrawable(this, if (index == selectedIndex) R.drawable.active_dot else R.drawable.non_active_dot)
+            )
+        }
+    }
+
+    private fun setupProductCategories() {
+        val categories: List<Pair<Int, List<Product>>> = listOf(
+            Pair(R.id.unbeatableRv, listOf(
+                Product("Nissin Wafer Choco", 50.00, R.drawable.nissin_wafer),
+                Product("Knorr Sinigang Mix", 15.00, R.drawable.knorr_sinigang_original_mix)
+            )),
+            Pair(R.id.featruedRv, listOf(
+                Product("Century Tuna", 30.00, R.drawable.century_tuna),
+                Product("Sugar", 20.00, R.drawable.sugar)
+            )),
+            Pair(R.id.snacksRv, listOf(
+                Product("Skyflakes Bundle", 60.00, R.drawable.skyflakes),
+                Product("Cream O Bundle", 75.00, R.drawable.cream_o_vanilla)
+            )),
+            Pair(R.id.sweetsRv, listOf(
+                Product("Toblerone", 260.00, R.drawable.toblerone),
+                Product("M&M's", 70.00, R.drawable.m_ms)
+            )),
+            Pair(R.id.pantryRv, listOf(
+                Product("Youngstown Sardines", 25.00, R.drawable.youngstown),
+                Product("Purefoods Cornbeef", 45.00, R.drawable.purefoods_cornedbeef)
+            )),
+            Pair(R.id.freshproduceRv, listOf(
+                Product("Eggplant", 25.00, R.drawable.eggplant),
+                Product("Okra", 15.00, R.drawable.okra)
+            )),
+            Pair(R.id.meatsandseafoodsRv, listOf(
+                Product("Pork Chop", 300.00, R.drawable.pork_chop),
+                Product("Beef Steak", 350.00, R.drawable.beef_steak)
+            )),
+            Pair(R.id.householdessentialsRv, listOf(
+                Product("Safeguard Soap", 40.00, R.drawable.safeguard_soap),
+                Product("Sanicare Tissue", 120.00, R.drawable.sanicare_tissue)
+            ))
+        )
+
+        categories.forEach { category ->
+            val recyclerViewId = category.first
+            val products = category.second
+            setupRecyclerView(recyclerViewId, products)
+        }
+    }
+
+
+    private fun setupRecyclerView(recyclerViewId: Int, products: List<Product>) {
+        findViewById<RecyclerView>(recyclerViewId).apply {
+            layoutManager = GridLayoutManager(this@MainActivity, 2)
+            adapter = ProductAdapter(this@MainActivity, products)
+        }
+    }
+
+    private fun navigateTo(destination: Class<*>) {
+        startActivity(Intent(this, destination))
+        finish()
     }
 }

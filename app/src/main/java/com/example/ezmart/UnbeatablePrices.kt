@@ -52,8 +52,8 @@ class UnbeatablePrices : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         productList = listOf(
-            Product("Nissin Wafer Choco", "₱ 50.00", R.drawable.nissin_wafer),
-            Product("Knorr Sinigang Mix", "₱ 15.00", R.drawable.knorr_sinigang_original_mix),
+            Product("Nissin Wafer Choco", 50.00, R.drawable.nissin_wafer),
+            Product("Knorr Sinigang Mix", 15.00, R.drawable.knorr_sinigang_original_mix),
         )
         productAdapter = ProductAdapter(this, productList)
         recyclerView.adapter = productAdapter
