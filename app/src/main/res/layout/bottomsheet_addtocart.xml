@@ -117,7 +117,7 @@
             app:layout_constraintVertical_bias="0.358">
 
             <ImageView
-                android:id="@+id/originalFlavorIv"
+                android:id="@+id/flavor1Iv"
                 android:layout_width="100dp"
                 android:layout_height="105dp"
                 android:layout_marginStart="20dp"
@@ -133,7 +133,7 @@
 
 
             <ImageView
-                android:id="@+id/hotandspicyFlavorIv"
+                android:id="@+id/flavor2Iv"
                 android:layout_width="100dp"
                 android:layout_height="105dp"
                 android:layout_marginStart="15dp"
@@ -154,7 +154,7 @@
             android:id="@+id/textView17"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Original"
+            android:text="Flavor 1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.121"
@@ -165,7 +165,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hot and Spicy"
+            android:text="Flavor 2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.438"
