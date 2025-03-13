@@ -25,6 +25,7 @@
             app:layout_constraintVertical_bias="0.08" />
 
         <TextView
+            android:id="@+id/productName_cartTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="151dp"
@@ -40,6 +41,7 @@
             app:layout_constraintVertical_bias="0.067" />
 
         <TextView
+            android:id="@+id/productPrice_cartTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="151dp"
@@ -55,7 +57,7 @@
             app:layout_constraintVertical_bias="0.107" />
 
         <TextView
-            android:id="@+id/productstockTv"
+            android:id="@+id/productStock_cartTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="151dp"
@@ -117,7 +119,7 @@
             app:layout_constraintVertical_bias="0.358">
 
             <ImageView
-                android:id="@+id/flavor1Iv"
+                android:id="@+id/flavor1_cartIv"
                 android:layout_width="100dp"
                 android:layout_height="105dp"
                 android:layout_marginStart="20dp"
@@ -133,7 +135,7 @@
 
 
             <ImageView
-                android:id="@+id/flavor2Iv"
+                android:id="@+id/flavor2_cartIv"
                 android:layout_width="100dp"
                 android:layout_height="105dp"
                 android:layout_marginStart="15dp"
@@ -151,7 +153,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView17"
+            android:id="@+id/nameFlavor1_cartTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Flavor 1"
@@ -163,6 +165,7 @@
             app:layout_constraintVertical_bias="0.447" />
 
         <TextView
+            android:id="@+id/nameFlavor2_cartTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Flavor 2"
