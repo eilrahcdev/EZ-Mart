@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="151dp"
             android:fontFamily="@font/henrysans_regular"
-            android:text="Stock: "
+            android:text="Stock: 0"
             android:textSize="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
