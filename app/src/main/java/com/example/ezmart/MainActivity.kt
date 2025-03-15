@@ -1,5 +1,6 @@
 package com.example.ezmart
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -16,11 +17,13 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -35,47 +38,130 @@ class MainActivity : AppCompatActivity() {
     private val sliderHandler = Handler(Looper.getMainLooper())
     private lateinit var sliderRunnable: Runnable
     private val dots = mutableListOf<ImageView>()
+    private lateinit var unbeatableRecyclerView: RecyclerView
+    private lateinit var featuredRecyclerView: RecyclerView
+    private lateinit var snacksRecyclerView: RecyclerView
+    private lateinit var sweetsRecyclerView: RecyclerView
+    private lateinit var pantryRecyclerView: RecyclerView
+    private lateinit var freshProduceRecyclerView: RecyclerView
+    private lateinit var meatsRecyclerView: RecyclerView
+    private lateinit var householdRecyclerView: RecyclerView
 
+    private lateinit var unbeatableAdapter: ProductAdapter
+    private lateinit var featuredAdapter: ProductAdapter
+    private lateinit var snacksAdapter: ProductAdapter
+    private lateinit var sweetsAdapter: ProductAdapter
+    private lateinit var pantryAdapter: ProductAdapter
+    private lateinit var freshProduceAdapter: ProductAdapter
+    private lateinit var meatsAdapter: ProductAdapter
+    private lateinit var householdAdapter: ProductAdapter
+
+    private lateinit var viewModel: ProductViewModel
+
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        setupWindowInsets()
-        setupButtons()
-        setupSeeMoreTextViews()
-        setupNavigation()
-        setupImageSlider()
-        setupProductCategories()
-    }
-
-    private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-    }
 
-    private fun setupButtons() {
+        // Initialize ViewModel
+        viewModel = ViewModelProvider(this)[ProductViewModel::class.java]
+
+        // Initialize Buttons
         cartIbtn = findViewById(R.id.cartIbtn)
         cartIbtn.setOnClickListener {
-            navigateTo(Cart::class.java)
+            val intent = Intent(this, Cart::class.java)
+            startActivity(intent)
         }
 
         searchEt = findViewById(R.id.searchEt)
         searchEt.setOnClickListener {
-            navigateTo(SearchActivity::class.java)
+            val intent = Intent(this, SearchActivity::class.java)
+            startActivity(intent)
         }
+
+        // Set RecyclerViews
+        unbeatableRecyclerView = findViewById(R.id.unbeatableRv)
+        featuredRecyclerView = findViewById(R.id.featuredRv)
+        snacksRecyclerView = findViewById(R.id.snacksRv)
+        sweetsRecyclerView = findViewById(R.id.sweetsRv)
+        pantryRecyclerView = findViewById(R.id.pantryRv)
+        freshProduceRecyclerView = findViewById(R.id.freshproduceRv)
+        meatsRecyclerView = findViewById(R.id.meatsandseafoodsRv)
+        householdRecyclerView = findViewById(R.id.householdessentialsRv)
+
+        // Set unique LayoutManagers for each RecyclerView
+        unbeatableRecyclerView.layoutManager = GridLayoutManager(this, 2)
+        featuredRecyclerView.layoutManager = GridLayoutManager(this, 2)
+        snacksRecyclerView.layoutManager = GridLayoutManager(this, 2)
+        sweetsRecyclerView.layoutManager = GridLayoutManager(this, 2)
+        pantryRecyclerView.layoutManager = GridLayoutManager(this, 2)
+        freshProduceRecyclerView.layoutManager = GridLayoutManager(this, 2)
+        meatsRecyclerView.layoutManager = GridLayoutManager(this, 2)
+        householdRecyclerView.layoutManager = GridLayoutManager(this, 2)
+
+
+        // Initialize Adapters
+        unbeatableAdapter = ProductAdapter(this, emptyList())
+        featuredAdapter = ProductAdapter(this, emptyList())
+        snacksAdapter = ProductAdapter(this, emptyList())
+        sweetsAdapter = ProductAdapter(this, emptyList())
+        pantryAdapter = ProductAdapter(this, emptyList())
+        freshProduceAdapter = ProductAdapter(this, emptyList())
+        meatsAdapter = ProductAdapter(this, emptyList())
+        householdAdapter = ProductAdapter(this, emptyList())
+
+        // Set Adapters
+        unbeatableRecyclerView.adapter = unbeatableAdapter
+        featuredRecyclerView.adapter = featuredAdapter
+        snacksRecyclerView.adapter = snacksAdapter
+        sweetsRecyclerView.adapter = sweetsAdapter
+        pantryRecyclerView.adapter = pantryAdapter
+        freshProduceRecyclerView.adapter = freshProduceAdapter
+        meatsRecyclerView.adapter = meatsAdapter
+        householdRecyclerView.adapter = householdAdapter
+
+        // Fetch products from the API
+        viewModel.fetchProducts()
+
+        // Observe products LiveData
+        viewModel.products.observe(this) { products ->
+            unbeatableAdapter.updateProductList(products.filter { it.category == "Unbeatable Prices" })
+            featuredAdapter.updateProductList(products.filter { it.category == "Featured Products" })
+            snacksAdapter.updateProductList(products.filter { it.category == "Snacks" })
+            sweetsAdapter.updateProductList(products.filter { it.category == "Sweets" })
+            pantryAdapter.updateProductList(products.filter { it.category == "Pantry" })
+            freshProduceAdapter.updateProductList(products.filter { it.category == "Fresh Produce" })
+            meatsAdapter.updateProductList(products.filter { it.category == "Meats and Seafoods" })
+            householdAdapter.updateProductList(products.filter { it.category == "Household Essentials" })
+        }
+
+        // Observe error messages
+        viewModel.errorMessage.observe(this) { errorMessage ->
+            Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+        }
+
+        // Set up additional UI elements
+        setupSeeMoreTextViews()
+        setupNavigation()
+        setupImageSlider()
     }
 
-    private fun setupSeeMoreTextViews() {
+    fun setupSeeMoreTextViews() {
         val seeMoreMappings = mapOf(
             R.id.unbeatable_seemoreTv to UnbeatablePrices::class.java,
             R.id.featured_seemoreTv to FeaturedProducts::class.java,
             R.id.snacks_seemoreTv to Snacks::class.java,
+            R.id.beverages_seemoreTv to Beverages::class.java,
             R.id.sweets_seemoreTv to Sweets::class.java,
             R.id.pantry_seemoreTv to Pantry::class.java,
+            R.id.dairy_seemoreTv to DairyandPastry::class.java,
             R.id.freshproduce_seemoreTv to FreshProduce::class.java,
             R.id.meatsandseafoods_seemoreTv to MeatsandSeafoods::class.java,
             R.id.household_seemoreTv to HouseholdEssentials::class.java
@@ -86,12 +172,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun makeSpannable(textView: TextView, destination: Class<*>) {
+    fun makeSpannable(textView: TextView, destination: Class<*>) {
         val spannableString = SpannableString("See More =>").apply {
             setSpan(object : ClickableSpan() {
                 override fun onClick(widget: View) {
-                    navigateTo(destination)
+                    val intent = Intent(widget.context, destination)
+                    widget.context.startActivity(intent)
                 }
+
                 override fun updateDrawState(ds: android.text.TextPaint) {
                     ds.isUnderlineText = false
                 }
@@ -106,44 +194,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupNavigation() {
-        val navigationItems = listOf(
-            R.id.homeTab to Pair(R.id.homeIcon, R.id.homeText),
-            R.id.categoriesTab to Pair(R.id.categoriesIcon, R.id.categoriesText),
-            R.id.ordersTab to Pair(R.id.ordersIcon, R.id.ordersText),
-            R.id.profileTab to Pair(R.id.profileIcon, R.id.profileText)
-        )
-
-        navigationItems.forEach { (tabId, iconTextPair) ->
-            val (iconId, textId) = iconTextPair
-            findViewById<LinearLayout>(tabId).setOnClickListener {
-                resetNavigationColors()
-                findViewById<ImageView>(iconId).setColorFilter(resources.getColor(R.color.blue))
-                findViewById<TextView>(textId).setTextColor(resources.getColor(R.color.blue))
-                navigateTo(getDestinationClass(tabId))
-            }
-        }
-    }
-
-    private fun getDestinationClass(tabId: Int): Class<*> {
-        return when (tabId) {
-            R.id.categoriesTab -> Categories::class.java
-            R.id.ordersTab -> Orders::class.java
-            R.id.profileTab -> Profile::class.java
-            else -> MainActivity::class.java
-        }
-    }
-
-    private fun resetNavigationColors() {
-        listOf(R.id.homeIcon, R.id.categoriesIcon, R.id.ordersIcon, R.id.profileIcon).forEach {
-            findViewById<ImageView>(it).setColorFilter(resources.getColor(R.color.black))
-        }
-        listOf(R.id.homeText, R.id.categoriesText, R.id.ordersText, R.id.profileText).forEach {
-            findViewById<TextView>(it).setTextColor(resources.getColor(R.color.black))
-        }
-    }
-
-    private fun setupImageSlider() {
+    fun setupImageSlider() {
         val imageList = listOf(R.drawable.ad1, R.drawable.ad2, R.drawable.ad3)
         val loopedList = listOf(imageList.last()) + imageList + listOf(imageList.first())
 
@@ -194,7 +245,7 @@ class MainActivity : AppCompatActivity() {
         dots.firstOrNull()?.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.active_dot))
     }
 
-    private fun updateDotsIndicator(selectedIndex: Int) {
+    fun updateDotsIndicator(selectedIndex: Int) {
         dots.forEachIndexed { index, imageView ->
             imageView.setImageDrawable(
                 ContextCompat.getDrawable(this, if (index == selectedIndex) R.drawable.active_dot else R.drawable.non_active_dot)
@@ -202,59 +253,51 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupProductCategories() {
-        val categories: List<Pair<Int, List<Product>>> = listOf(
-            Pair(R.id.unbeatableRv, listOf(
-                Product("Nissin Wafer Choco", 50.00, R.drawable.nissin_wafer),
-                Product("Knorr Sinigang Mix", 15.00, R.drawable.knorr_sinigang_original_mix)
-            )),
-            Pair(R.id.featruedRv, listOf(
-                Product("Century Tuna", 30.00, R.drawable.century_tuna),
-                Product("Sugar", 20.00, R.drawable.sugar)
-            )),
-            Pair(R.id.snacksRv, listOf(
-                Product("Skyflakes Bundle", 60.00, R.drawable.skyflakes),
-                Product("Cream O Bundle", 75.00, R.drawable.cream_o_vanilla)
-            )),
-            Pair(R.id.sweetsRv, listOf(
-                Product("Toblerone", 260.00, R.drawable.toblerone),
-                Product("M&M's", 70.00, R.drawable.m_ms)
-            )),
-            Pair(R.id.pantryRv, listOf(
-                Product("Youngstown Sardines", 25.00, R.drawable.youngstown),
-                Product("Purefoods Cornbeef", 45.00, R.drawable.purefoods_cornedbeef)
-            )),
-            Pair(R.id.freshproduceRv, listOf(
-                Product("Eggplant", 25.00, R.drawable.eggplant),
-                Product("Okra", 15.00, R.drawable.okra)
-            )),
-            Pair(R.id.meatsandseafoodsRv, listOf(
-                Product("Pork Chop", 300.00, R.drawable.pork_chop),
-                Product("Beef Steak", 350.00, R.drawable.beef_steak)
-            )),
-            Pair(R.id.householdessentialsRv, listOf(
-                Product("Safeguard Soap", 40.00, R.drawable.safeguard_soap),
-                Product("Sanicare Tissue", 120.00, R.drawable.sanicare_tissue)
-            ))
+
+    fun setupNavigation() {
+        val navigationItems = listOf(
+            R.id.homeTab to Pair(R.id.homeIcon, R.id.homeText),
+            R.id.categoriesTab to Pair(R.id.categoriesIcon, R.id.categoriesText),
+            R.id.ordersTab to Pair(R.id.ordersIcon, R.id.ordersText),
+            R.id.profileTab to Pair(R.id.profileIcon, R.id.profileText)
         )
 
-        categories.forEach { category ->
-            val recyclerViewId = category.first
-            val products = category.second
-            setupRecyclerView(recyclerViewId, products)
+        navigationItems.forEach { (tabId, iconTextPair) ->
+            val (iconId, textId) = iconTextPair
+            findViewById<LinearLayout>(tabId).setOnClickListener {
+                resetNavigationColors()
+                findViewById<ImageView>(iconId).setColorFilter(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.blue
+                    )
+                )
+                findViewById<TextView>(textId).setTextColor(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.blue
+                    )
+                )
+                startActivity(Intent(this, getDestinationClass(tabId)))
+            }
         }
     }
 
-
-    private fun setupRecyclerView(recyclerViewId: Int, products: List<Product>) {
-        findViewById<RecyclerView>(recyclerViewId).apply {
-            layoutManager = GridLayoutManager(this@MainActivity, 2)
-            adapter = ProductAdapter(this@MainActivity, products)
+    fun getDestinationClass(tabId: Int): Class<*> {
+        return when (tabId) {
+            R.id.categoriesTab -> Categories::class.java
+            R.id.ordersTab -> Orders::class.java
+            R.id.profileTab -> Profile::class.java
+            else -> MainActivity::class.java
         }
     }
 
-    private fun navigateTo(destination: Class<*>) {
-        startActivity(Intent(this, destination))
-        finish()
+    fun resetNavigationColors() {
+        listOf(R.id.homeIcon, R.id.categoriesIcon, R.id.ordersIcon, R.id.profileIcon).forEach {
+            findViewById<ImageView>(it).setColorFilter(ContextCompat.getColor(this, R.color.black))
+        }
+        listOf(R.id.homeText, R.id.categoriesText, R.id.ordersText, R.id.profileText).forEach {
+            findViewById<TextView>(it).setTextColor(ContextCompat.getColor(this, R.color.black))
+        }
     }
 }

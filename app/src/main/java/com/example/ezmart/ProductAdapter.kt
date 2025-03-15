@@ -2,6 +2,8 @@ package com.example.ezmart
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +11,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import android.content.SharedPreferences
-import android.util.Log
-import android.widget.Toast
+import com.bumptech.glide.Glide
 
 class ProductAdapter(private val context: Context, private var productList: List<Product>) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
@@ -31,39 +31,38 @@ class ProductAdapter(private val context: Context, private var productList: List
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-        holder.productImage.setImageResource(product.imageResId)
+
+        Glide.with(context)
+            .load(product.image)
+            .into(holder.productImage)
+
         holder.productName.text = product.name
+        holder.productPrice.text = "₱ %.2f".format(product.price) // Format price properly
 
-        // Store price as Double internally but format it for display
-        holder.productPrice.text = "₱ %.2f".format(product.price)
-
+        // Handle Add to Cart button
         holder.addToCartBtn.setOnClickListener {
             CartManager.addToCart(context, product)
-            showToast("${product.name} added to cart")
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun getItemCount(): Int = productList.size
 
-    // Function to update the adapter's data and refresh the RecyclerView
-    fun updateList(newList: List<Product>) {
-        productList = newList
+    // Function to update the adapter's data and refresh RecyclerView
+    fun updateProductList(newProductList: List<Product>) {
+        productList = newProductList
         notifyDataSetChanged()
     }
 
-    // Function to handle product search and save query to history
+
+    // Optional: Search products and save search history
     fun searchProducts(query: String, allProducts: List<Product>) {
         val filteredList = allProducts.filter { it.name.contains(query, ignoreCase = true) }
-        updateList(filteredList)
+        updateProductList(filteredList)
         SearchHistoryManager.saveSearchQuery(context, query)
     }
 }
 
-// Manages search history using SharedPreferences
+// Search history manager using SharedPreferences
 object SearchHistoryManager {
     private const val PREFS_NAME = "search_history"
     private const val KEY_HISTORY = "history"
@@ -73,7 +72,7 @@ object SearchHistoryManager {
         val historySet = prefs.getStringSet(KEY_HISTORY, mutableSetOf())?.toMutableSet() ?: mutableSetOf()
 
         if (query.isNotBlank()) {
-            historySet.add(query) // Save unique searches
+            historySet.add(query) // Avoid duplicates
             prefs.edit().putStringSet(KEY_HISTORY, historySet).apply()
             Log.d("SearchHistory", "Saved Query: $query")
         }

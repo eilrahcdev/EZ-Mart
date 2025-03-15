@@ -6,25 +6,34 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 data class Product(
+    val id: Int,
     val name: String,
     val price: Double,
-    val imageResId: Int,
+    val stock: Int,
+    val image: String,
+    val category: String,
     var isSelected: Boolean = false,
     var quantity: Int = 1
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
+        parcel.readInt(),
         parcel.readString() ?: "",
         parcel.readDouble(),
         parcel.readInt(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
         parcel.readByte() != 0.toByte(),
         parcel.readInt()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
         parcel.writeString(name)
-        parcel.writeDouble(price)  // Ensure price is saved as Double
-        parcel.writeInt(imageResId)
+        parcel.writeDouble(price)
+        parcel.writeInt(stock)
+        parcel.writeString(image)
+        parcel.writeString(category)
         parcel.writeByte(if (isSelected) 1 else 0)
         parcel.writeInt(quantity)
     }
@@ -40,20 +49,21 @@ data class Product(
             return arrayOfNulls(size)
         }
 
+        // Serialize a list of products to JSON
         fun serializeList(products: List<Product>): String {
             return Gson().toJson(products)
         }
 
+        // Deserialize a JSON string to a list of products
         fun deserializeList(json: String): List<Product> {
             val gson = Gson()
             val listType = object : TypeToken<List<Product>>() {}.type
-            return gson.fromJson(json, listType) ?: emptyList() // Keep price as Double
+            return gson.fromJson(json, listType) ?: emptyList()
         }
     }
 
     // Function to get price as a formatted string with Peso sign
     fun getFormattedPrice(): String {
-        return "₱ %.2f".format(price) // Formats price with ₱ and two decimal places
+        return "₱ %.2f".format(price)
     }
 }
-

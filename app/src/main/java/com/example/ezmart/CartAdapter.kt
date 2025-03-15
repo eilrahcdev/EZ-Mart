@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class CartAdapter(
     private val cartList: MutableList<Product>,
@@ -31,43 +32,43 @@ class CartAdapter(
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val product = cartList[position]
 
-        holder.productImage.setImageResource(product.imageResId)
+        // Load image using Glide
+        Glide.with(holder.itemView.context)
+            .load(product.image)
+            .into(holder.productImage)
+
         holder.productName.text = product.name
         holder.productPrice.text = "₱ %.2f".format(product.price)
         holder.quantityText.text = product.quantity.toString()
 
-        // Prevent multiple calls to onCheckedChanged when setting the state
         holder.selectCheckBox.setOnCheckedChangeListener(null)
         holder.selectCheckBox.isChecked = product.isSelected
 
-        // Apply blue tint to checkbox
         holder.selectCheckBox.buttonTintList =
             ContextCompat.getColorStateList(holder.itemView.context, R.color.blue)
 
-        // Checkbox click event
         holder.selectCheckBox.setOnCheckedChangeListener { _, isChecked ->
             product.isSelected = isChecked
             onTotalAmountUpdated(getTotalAmount())
         }
 
-        // Plus button: Increase quantity
         holder.btnPlus.setOnClickListener {
             product.quantity++
             holder.quantityText.text = product.quantity.toString()
-            notifyItemChanged(position) // Efficient update
+            notifyItemChanged(position)
             onTotalAmountUpdated(getTotalAmount())
         }
 
-        // Minus button: Decrease quantity (but not below 1)
         holder.btnMinus.setOnClickListener {
             if (product.quantity > 1) {
                 product.quantity--
                 holder.quantityText.text = product.quantity.toString()
-                notifyItemChanged(position) // Efficient update
+                notifyItemChanged(position)
                 onTotalAmountUpdated(getTotalAmount())
             }
         }
     }
+
 
     fun updateCart(newCartList: List<Product>) {
         cartList.clear()

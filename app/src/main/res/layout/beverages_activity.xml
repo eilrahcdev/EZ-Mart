@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/sweets_activity">
+    android:id="@+id/beverages_activity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar_sweets"
+        android:id="@+id/appBar_beverages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/appbar_background"
@@ -22,7 +21,7 @@
             android:elevation="10dp">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/sweetsTb"
+                android:id="@+id/beveragesTb"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@android:color/transparent"
@@ -34,7 +33,7 @@
                 android:elevation="15dp">
 
                 <ImageButton
-                    android:id="@+id/backBtn_sweets"
+                    android:id="@+id/backBtn_beverages"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="20dp"
@@ -45,17 +44,17 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/sweetsTv"
+                    android:id="@+id/beveragesTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/inter_bold"
                     android:layout_gravity="center"
-                    android:text="Sweets"
-                    android:textColor="@color/mango"
-                    android:textSize="20dp" />
+                    android:text="Beverages"
+                    android:textColor="@color/yellow"
+                    android:textSize="20sp" />
 
                 <ImageButton
-                    android:id="@+id/cartIbtn_sweets"
+                    android:id="@+id/cartIbtn_beverages"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginEnd="20dp"
@@ -72,23 +71,23 @@
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/sweetsSection"
+        android:id="@+id/beveragesSection"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_margin="10dp"
         android:layout_marginBottom="20dp"
-        android:background="@drawable/sweets_bg"
-        android:padding="10dp"
+        android:background="@drawable/beverages_bg"
         android:elevation="5dp"
+        android:padding="10dp"
         app:layout_constraintBottom_toTopOf="@+id/customBottomNav"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBar_sweets"
-        app:layout_constraintVertical_bias="0.027">
+        app:layout_constraintTop_toBottomOf="@+id/appBar_beverages"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/sweetsRv"
+            android:id="@+id/beveragesRv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"

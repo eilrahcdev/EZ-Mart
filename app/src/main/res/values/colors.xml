@@ -10,9 +10,11 @@
     <color name="lime">#2FE644</color>">
     <color name="leafgreen">#076612</color>">
     <color name="pastelbluegreen">#96D8CE</color>
-    <color name="pastelblue">#ACCAFF</color>
+    <color name="pastelblue">#93BBFF</color>
     <color name="lightpink">#EFE1E1</color>
     <color name="violet">#BB00FF</color>
     <color name="pastelred">#F93F3F</color>
     <color name="mango">#F1A232</color>
+    <color name="pastelbrown">#9D7251</color>
+    <color name="yellow">#FFC900</color>
 </resources>

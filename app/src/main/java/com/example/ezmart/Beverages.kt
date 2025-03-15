@@ -9,85 +9,68 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ezmart.api.ApiClient
-import com.example.ezmart.models.ProductResponse
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlin.getValue
 
 @Suppress("DEPRECATION")
-class Snacks : AppCompatActivity() {
+class Beverages : AppCompatActivity() {
+    @SuppressLint("MissingInflatedId")
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
-    private var productList: MutableList<Product> = mutableListOf()
 
-    @SuppressLint("MissingInflatedId")
+    private val productViewModel: ProductViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.snacks_activity)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.snacks_activity)) { v, insets ->
+        setContentView(R.layout.beverages_activity)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.beverages_activity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        //Buttons with function
+        val backBtnBeverages = findViewById<ImageButton>(R.id.backBtn_beverages)
+        backBtnBeverages.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
-        // Initialize RecyclerView
-        recyclerView = findViewById(R.id.snacksRv)
+        val cartIbtnBeverages = findViewById<ImageButton>(R.id.cartIbtn_beverages)
+        cartIbtnBeverages.setOnClickListener {
+            val intent = Intent(this, Cart::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        // Set up RecyclerView
+        recyclerView = findViewById(R.id.beveragesRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productAdapter = ProductAdapter(this, productList)
+        productAdapter = ProductAdapter(this, emptyList()) // Initially empty
         recyclerView.adapter = productAdapter
 
-        // Fetch only "Snacks" category directly from API
-        fetchSnacksProducts()
-
-        // Set up navigation and button clicks
-        setupNavigation()
-
-        // Back button to MainActivity
-        findViewById<ImageButton>(R.id.backBtn_snacks).setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
-
-        // Cart button
-        findViewById<ImageButton>(R.id.cartIbtn_snacks).setOnClickListener {
-            startActivity(Intent(this, Cart::class.java))
-            finish()
-        }
-    }
-
-    // Fetch Snacks category products from API
-    private fun fetchSnacksProducts() {
-        val apiService = ApiClient.instance
-        val call = apiService.getProductsByCategory("Snacks")
-
-        call.enqueue(object : Callback<ProductResponse> {
-            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
-                if (response.isSuccessful && response.body() != null) {
-                    productList.clear()
-                    productList.addAll(response.body()!!.products)
-                    productAdapter.notifyDataSetChanged()
-                } else {
-                    Toast.makeText(this@Snacks, "Failed to load products", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                Toast.makeText(this@Snacks, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
+        // Observe product list from ViewModel
+        productViewModel.products.observe(this, Observer { products ->
+            productAdapter.updateProductList(products)
         })
-    }
 
-    // Navigation bar setup function (Bottom Tabs)
-    private fun setupNavigation() {
+        // Observe error messages
+        productViewModel.errorMessage.observe(this, Observer { error ->
+            Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+        })
+
+        // Fetch products for "Beverages"
+        productViewModel.fetchProducts("Beverages")
+
+        // Navigation Items
         val homeTab = findViewById<LinearLayout>(R.id.homeTab)
         val categoriesTab = findViewById<LinearLayout>(R.id.categoriesTab)
         val ordersTab = findViewById<LinearLayout>(R.id.ordersTab)
@@ -103,21 +86,18 @@ class Snacks : AppCompatActivity() {
         val ordersText = findViewById<TextView>(R.id.ordersText)
         val profileText = findViewById<TextView>(R.id.profileText)
 
-        // Reset colors function
         fun resetColors() {
-            val defaultColor = resources.getColor(R.color.black)
-            homeIcon.setColorFilter(defaultColor)
-            categoriesIcon.setColorFilter(defaultColor)
-            ordersIcon.setColorFilter(defaultColor)
-            profileIcon.setColorFilter(defaultColor)
+            homeIcon.setColorFilter(resources.getColor(R.color.black))
+            categoriesIcon.setColorFilter(resources.getColor(R.color.black))
+            ordersIcon.setColorFilter(resources.getColor(R.color.black))
+            profileIcon.setColorFilter(resources.getColor(R.color.black))
 
-            homeText.setTextColor(defaultColor)
-            categoriesText.setTextColor(defaultColor)
-            ordersText.setTextColor(defaultColor)
-            profileText.setTextColor(defaultColor)
+            homeText.setTextColor(resources.getColor(R.color.black))
+            categoriesText.setTextColor(resources.getColor(R.color.black))
+            ordersText.setTextColor(resources.getColor(R.color.black))
+            profileText.setTextColor(resources.getColor(R.color.black))
         }
 
-        // Navigation listeners
         homeTab.setOnClickListener {
             resetColors()
             homeIcon.setColorFilter(resources.getColor(R.color.blue))

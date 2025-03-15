@@ -15,29 +15,45 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.ezmart.api.ApiClient
+import com.example.ezmart.models.LoginRequest
+import com.example.ezmart.models.LoginResponse
 import com.google.android.material.textfield.TextInputEditText
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class Login : AppCompatActivity() {
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Check if user is already logged in
+        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false)
+
+        if (isLoggedIn) {
+            navigateToMain()
+            return
+        }
+
         enableEdgeToEdge()
         setContentView(R.layout.login_activity)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login_activity)) { v, insets ->
+    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.login_activity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Find views
+        // Initialize UI elements
         val emailField = findViewById<TextInputEditText>(R.id.emailEt_login)
         val passwordField = findViewById<TextInputEditText>(R.id.passwordEt_login)
         val loginButton = findViewById<Button>(R.id.loginBtn)
         val forgotPasswordButton = findViewById<Button>(R.id.forgotpassbtn)
         val registerTextView = findViewById<TextView>(R.id.registerTv_login)
 
-        // Set Spannable text for signupTextView
+        // Set Spannable text for Register textView
         val registerSpannable = SpannableString("Don't have an account? Register")
         registerSpannable.setSpan(
             ForegroundColorSpan(Color.BLUE),
@@ -52,66 +68,86 @@ class Login : AppCompatActivity() {
             val email = emailField.text.toString().trim()
             val password = passwordField.text.toString().trim()
 
-            if (validateEmail(email) && validatePassword(password)) {
-                // Proceed with login
-                Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
-            }
+            if (!validateEmail(email) || !validatePassword(password)) return@setOnClickListener
+
+            val loginRequest = LoginRequest(email, password)
+
+            // API Call
+            ApiClient.instance.login(loginRequest).enqueue(object : Callback<LoginResponse> {
+                override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
+                    val loginResponse = response.body()
+                    if (response.isSuccessful && loginResponse?.success == true) {
+                        saveLoginState(true)
+                        showToast("Login Successful!")
+                        navigateToMain()
+                    } else {
+                        showToast(loginResponse?.message ?: "Invalid email or password")
+                    }
+                }
+
+
+                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                    showToast("Network error: ${t.message}")
+                }
+            })
         }
 
-        // Set navigation for Sign Up and Forgot Password buttons
-        setupNavigationButtons(forgotPasswordButton, loginButton, registerTextView)
+        // Set navigation buttons
+        forgotPasswordButton.setOnClickListener {
+            startActivity(Intent(this, ForgotPassword::class.java))
+        }
+
+        registerTextView.setOnClickListener {
+            startActivity(Intent(this, Register::class.java))
+        }
     }
 
     // Function to validate email
     private fun validateEmail(email: String): Boolean {
-        return if (email.isEmpty()) {
-            showToast("Email field cannot be empty.")
-            false
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            showToast("Please enter a valid email address.")
-            false
-        } else {
-            true
+        return when {
+            email.isEmpty() -> {
+                showToast("Email field cannot be empty.")
+                false
+            }
+            !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                showToast("Please enter a valid email address.")
+                false
+            }
+            else -> true
         }
     }
 
     // Function to validate password
     private fun validatePassword(password: String): Boolean {
-        return if (password.isEmpty()) {
-            showToast("Password field cannot be empty.")
-            false
-        } else if (password.length < 8 || password.length > 15) {
-            showToast("Password must be between 8 and 15 characters.")
-            false
-        } else {
-            true
+        return when {
+            password.isEmpty() -> {
+                showToast("Password field cannot be empty.")
+                false
+            }
+            password.length !in 8..15 -> {
+                showToast("Password must be between 8 and 15 characters.")
+                false
+            }
+            else -> true
         }
     }
 
-    // Function to show a toast message
+    // Function to show toast messages
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
-    // Function to set navigation for Sign Up and Forgot Password buttons
-    private fun setupNavigationButtons(
-        forgotPasswordButton: Button,
-        loginButton: Button,
-        registerTextview: TextView
-    ) {
-        forgotPasswordButton.setOnClickListener {
-            val intent = Intent(this, ForgotPassword::class.java)
-            startActivity(intent)
-        }
-        loginButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
+    // Navigate to MainActivity
+    private fun navigateToMain() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
 
-        registerTextview.setOnClickListener {
-            val intent = Intent(this, Register::class.java)
-            startActivity(intent)
-        }
+    // Save login state
+    private fun saveLoginState(isLoggedIn: Boolean) {
+        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("is_logged_in", isLoggedIn)
+        editor.apply()
     }
 }

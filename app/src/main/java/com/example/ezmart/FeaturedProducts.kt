@@ -7,12 +7,16 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.getValue
 
 @Suppress("DEPRECATION")
 class FeaturedProducts : AppCompatActivity() {
@@ -20,7 +24,8 @@ class FeaturedProducts : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
-    private lateinit var productList: List<Product>
+
+    private val productViewModel: ProductViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,16 +51,23 @@ class FeaturedProducts : AppCompatActivity() {
             finish()
         }
 
-        //Featured Products
+        // Setup RecyclerView
         recyclerView = findViewById(R.id.featruedRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-
-        productList = listOf(
-            Product("Century Tuna", 30.00, R.drawable.century_tuna),
-            Product( "Sugar", 20.00, R.drawable.sugar),
-        )
-        productAdapter = ProductAdapter(this, productList)
+        productAdapter = ProductAdapter(this, emptyList()) // Start with empty list
         recyclerView.adapter = productAdapter
+
+        // Observe products and error messages
+        productViewModel.products.observe(this, Observer { products ->
+            productAdapter.updateProductList(products)
+        })
+
+        productViewModel.errorMessage.observe(this, Observer { error ->
+            Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+        })
+
+        // Fetch featured products
+        productViewModel.fetchProducts("Featured Products")
 
         // Navigation Items
         val homeTab = findViewById<LinearLayout>(R.id.homeTab)

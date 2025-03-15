@@ -15,6 +15,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ezmart.api.ApiClient
+import com.example.ezmart.models.ProductResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
 
@@ -55,12 +60,11 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryRecyclerView.adapter = historyAdapter
 
         productRecyclerView.layoutManager = LinearLayoutManager(this)
-        productAdapter = ProductAdapter(this, productList) // FIXED: Now passing context and correct list
+        productAdapter = ProductAdapter(this, productList)
         productRecyclerView.adapter = productAdapter
 
         // Search button click listener
-        val searchBtn = findViewById<ImageButton>(R.id.searchIcon)
-        searchBtn.setOnClickListener {
+        findViewById<ImageButton>(R.id.searchIcon).setOnClickListener {
             val query = searchEt.text.toString().trim()
             if (!TextUtils.isEmpty(query)) {
                 saveSearchHistory(query)
@@ -69,15 +73,13 @@ class SearchActivity : AppCompatActivity() {
         }
 
         // Back button click listener
-        val backBtn = findViewById<ImageButton>(R.id.backBtn_search)
-        backBtn.setOnClickListener {
+        findViewById<ImageButton>(R.id.backBtn_search).setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
         // Clear history button click listener
-        val clearSearchHistoryBtn = findViewById<TextView>(R.id.clearHistoryBtn)
-        clearSearchHistoryBtn.setOnClickListener {
+        findViewById<TextView>(R.id.clearHistoryBtn).setOnClickListener {
             clearSearchHistory()
         }
     }
@@ -104,28 +106,30 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter.notifyDataSetChanged()
     }
 
-    // Simulate searching for products (updated to use Product objects)
+    // Search products directly from API based on user input
     private fun performSearch(query: String) {
-        productList.clear()
+        val apiService = ApiClient.instance
+        val call = apiService.searchProducts(query)
 
-        val sampleProducts = listOf(
-            Product("Nissin Wafer Choco", 50.00, R.drawable.nissin_wafer),
-            Product("Knorr Sinigang Mix", 15.00, R.drawable.knorr_sinigang_original_mix),
-            Product( "Sugar", 20.00, R.drawable.sugar),
-            Product("Skyflakes Bundle", 60.00, R.drawable.skyflakes),
-            Product("Toblerone", 260.00, R.drawable.toblerone),
-        )
+        call.enqueue(object : Callback<ProductResponse> {
+            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    productList.clear()
+                    val filteredProducts = response.body()!!.products
+                    if (filteredProducts.isNotEmpty()) {
+                        productList.addAll(filteredProducts)
+                    } else {
+                        Toast.makeText(this@SearchActivity, "No products found", Toast.LENGTH_SHORT).show()
+                    }
+                    productAdapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(this@SearchActivity, "Failed to load products", Toast.LENGTH_SHORT).show()
+                }
+            }
 
-        // Filter products based on the search query
-        val filteredProducts = sampleProducts.filter { it.name.contains(query, ignoreCase = true) }
-
-        if (filteredProducts.isNotEmpty()) {
-            productList.addAll(filteredProducts)
-        } else {
-            // If no product matches, display "No products found"
-            Toast.makeText(this, "No products found", Toast.LENGTH_SHORT).show()
-        }
-
-        productAdapter.notifyDataSetChanged()
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
+                Toast.makeText(this@SearchActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }

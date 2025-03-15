@@ -65,6 +65,9 @@ class Cart : AppCompatActivity() {
                 Toast.makeText(this, "Your cart is empty!", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(this, "Proceeding to Checkout", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, Checkout::class.java)
+                startActivity(intent)
+                finish()
             }
         }
 
@@ -87,6 +90,6 @@ class Cart : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun updateTotalAmount(totalAmount: Double) {
-        totalAmountTextView.text = "₱ %.2f".format(totalAmount) // Ensure peso sign is displayed
+        totalAmountTextView.text = "₱ %.2f".format(totalAmount)
     }
 }

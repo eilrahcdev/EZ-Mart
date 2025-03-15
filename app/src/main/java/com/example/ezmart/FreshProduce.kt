@@ -7,12 +7,16 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.getValue
 
 @Suppress("DEPRECATION")
 class FreshProduce : AppCompatActivity() {
@@ -20,7 +24,8 @@ class FreshProduce : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
-    private lateinit var productList: List<Product>
+
+    private val productViewModel: ProductViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,16 +52,24 @@ class FreshProduce : AppCompatActivity() {
             finish()
         }
 
-        //Fresh Produce
+        // Setup RecyclerView
         recyclerView = findViewById(R.id.freshproduceRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productList = listOf(
-            Product("Eggplant", 25.00, R.drawable.eggplant),
-            Product( "Okra", 15.00, R.drawable.okra),
-            Product( "Squash", 35.00, R.drawable.squash),
-        )
-        productAdapter = ProductAdapter(this, productList)
+        productAdapter = ProductAdapter(this, emptyList()) // Empty initial list
         recyclerView.adapter = productAdapter
+
+        // Observe products LiveData
+        productViewModel.products.observe(this, Observer { products ->
+            productAdapter.updateProductList(products)
+        })
+
+        // Observe error messages
+        productViewModel.errorMessage.observe(this, Observer { error ->
+            Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+        })
+
+        // Fetch products for "Fresh Produce"
+        productViewModel.fetchProducts("Fresh Produce")
 
         // Navigation Items
         val homeTab = findViewById<LinearLayout>(R.id.homeTab)

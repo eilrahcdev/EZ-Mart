@@ -24,19 +24,25 @@ class SplashScreen : AppCompatActivity() {
             insets
         }
 
-        // Delay for 1.5 seconds before checking login state and navigating
+        // Delay for 1.5 seconds before navigating
         Handler(Looper.getMainLooper()).postDelayed({
-            val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-            val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
-
-            if (isLoggedIn) {
-                // Navigate to MainActivity if logged in
-                startActivity(Intent(this, MainActivity::class.java))
-            } else {
-                // Navigate to OnboardScreen if not logged in
-                startActivity(Intent(this, OnboardScreen::class.java))
-            }
-            finish() // Close the splash screen
+            navigateToNextScreen()
         }, 1500)
     }
+
+    private fun navigateToNextScreen() {
+        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false)
+        val isFirstTime = sharedPreferences.getBoolean("is_first_time", true)
+
+        val nextActivity = when {
+            isLoggedIn -> MainActivity::class.java
+            isFirstTime -> OnboardScreen::class.java
+            else -> Register::class.java
+        }
+
+        startActivity(Intent(this, nextActivity))
+        finish()
+    }
 }
+

@@ -50,11 +50,11 @@
                     android:id="@+id/profileTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/henrysans_medium"
+                    android:fontFamily="@font/inter_bold"
                     android:layout_gravity="center"
                     android:text="My Profile"
                     android:textColor="@color/blue"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -212,7 +212,7 @@
                     android:id="@+id/dateofbirthTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="mm/dd/yyyy"
+                    android:text="yyyy-mm-dd"
                     android:textSize="16sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
@@ -319,11 +319,11 @@
     <LinearLayout
         android:id="@+id/customBottomNav"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="60dp"
         android:layout_gravity="bottom"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

@@ -9,16 +9,49 @@ import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Patterns
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.Button
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import com.example.ezmart.api.ApiClient
+import com.example.ezmart.models.RegisterRequest
+import com.example.ezmart.models.RegisterResponse
 import com.google.android.material.textfield.TextInputEditText
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class Register : AppCompatActivity() {
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Check if the user is already registered
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val isRegistered = sharedPreferences.getBoolean("isRegistered", false)
+
+        if (isRegistered) {
+            // If user is already registered, skip register activity
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            return
+        }
+
+        enableEdgeToEdge()
         setContentView(R.layout.register_activity)
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.register_activity)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         val emailEt = findViewById<TextInputEditText>(R.id.emailEt_register)
         val passwordEt = findViewById<TextInputEditText>(R.id.passwordEt_register)
@@ -70,16 +103,40 @@ class Register : AppCompatActivity() {
             val firstName = firstNameEt.text.toString().trim()
             val lastName = lastNameEt.text.toString().trim()
             val birthdate = birthdateEt.text.toString().trim()
-            val phone = phoneEt.text.toString().trim()
+            val contact = phoneEt.text.toString().trim()
             val address = addressEt.text.toString().trim()
             val gender = genderSpinner.selectedItem.toString()
 
-            if (validateInput(email, password, confirmPassword, firstName, lastName, birthdate, phone, address, gender)) {
-                Toast.makeText(this, "Signup successful!", Toast.LENGTH_SHORT).show()
-                // Proceed with signup logic
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+            if (validateInput(email, password, confirmPassword, firstName, lastName, birthdate, contact, address, gender)) {
+                val registerRequest = RegisterRequest(firstName, lastName, email, password, confirmPassword, gender, birthdate, contact, address)
+
+                ApiClient.instance.register(registerRequest).enqueue(object : Callback<RegisterResponse> {
+                    override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+                        if (response.isSuccessful) {
+                            val responseBody = response.body()
+                            if (responseBody != null && responseBody.success) {
+                                Toast.makeText(this@Register, "Registration Successful!", Toast.LENGTH_SHORT).show()
+
+                                // Save registration flag in SharedPreferences
+                                val editor = sharedPreferences.edit()
+                                editor.putBoolean("isRegistered", true)
+                                editor.apply()
+
+                                startActivity(Intent(this@Register, MainActivity::class.java))
+                                finish()
+                            } else {
+                                Toast.makeText(this@Register, "Registration failed: ${responseBody?.message ?: "No message"}", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            val errorBody = response.errorBody()?.string()
+                            Toast.makeText(this@Register, "Error: $errorBody", Toast.LENGTH_LONG).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                        Toast.makeText(this@Register, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
             }
         }
 

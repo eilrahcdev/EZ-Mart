@@ -7,19 +7,24 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.getValue
 
 @Suppress("DEPRECATION")
 class HouseholdEssentials : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
-    private lateinit var productList: List<Product>
+
+    private val productViewModel: ProductViewModel by viewModels()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,15 +51,24 @@ class HouseholdEssentials : AppCompatActivity() {
             finish()
         }
 
-        //Household Essentials
+        // Set up RecyclerView
         recyclerView = findViewById(R.id.householdRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productList = listOf(
-            Product("Safeguard Soap", 40.00, R.drawable.safeguard_soap),
-            Product( "Sanicare Tissue", 120.00, R.drawable.sanicare_tissue),
-        )
-        productAdapter = ProductAdapter(this, productList)
+        productAdapter = ProductAdapter(this, emptyList()) // Initially empty
         recyclerView.adapter = productAdapter
+
+        // Observe product list from ViewModel
+        productViewModel.products.observe(this, Observer { products ->
+            productAdapter.updateProductList(products)
+        })
+
+        // Observe error messages
+        productViewModel.errorMessage.observe(this, Observer { error ->
+            Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+        })
+
+        // Fetch products for "Household Essentials"
+        productViewModel.fetchProducts("Household Essentials")
 
         // Navigation Items
         val homeTab = findViewById<LinearLayout>(R.id.homeTab)

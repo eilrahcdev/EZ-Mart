@@ -7,19 +7,24 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.getValue
 
 @Suppress("DEPRECATION")
 class Pantry : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
-    private lateinit var productList: List<Product>
+
+    private val productViewModel: ProductViewModel by viewModels()
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,17 +37,25 @@ class Pantry : AppCompatActivity() {
             insets
         }
 
-        //Pantry
-        productList = listOf(
-            Product("Youngstown Sardines", 25.00, R.drawable.youngstown),
-            Product( "Purefoods Cornbeef", 45.00, R.drawable.purefoods_cornedbeef),
-        )
-
+        // Set up RecyclerView
         recyclerView = findViewById(R.id.pantryRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-
-        productAdapter = ProductAdapter(this, productList)
+        productAdapter = ProductAdapter(this, emptyList()) // Initially empty
         recyclerView.adapter = productAdapter
+
+        // Observe products data
+        productViewModel.products.observe(this, Observer { products ->
+            productAdapter.updateProductList(products)
+        })
+
+        // Observe error messages
+        productViewModel.errorMessage.observe(this, Observer { error ->
+            Toast.makeText(this, error, Toast.LENGTH_LONG).show()
+        })
+
+        // Fetch products dynamically for "Pantry"
+        productViewModel.fetchProducts("Pantry")
+
 
         // Buttons with functions
         val backBtnPantry = findViewById<ImageButton>(R.id.backBtn_pantry)

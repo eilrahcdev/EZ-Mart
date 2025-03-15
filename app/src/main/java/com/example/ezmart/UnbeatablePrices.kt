@@ -7,21 +7,27 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ezmart.api.ApiClient
+import com.example.ezmart.models.ProductResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Suppress("DEPRECATION")
 class UnbeatablePrices : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
-    private lateinit var productList: List<Product>
+    private var productList: MutableList<Product> = mutableListOf()
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -32,33 +38,66 @@ class UnbeatablePrices : AppCompatActivity() {
             insets
         }
 
-        //Buttons with function
+        // Setup RecyclerView
+        recyclerView = findViewById(R.id.unbeatableRv)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        productAdapter = ProductAdapter(this, productList)
+        recyclerView.adapter = productAdapter
+
+        // Fetch products via Retrofit
+        fetchProducts()
+
+        // Setup Buttons
+        setupNavigationButtons()
+
+        // Setup Bottom Navigation
+        setupBottomNavigation()
+    }
+
+    // Fetch products using Retrofit
+    private fun fetchProducts() {
+        val apiService = ApiClient.instance
+
+        // Correct return type: Call<ProductResponse>
+        val call = apiService.getProductsByCategory("Unbeatable Prices")
+
+        // Correct callback type: Callback<ProductResponse>
+        call.enqueue(object : Callback<ProductResponse> {
+            override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    productList.clear()
+                    // Access products from response
+                    productList.addAll(response.body()!!.products)
+                    productAdapter.notifyDataSetChanged()
+                } else {
+                    Toast.makeText(this@UnbeatablePrices, "Failed to load products", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
+                Toast.makeText(this@UnbeatablePrices, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
+    // Back and Cart buttons
+    private fun setupNavigationButtons() {
         val backBtnUnbeatable = findViewById<ImageButton>(R.id.backBtn_unbeatable)
         backBtnUnbeatable.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, MainActivity::class.java))
             finish()
         }
 
         val cartIbtnUnbeatable = findViewById<ImageButton>(R.id.cartIbtn_unbeatable)
         cartIbtnUnbeatable.setOnClickListener {
-            val intent = Intent(this, Cart::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, Cart::class.java))
             finish()
         }
+    }
 
-        //Unbeatable Prices
-        recyclerView = findViewById(R.id.unbeatableRv)
-        recyclerView.layoutManager = GridLayoutManager(this, 2)
-
-        productList = listOf(
-            Product("Nissin Wafer Choco", 50.00, R.drawable.nissin_wafer),
-            Product("Knorr Sinigang Mix", 15.00, R.drawable.knorr_sinigang_original_mix),
-        )
-        productAdapter = ProductAdapter(this, productList)
-        recyclerView.adapter = productAdapter
-
-        // Navigation Items
+    // Bottom Navigation Setup
+    private fun setupBottomNavigation() {
         val homeTab = findViewById<LinearLayout>(R.id.homeTab)
         val categoriesTab = findViewById<LinearLayout>(R.id.categoriesTab)
         val ordersTab = findViewById<LinearLayout>(R.id.ordersTab)
@@ -75,15 +114,16 @@ class UnbeatablePrices : AppCompatActivity() {
         val profileText = findViewById<TextView>(R.id.profileText)
 
         fun resetColors() {
-            homeIcon.setColorFilter(resources.getColor(R.color.black))
-            categoriesIcon.setColorFilter(resources.getColor(R.color.black))
-            ordersIcon.setColorFilter(resources.getColor(R.color.black))
-            profileIcon.setColorFilter(resources.getColor(R.color.black))
+            val colorDefault = resources.getColor(R.color.black)
+            homeIcon.setColorFilter(colorDefault)
+            categoriesIcon.setColorFilter(colorDefault)
+            ordersIcon.setColorFilter(colorDefault)
+            profileIcon.setColorFilter(colorDefault)
 
-            homeText.setTextColor(resources.getColor(R.color.black))
-            categoriesText.setTextColor(resources.getColor(R.color.black))
-            ordersText.setTextColor(resources.getColor(R.color.black))
-            profileText.setTextColor(resources.getColor(R.color.black))
+            homeText.setTextColor(colorDefault)
+            categoriesText.setTextColor(colorDefault)
+            ordersText.setTextColor(colorDefault)
+            profileText.setTextColor(colorDefault)
         }
 
         homeTab.setOnClickListener {

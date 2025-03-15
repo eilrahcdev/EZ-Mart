@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EZMart"
-        tools:targetApi="31">
+        tools:targetApi="31"
+        android:usesCleartextTraffic="true">
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
@@ -58,6 +68,10 @@
             android:exported="true" />
         <activity android:name=".Snacks"
             android:exported="true" />
+        <activity android:name=".Beverages"
+            android:exported="true" />
+        <activity android:name=".DairyandPastry"
+            android:exported="true" />
         <activity android:name=".Sweets"
             android:exported="true" />
         <activity android:name=".UnbeatablePrices"
@@ -65,6 +79,8 @@
         <activity android:name=".HouseholdEssentials"
             android:exported="true" />
         <activity android:name=".SearchActivity"
+            android:exported="true" />
+        <activity android:name=".Checkout"
             android:exported="true" />
 
         <service
