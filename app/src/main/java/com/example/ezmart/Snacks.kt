@@ -14,7 +14,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ezmart.api.ApiClient
+import com.example.ezmart.api.RetrofitClient
 import com.example.ezmart.models.ProductResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -66,7 +66,7 @@ class Snacks : AppCompatActivity() {
 
     // Fetch Snacks category products from API
     private fun fetchSnacksProducts() {
-        val apiService = ApiClient.instance
+        val apiService = RetrofitClient.instance
         val call = apiService.getProductsByCategory("Snacks")
 
         call.enqueue(object : Callback<ProductResponse> {

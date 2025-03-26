@@ -2,240 +2,125 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bottom_appbar_bg">
-
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bottom_appbar_bg"
+    android:padding="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/productIv"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:background="@drawable/product_stroke_bg"
-            android:src="@drawable/century_tuna"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:elevation="5dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.08" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/productNameTv"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="151dp"
-            android:fontFamily="@font/henrysans_medium"
+            android:fontFamily="@font/inter_bold"
             android:text="Product Name"
-            android:textColor="@color/blue"
-            android:textSize="18dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.112"
-            app:layout_constraintStart_toStartOf="@+id/productIv"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.067" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="151dp"
-            android:fontFamily="@font/henrysans_medium"
-            android:text="Product Price"
-            android:textColor="@color/red"
-            android:textSize="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.093"
-            app:layout_constraintStart_toStartOf="@+id/productIv"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.107" />
-
-        <TextView
-            android:id="@+id/productstockTv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="151dp"
-            android:fontFamily="@font/henrysans_regular"
-            android:text="Stock: "
-            android:textSize="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.073"
-            app:layout_constraintStart_toStartOf="@+id/productIv"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.143" />
-
-
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="@font/henrysans_medium"
-            android:text="Flavor"
             android:textColor="@color/black"
-
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/productIv"
+            app:layout_constraintTop_toTopOf="@id/productIv"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.044"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/productIv"
-            app:layout_constraintVertical_bias="0.008" />
-
+            android:layout_marginStart="12dp" />
 
         <TextView
+            android:id="@+id/productPriceTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_medium"
+            android:text="\u20B1 0.00"
+            android:textColor="@color/blue"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="@id/productNameTv"
+            app:layout_constraintTop_toBottomOf="@id/productNameTv"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/productStockTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter"
+            android:text="Stock: 0"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/productPriceTv"
+            app:layout_constraintTop_toBottomOf="@id/productPriceTv"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/quantityLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/inter"
             android:text="Quantity"
             android:textColor="@color/black"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.045"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-
-
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.543" />
+            app:layout_constraintTop_toBottomOf="@+id/productIv" />
 
         <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.358">
-
-            <ImageView
-                android:id="@+id/originalFlavorIv"
-                android:layout_width="100dp"
-                android:layout_height="105dp"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/product_stroke_bg"
-                android:contextClickable="true"
-                android:src="@drawable/century_tuna"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.05"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.356" />
-
-
-            <ImageView
-                android:id="@+id/hotandspicyFlavorIv"
-                android:layout_width="100dp"
-                android:layout_height="105dp"
-                android:layout_marginStart="15dp"
-                android:background="@drawable/product_stroke_bg"
-                android:contextClickable="true"
-                android:src="@drawable/hot_spicy_tuna"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.05"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.356" />
-
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/textView17"
+            android:id="@+id/linearLayout3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Original"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.121"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.447" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hot and Spicy"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.438"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.447" />
-
-        <LinearLayout
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:background="@drawable/search_bg"
             android:gravity="center"
             android:orientation="horizontal"
-            android:padding="2dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.89"
+            android:padding="4dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.544">
+            app:layout_constraintTop_toBottomOf="@id/quantityLabel">
 
             <ImageButton
-                android:id="@+id/btnMinus"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginEnd="10dp"
+                android:id="@+id/btnMinus_btb"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="?attr/selectableItemBackground"
                 android:scaleType="fitCenter"
                 android:src="@drawable/minusbtn" />
 
             <TextView
-                android:id="@+id/tvCounter"
+                android:id="@+id/tvCounter_btb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:gravity="center"
                 android:text="1"
                 android:textSize="18sp" />
 
             <ImageButton
-                android:id="@+id/btnPlus"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginStart="10dp"
+                android:id="@+id/btnPlus_btb"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="?attr/selectableItemBackground"
                 android:scaleType="fitCenter"
                 android:src="@drawable/plusbtn" />
-
         </LinearLayout>
 
-        <Button
-            android:id="@+id/BuyBtn"
-            android:layout_width="340dp"
-            android:layout_height="55dp"
-            android:layout_gravity="center"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/buyNowBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
             android:backgroundTint="@color/red"
             android:fontFamily="@font/inter_bold"
             android:text="Buy Now"
-            android:textSize="15sp"
+            android:textSize="16sp"
             app:cornerRadius="@dimen/dimens"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.492"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.651" />
-
-
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
 </LinearLayout>

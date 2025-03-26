@@ -1,20 +1,24 @@
 package com.example.ezmart
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
-import android.util.Log
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class ProductAdapter(private val context: Context, private var productList: List<Product>) :
-    RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class ProductAdapter(
+    private val context: Context,
+    private var productList: List<Product>
+) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val productImage: ImageView = view.findViewById(R.id.productImage)
@@ -28,20 +32,26 @@ class ProductAdapter(private val context: Context, private var productList: List
         return ProductViewHolder(view)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
 
-        Glide.with(context)
-            .load(product.image)
-            .into(holder.productImage)
+        // Load product image
+        Glide.with(context).load(product.image).into(holder.productImage)
 
+        // Set product details
         holder.productName.text = product.name
-        holder.productPrice.text = "₱ %.2f".format(product.price) // Format price properly
+        holder.productPrice.text = "₱ %.2f".format(product.price)
 
-        // Handle Add to Cart button
+        // Handle item click to open product details in ModalBottomSheet Activity
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, ModalBottomSheet::class.java)
+            intent.putExtra("product", product)
+            context.startActivity(intent)
+        }
+
+        // Handle Add to Cart button click to show BottomSheet
         holder.addToCartBtn.setOnClickListener {
-            CartManager.addToCart(context, product)
+            showAddToCartBottomSheet(product)
         }
     }
 
@@ -53,33 +63,53 @@ class ProductAdapter(private val context: Context, private var productList: List
         notifyDataSetChanged()
     }
 
+    // Function to show Add to Cart Bottom Sheet
+    private fun showAddToCartBottomSheet(product: Product) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.bottomsheet_addtocart, null)
+        val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogTheme)
+        bottomSheetDialog.setContentView(dialogView)
 
-    // Optional: Search products and save search history
-    fun searchProducts(query: String, allProducts: List<Product>) {
-        val filteredList = allProducts.filter { it.name.contains(query, ignoreCase = true) }
-        updateProductList(filteredList)
-        SearchHistoryManager.saveSearchQuery(context, query)
-    }
-}
+        // Bind product details in BottomSheet
+        val productImage: ImageView = dialogView.findViewById(R.id.productIv)
+        val productName: TextView = dialogView.findViewById(R.id.productNameTv)
+        val productPrice: TextView = dialogView.findViewById(R.id.productPriceTv)
+        val productStock: TextView = dialogView.findViewById(R.id.productStockTv)
+        val quantityTv: TextView = dialogView.findViewById(R.id.tvCounter_bta)
+        val minusButton: ImageButton = dialogView.findViewById(R.id.btnMinus_bta)
+        val plusButton: ImageButton = dialogView.findViewById(R.id.btnPlus_bta)
+        val confirmAddToCartBtn: Button = dialogView.findViewById(R.id.addToCartBtn)
 
-// Search history manager using SharedPreferences
-object SearchHistoryManager {
-    private const val PREFS_NAME = "search_history"
-    private const val KEY_HISTORY = "history"
+        // Set product details
+        Glide.with(context).load(product.image).into(productImage)
+        productName.text = product.name
+        productPrice.text = "₱ %.2f".format(product.price)
+        productStock.text = "Stock: ${product.stock}"
 
-    fun saveSearchQuery(context: Context, query: String) {
-        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val historySet = prefs.getStringSet(KEY_HISTORY, mutableSetOf())?.toMutableSet() ?: mutableSetOf()
+        // Quantity Counter Logic
+        var quantity = 1
+        quantityTv.text = quantity.toString()
 
-        if (query.isNotBlank()) {
-            historySet.add(query) // Avoid duplicates
-            prefs.edit().putStringSet(KEY_HISTORY, historySet).apply()
-            Log.d("SearchHistory", "Saved Query: $query")
+        minusButton.setOnClickListener {
+            if (quantity > 1) {
+                quantity--
+                quantityTv.text = quantity.toString()
+            }
         }
-    }
 
-    fun getSearchHistory(context: Context): List<String> {
-        val prefs: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        return prefs.getStringSet(KEY_HISTORY, setOf())?.toList() ?: emptyList()
+        plusButton.setOnClickListener {
+            if (product.stock > quantity) {
+                quantity++
+                quantityTv.text = quantity.toString()
+            }
+        }
+
+        // Handle Add to Cart Confirmation
+        confirmAddToCartBtn.setOnClickListener {
+            CartManager.addToCart(context, product)
+            bottomSheetDialog.dismiss()
+            Toast.makeText(context, "${product.name} added to cart", Toast.LENGTH_SHORT).show()
+        }
+
+        bottomSheetDialog.show()
     }
 }

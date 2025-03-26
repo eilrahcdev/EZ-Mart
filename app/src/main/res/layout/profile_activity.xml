@@ -67,7 +67,7 @@
         android:id="@+id/cardview4"
         android:layout_width="match_parent"
         android:layout_height="612dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="90dp"
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="20dp"
         app:cardElevation="8dp"
@@ -81,21 +81,34 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="15dp"
             android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="28dp"
-                android:fontFamily="@font/inter_bold"
-                android:text="Profile"
-                android:textSize="21sp"
-                android:textColor="@color/black">
+                android:orientation="horizontal">
 
-            </TextView>
+                <TextView
+                    android:id="@+id/profileTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="@font/inter_bold"
+                    android:gravity="center_vertical"
+                    android:text="Profile"
+                    android:textColor="@color/black"
+                    android:textSize="21sp" />
 
+                <ImageButton
+                    android:id="@+id/editprofileIbtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginStart="250dp"
+                    android:background="?attr/selectableItemBackground"
+                    app:srcCompat="@drawable/edit_25" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,13 +118,13 @@
                 android:layout_marginTop="15dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:text="First Name"
                     android:layout_marginStart="15dp"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/darkgrey"
                     android:layout_weight="1"/>
 
                 <TextView
@@ -136,13 +149,13 @@
                 android:layout_marginTop="15dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:text="Last Name"
                     android:layout_marginStart="15dp"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/darkgrey"
                     android:layout_weight="1"/>
 
                 <TextView
@@ -167,13 +180,13 @@
                 android:layout_marginTop="15dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:text="Gender"
                     android:layout_marginStart="15dp"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/darkgrey"
                     android:layout_weight="1"/>
 
                 <TextView
@@ -182,8 +195,7 @@
                     android:layout_height="wrap_content"
                     android:text="Gender"
                     android:textSize="16sp"
-                    android:textColor="@color/blue"
-                    app:drawableEndCompat="@drawable/arrow_down_24" />
+                    android:textColor="@color/black" />
             </LinearLayout>
 
             <View
@@ -199,20 +211,20 @@
                 android:layout_marginTop="15dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
-                    android:text="Date of Birth"
+                    android:text="Birthdate"
                     android:layout_marginStart="15dp"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/darkgrey"
                     android:layout_weight="1"/>
 
                 <TextView
                     android:id="@+id/dateofbirthTv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="yyyy-mm-dd"
+                    android:text="YYYY-MM-DD"
                     android:textSize="16sp"
                     android:textColor="@color/black"/>
             </LinearLayout>
@@ -230,13 +242,13 @@
                 android:layout_marginTop="15dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:text="Email"
                     android:layout_marginStart="15dp"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/darkgrey"
                     android:layout_weight="1"/>
 
                 <TextView
@@ -261,13 +273,13 @@
                 android:layout_marginTop="15dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:text="Phone Number"
                     android:layout_marginStart="15dp"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/darkgrey"
                     android:layout_weight="1"/>
 
                 <TextView
@@ -289,13 +301,13 @@
                 android:layout_marginTop="15dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:text="Address"
                     android:layout_marginStart="15dp"
                     android:gravity="center_vertical"
                     android:textSize="16sp"
-                    android:textColor="@android:color/darker_gray"
+                    android:textColor="@color/darkgrey"
                     android:layout_weight="1"/>
 
                 <TextView
@@ -315,6 +327,25 @@
 
     </androidx.cardview.widget.CardView>
 
+    <Button
+        android:id="@+id/logoutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="@color/blue"
+        android:drawableEnd="@drawable/logout_25"
+        android:elevation="10dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="Log Out"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:cornerRadius="@dimen/dimens"
+        app:layout_constraintBottom_toTopOf="@+id/customBottomNav"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.974"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardview4"
+        app:layout_constraintVertical_bias="0.197" />
 
     <LinearLayout
         android:id="@+id/customBottomNav"

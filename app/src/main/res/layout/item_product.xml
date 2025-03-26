@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="160dp"
+    android:layout_width="170dp"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
+    android:layout_margin="4dp"
+    app:cardCornerRadius="10dp"
     app:cardElevation="4dp"
     android:background="@android:color/white">
 
@@ -18,7 +18,7 @@
         <ImageView
             android:id="@+id/productImage"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="110dp"
             android:scaleType="fitCenter" />
 
         <!-- Product Name -->
@@ -29,8 +29,11 @@
             android:text="Product Name"
             android:fontFamily="@font/inter_bold"
             android:textColor="@color/black"
-            android:textSize="14sp"
-            android:layout_marginTop="8dp" />
+            android:textSize="12sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:minHeight="32dp"
+            android:layout_marginTop="5dp" />
 
         <!-- Product Price -->
         <TextView
@@ -40,8 +43,8 @@
             android:text="₱ 0.00"
             android:textColor="@color/blue"
             android:fontFamily="@font/inter_bold"
-            android:textSize="16sp"
-            android:layout_marginTop="4dp" />
+            android:textSize="12sp"
+            android:layout_marginTop="5dp" />
 
         <!-- Add to Cart Button -->
         <Button
@@ -52,6 +55,6 @@
             android:textColor="@color/white"
             app:cornerRadius="@dimen/dimens"
             android:backgroundTint="@color/blue"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="5dp" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

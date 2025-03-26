@@ -107,456 +107,437 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/unbeatable"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/bg2"
-                app:layout_constraintTop_toBottomOf="@id/dotsLayout"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:elevation="10dp">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="25dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dotsLayout">
 
-                <TextView
-                    android:id="@+id/unbeatableTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Unbeatable Prices"
-                    android:fontFamily="@font/inter_bold"
-                    android:textColor="@color/red"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/unbeatable_seemoreTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See More =>"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="13sp"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/unbeatableTv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/unbeatableRv"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/unbeatable"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_height="320dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg2"
                     android:elevation="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/unbeatableTv"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:padding="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/featured"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/bg2"
-                app:layout_constraintTop_toBottomOf="@id/unbeatable"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:elevation="10dp">
+                    <TextView
+                        android:id="@+id/unbeatableTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Unbeatable Prices"
+                        android:textColor="@color/red"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/featuredTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Featured Products"
-                    android:fontFamily="@font/inter_bold"
-                    android:textColor="@color/lime"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/unbeatable_seemoreTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="See More =>"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/unbeatableTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/featured_seemoreTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
-                    android:text="See More =>"
-                    android:textColor="@color/black"
-                    android:textSize="13sp"
-                    app:layout_constraintBottom_toBottomOf="@+id/featuredTv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/unbeatableRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:elevation="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/unbeatableTv" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/featuredRv"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/featured"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/featuredTv"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="320dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg2"
+                    android:elevation="10dp"
+                    android:padding="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/snacks"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/bg2"
-                app:layout_constraintTop_toBottomOf="@id/featured"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:elevation="10dp">
+                    <TextView
+                        android:id="@+id/featuredTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Featured Products"
+                        android:textColor="@color/lime"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/snacksTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Snacks"
-                    android:fontFamily="@font/inter_bold"
-                    android:textColor="@color/pastelbluegreen"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/featured_seemoreTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="See More =>"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/featuredTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/snacks_seemoreTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See More =>"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="13sp"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/snacksTv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/featuredRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/featuredTv" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/snacksRv"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/snacks"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/snacksTv"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="320dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg2"
+                    android:elevation="10dp"
+                    android:padding="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/beverages"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/bg2"
-                app:layout_constraintTop_toBottomOf="@id/snacks"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:elevation="10dp">
+                    <TextView
+                        android:id="@+id/snacksTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Snacks"
+                        android:textColor="@color/pastelbluegreen"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/beveragesTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Beverages"
-                    android:fontFamily="@font/inter_bold"
-                    android:textColor="@color/yellow"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/snacks_seemoreTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="See More =>"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/snacksTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/beverages_seemoreTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See More =>"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="13sp"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/beveragesTv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/snacksRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/snacksTv" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/beveragesRv"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/beverages"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/beveragesTv"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="320dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg2"
+                    android:elevation="10dp"
+                    android:padding="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/sweets"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/bg2"
-                app:layout_constraintTop_toBottomOf="@id/beverages"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:elevation="10dp">
+                    <TextView
+                        android:id="@+id/beveragesTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Beverages"
+                        android:textColor="@color/yellow"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/sweetsTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sweets"
-                    android:fontFamily="@font/inter_bold"
-                    android:textColor="@color/mango"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/beverages_seemoreTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="See More =>"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/beveragesTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/sweets_seemoreTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See More =>"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="13sp"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/sweetsTv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/beveragesRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/beveragesTv" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/sweetsRv"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/sweets"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/sweetsTv"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="320dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg2"
+                    android:elevation="10dp"
+                    android:padding="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/pantry"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/bg2"
-                app:layout_constraintTop_toBottomOf="@id/sweets"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:elevation="10dp">
+                    <TextView
+                        android:id="@+id/sweetsTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Sweets"
+                        android:textColor="@color/mango"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/pantryTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Pantry"
-                    android:fontFamily="@font/inter_bold"
-                    android:textColor="@color/pastelblue"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/sweets_seemoreTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="See More =>"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/sweetsTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/pantry_seemoreTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See More =>"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="13sp"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/pantryTv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/sweetsRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/sweetsTv" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/pantryRv"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/pantry"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/pantryTv"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="320dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg2"
+                    android:elevation="10dp"
+                    android:padding="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/dairyandpastry"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/bg2"
-                app:layout_constraintTop_toBottomOf="@id/pantry"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:elevation="10dp">
+                    <TextView
+                        android:id="@+id/pantryTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Pantry"
+                        android:textColor="@color/pastelblue"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/dairyandpastryTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dairy and Pastry"
-                    android:fontFamily="@font/inter_bold"
-                    android:textColor="@color/pastelbrown"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/pantry_seemoreTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="See More =>"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/pantryTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/dairy_seemoreTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See More =>"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="13sp"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/dairyandpastryTv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/pantryRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/pantryTv" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/dairyandpastryRv"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/dairyandpastry"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/dairyandpastryTv"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="320dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg2"
+                    android:elevation="10dp"
+                    android:padding="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/freshproduce"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/bg2"
-                app:layout_constraintTop_toBottomOf="@id/dairyandpastry"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:elevation="10dp">
+                    <TextView
+                        android:id="@+id/dairyandpastryTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Dairy and Pastry"
+                        android:textColor="@color/pastelbrown"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/freshproduceTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Fresh Produce"
-                    android:fontFamily="@font/inter_bold"
-                    android:textColor="@color/leafgreen"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/dairy_seemoreTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="See More =>"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/dairyandpastryTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/freshproduce_seemoreTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See More =>"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="13sp"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/freshproduceTv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/dairyandpastryRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/dairyandpastryTv" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/freshproduceRv"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/freshproduce"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/freshproduceTv"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="320dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg2"
+                    android:elevation="10dp"
+                    android:padding="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/meatsandseafoods"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/bg2"
-                app:layout_constraintTop_toBottomOf="@id/freshproduce"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:elevation="10dp">
+                    <TextView
+                        android:id="@+id/freshproduceTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Fresh Produce"
+                        android:textColor="@color/leafgreen"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/meatsandseafoodsTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Meats and Seafoods"
-                    android:fontFamily="@font/inter_bold"
-                    android:textColor="@color/pastelred"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/freshproduce_seemoreTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="See More =>"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/freshproduceTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/meatsandseafoods_seemoreTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See More =>"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="13sp"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/meatsandseafoodsTv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/freshproduceRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/freshproduceTv" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/meatsandseafoodsRv"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/meatsandseafoods"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/meatsandseafoodsTv"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="320dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg2"
+                    android:elevation="10dp"
+                    android:padding="10dp">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/householdessentials"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_margin="10dp"
-                android:padding="10dp"
-                android:background="@drawable/bg2"
-                app:layout_constraintTop_toBottomOf="@id/meatsandseafoods"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:elevation="10dp">
+                    <TextView
+                        android:id="@+id/meatsandseafoodsTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Meats and Seafoods"
+                        android:textColor="@color/pastelred"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/householdessentialsTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Household Essentials"
-                    android:fontFamily="@font/inter_bold"
-                    android:textColor="@color/violet"
-                    android:textSize="14sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <TextView
+                        android:id="@+id/meatsandseafoods_seemoreTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="See More =>"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/meatsandseafoodsTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-                <TextView
-                    android:id="@+id/household_seemoreTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="See More =>"
-                    android:fontFamily="@font/inter_bold"
-                    android:textSize="13sp"
-                    android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/householdessentialsTv"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/meatsandseafoodsRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/meatsandseafoodsTv" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/householdessentialsRv"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/householdessentials"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    app:layout_constraintTop_toBottomOf="@id/householdessentialsTv"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="320dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/bg2"
+                    android:elevation="10dp"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:id="@+id/householdessentialsTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="Household Essentials"
+                        android:textColor="@color/violet"
+                        android:textSize="14sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/household_seemoreTv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter_bold"
+                        android:text="See More =>"
+                        android:textColor="@color/black"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/householdessentialsTv"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/householdessentialsRv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/householdessentialsTv" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

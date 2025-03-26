@@ -30,7 +30,7 @@ class OnboardScreen : AppCompatActivity() {
 
     // Navigate based on login state
     private fun navigateToNextScreen() {
-        val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
         val isLoggedIn = sharedPreferences.getBoolean("is_logged_in", false)
 
         val nextActivity = if (isLoggedIn) MainActivity::class.java else Login::class.java

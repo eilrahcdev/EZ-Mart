@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true"
-    android:background="@drawable/auth_bg">
+    android:background="@drawable/auth_bg"
+    android:id="@+id/register_activity">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/register_activity">
+        android:layout_height="match_parent">
 
         <ImageView
             android:id="@+id/imageView6"
@@ -120,7 +120,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email Address"
-                android:inputType="textEmailAddress" />
+                android:textColorHint="@color/blue"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -156,7 +158,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Create password"
-                android:inputType="textPassword" />
+                android:textColorHint="@color/blue"
+                android:inputType="textPassword"
+                android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -192,7 +196,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Confirm Password"
-                android:inputType="textPassword" />
+                android:textColorHint="@color/blue"
+                android:inputType="textPassword"
+                android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
     </androidx.cardview.widget.CardView>
@@ -253,7 +259,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="First Name"
-                android:inputType="textPersonName" />
+                android:textColorHint="@color/blue"
+                android:inputType="textPersonName"
+                android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -287,7 +295,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Last Name"
-                android:inputType="textPersonName" />
+                android:textColorHint="@color/blue"
+                android:inputType="textPersonName"
+                android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -343,8 +353,10 @@
                 android:id="@+id/birthdateEt_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="yyyy-mm-dd"
-                android:inputType="date|number" />
+                android:hint="YYYY-MM-DD"
+                android:textColorHint="@color/blue"
+                android:inputType="date"
+                android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
         <TextView
             android:id="@+id/textView18"
@@ -377,7 +389,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="09XXXXXXXXX"
-                android:inputType="phone|number" />
+                android:textColorHint="@color/blue"
+                android:inputType="phone|number"
+                android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
@@ -411,7 +425,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="City, Province"
-                android:inputType="textPostalAddress" />
+                android:textColorHint="@color/blue"
+                android:inputType="textPostalAddress"
+                android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

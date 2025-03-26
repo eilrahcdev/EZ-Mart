@@ -12,6 +12,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -27,6 +28,10 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -46,6 +51,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var freshProduceRecyclerView: RecyclerView
     private lateinit var meatsRecyclerView: RecyclerView
     private lateinit var householdRecyclerView: RecyclerView
+    private lateinit var bevergesRecyclerView: RecyclerView
+    private lateinit var dairyRecyclerView: RecyclerView
 
     private lateinit var unbeatableAdapter: ProductAdapter
     private lateinit var featuredAdapter: ProductAdapter
@@ -55,12 +62,25 @@ class MainActivity : AppCompatActivity() {
     private lateinit var freshProduceAdapter: ProductAdapter
     private lateinit var meatsAdapter: ProductAdapter
     private lateinit var householdAdapter: ProductAdapter
+    private lateinit var bevergesAdapter: ProductAdapter
+    private lateinit var dairyAdapter: ProductAdapter
 
     private lateinit var viewModel: ProductViewModel
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val loggedInUser = sharedPreferences.getString("loggedInUser", null)
+
+        // Redirect to LoginActivity if no user is logged in
+        if (loggedInUser == null) {
+            startActivity(Intent(this, Login::class.java))
+            finish()
+            return
+        }
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
@@ -69,6 +89,16 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        //Get FCM Token for Testing
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val token = task.result
+                println("FCM Token: $token")
+            } else {
+                println("Failed to get FCM token: ${task.exception}")
+                }
+            }
 
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[ProductViewModel::class.java]
@@ -95,19 +125,32 @@ class MainActivity : AppCompatActivity() {
         freshProduceRecyclerView = findViewById(R.id.freshproduceRv)
         meatsRecyclerView = findViewById(R.id.meatsandseafoodsRv)
         householdRecyclerView = findViewById(R.id.householdessentialsRv)
+        bevergesRecyclerView = findViewById(R.id.beveragesRv)
+        dairyRecyclerView = findViewById(R.id.dairyandpastryRv)
 
         // Set unique LayoutManagers for each RecyclerView
-        unbeatableRecyclerView.layoutManager = GridLayoutManager(this, 2)
-        featuredRecyclerView.layoutManager = GridLayoutManager(this, 2)
-        snacksRecyclerView.layoutManager = GridLayoutManager(this, 2)
-        sweetsRecyclerView.layoutManager = GridLayoutManager(this, 2)
-        pantryRecyclerView.layoutManager = GridLayoutManager(this, 2)
-        freshProduceRecyclerView.layoutManager = GridLayoutManager(this, 2)
-        meatsRecyclerView.layoutManager = GridLayoutManager(this, 2)
-        householdRecyclerView.layoutManager = GridLayoutManager(this, 2)
+        fun setupRecyclerView(recyclerView: RecyclerView) {
+            recyclerView.layoutManager = GridLayoutManager(this, 2)
+        }
 
+        // Limit product list to 2 items
+        fun limitProducts(products: List<Product>): List<Product> {
+            return if (products.size > 2) products.subList(0, 2) else products
+        }
 
-        // Initialize Adapters
+// Initialize RecyclerViews
+        setupRecyclerView(unbeatableRecyclerView)
+        setupRecyclerView(featuredRecyclerView)
+        setupRecyclerView(snacksRecyclerView)
+        setupRecyclerView(sweetsRecyclerView)
+        setupRecyclerView(pantryRecyclerView)
+        setupRecyclerView(freshProduceRecyclerView)
+        setupRecyclerView(meatsRecyclerView)
+        setupRecyclerView(householdRecyclerView)
+        setupRecyclerView(bevergesRecyclerView)
+        setupRecyclerView(dairyRecyclerView)
+
+// Initialize Adapters
         unbeatableAdapter = ProductAdapter(this, emptyList())
         featuredAdapter = ProductAdapter(this, emptyList())
         snacksAdapter = ProductAdapter(this, emptyList())
@@ -116,8 +159,10 @@ class MainActivity : AppCompatActivity() {
         freshProduceAdapter = ProductAdapter(this, emptyList())
         meatsAdapter = ProductAdapter(this, emptyList())
         householdAdapter = ProductAdapter(this, emptyList())
+        bevergesAdapter = ProductAdapter(this, emptyList())
+        dairyAdapter = ProductAdapter(this, emptyList())
 
-        // Set Adapters
+// Set Adapters
         unbeatableRecyclerView.adapter = unbeatableAdapter
         featuredRecyclerView.adapter = featuredAdapter
         snacksRecyclerView.adapter = snacksAdapter
@@ -126,23 +171,27 @@ class MainActivity : AppCompatActivity() {
         freshProduceRecyclerView.adapter = freshProduceAdapter
         meatsRecyclerView.adapter = meatsAdapter
         householdRecyclerView.adapter = householdAdapter
+        bevergesRecyclerView.adapter = bevergesAdapter
+        dairyRecyclerView.adapter = dairyAdapter
 
-        // Fetch products from the API
+// Fetch products from the API
         viewModel.fetchProducts()
 
-        // Observe products LiveData
+// Observe products LiveData
         viewModel.products.observe(this) { products ->
-            unbeatableAdapter.updateProductList(products.filter { it.category == "Unbeatable Prices" })
-            featuredAdapter.updateProductList(products.filter { it.category == "Featured Products" })
-            snacksAdapter.updateProductList(products.filter { it.category == "Snacks" })
-            sweetsAdapter.updateProductList(products.filter { it.category == "Sweets" })
-            pantryAdapter.updateProductList(products.filter { it.category == "Pantry" })
-            freshProduceAdapter.updateProductList(products.filter { it.category == "Fresh Produce" })
-            meatsAdapter.updateProductList(products.filter { it.category == "Meats and Seafoods" })
-            householdAdapter.updateProductList(products.filter { it.category == "Household Essentials" })
+            unbeatableAdapter.updateProductList(limitProducts(products.filter { it.category == "Unbeatable Prices" }))
+            featuredAdapter.updateProductList(limitProducts(products.filter { it.category == "Featured Products" }))
+            snacksAdapter.updateProductList(limitProducts(products.filter { it.category == "Snacks" }))
+            sweetsAdapter.updateProductList(limitProducts(products.filter { it.category == "Sweets" }))
+            pantryAdapter.updateProductList(limitProducts(products.filter { it.category == "Pantry" }))
+            freshProduceAdapter.updateProductList(limitProducts(products.filter { it.category == "Fresh Produce" }))
+            meatsAdapter.updateProductList(limitProducts(products.filter { it.category == "Meats and Seafoods" }))
+            householdAdapter.updateProductList(limitProducts(products.filter { it.category == "Household Essentials" }))
+            bevergesAdapter.updateProductList(limitProducts(products.filter { it.category == "Beverages" }))
+            dairyAdapter.updateProductList(limitProducts(products.filter { it.category == "Dairy and Pastry" }))
         }
 
-        // Observe error messages
+// Observe error messages
         viewModel.errorMessage.observe(this) { errorMessage ->
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         }
@@ -262,6 +311,10 @@ class MainActivity : AppCompatActivity() {
             R.id.profileTab to Pair(R.id.profileIcon, R.id.profileText)
         )
 
+        // Set Home tab as active
+        setDefaultHomeTab()
+
+
         navigationItems.forEach { (tabId, iconTextPair) ->
             val (iconId, textId) = iconTextPair
             findViewById<LinearLayout>(tabId).setOnClickListener {
@@ -281,6 +334,16 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, getDestinationClass(tabId)))
             }
         }
+    }
+
+    // Highlight Home tab as active
+    private fun setDefaultHomeTab() {
+        findViewById<ImageView>(R.id.homeIcon).setColorFilter(
+            ContextCompat.getColor(this, R.color.blue)
+        )
+        findViewById<TextView>(R.id.homeText).setTextColor(
+            ContextCompat.getColor(this, R.color.blue)
+        )
     }
 
     fun getDestinationClass(tabId: Int): Class<*> {
