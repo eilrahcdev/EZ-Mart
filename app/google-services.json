@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "446082871770",
-    "project_id": "ez-mart-3ee2e",
-    "storage_bucket": "ez-mart-3ee2e.firebasestorage.app"
+    "project_number": "294979806864",
+    "project_id": "ezmart-f178a",
+    "storage_bucket": "ezmart-f178a.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:446082871770:android:b2854b167e52915a4090e3",
+        "mobilesdk_app_id": "1:294979806864:android:57b23780eb02a41b8ada15",
         "android_client_info": {
           "package_name": "com.example.ezmart"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAI0PHFDGgxNvqLy1dIuSAf41_RY7-7clY"
+          "current_key": "AIzaSyBKFdo3Tu4bMjVpB26mAHL80TFJZV_YNsY"
         }
       ],
       "services": {

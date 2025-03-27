@@ -39,6 +39,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".auth.ResetPasswordActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true"/>
@@ -82,11 +83,12 @@
             android:exported="true" />
         <activity android:name=".Checkout"
             android:exported="true" />
+        <activity android:name=".ModalBottomSheet"
+            android:exported="true" />
 
         <service
-            android:name=".MyFirebaseMessagingService"
-            android:exported="false"
-            tools:ignore="Instantiatable">
+            android:name=".firebase.EzMartFirebaseService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
@@ -94,8 +96,7 @@
 
         <meta-data
             android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts"
-            />
+            android:resource="@array/preloaded_fonts" />
 
     </application>
 

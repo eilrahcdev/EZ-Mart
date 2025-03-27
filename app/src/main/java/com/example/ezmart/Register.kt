@@ -8,8 +8,6 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.util.Patterns
-import android.view.View
-import android.widget.AdapterView
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
@@ -18,7 +16,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.ezmart.api.ApiClient
+import com.example.ezmart.api.RetrofitClient
 import com.example.ezmart.models.RegisterRequest
 import com.example.ezmart.models.RegisterResponse
 import com.google.android.material.textfield.TextInputEditText
@@ -32,12 +30,11 @@ class Register : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Check if the user is already registered
+        // Check if user is already logged in
         val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-        val isRegistered = sharedPreferences.getBoolean("isRegistered", false)
+        val loggedInUser = sharedPreferences.getString("loggedInUser", null)
 
-        if (isRegistered) {
-            // If user is already registered, skip register activity
+        if (loggedInUser != null) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
             return
@@ -45,7 +42,6 @@ class Register : AppCompatActivity() {
 
         enableEdgeToEdge()
         setContentView(R.layout.register_activity)
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.register_activity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -62,7 +58,7 @@ class Register : AppCompatActivity() {
         val phoneEt = findViewById<TextInputEditText>(R.id.phonenumEt_register)
         val addressEt = findViewById<TextInputEditText>(R.id.addressEt_register)
         val genderSpinner = findViewById<Spinner>(R.id.genderSpinner)
-        val signupBtn = findViewById<Button>(R.id.registerBtn)
+        val registerBtn = findViewById<Button>(R.id.registerBtn)
         val loginTv = findViewById<TextView>(R.id.loginTv_register)
 
         // Apply SpannableString to loginTv
@@ -75,28 +71,10 @@ class Register : AppCompatActivity() {
         )
         loginTv.text = spannable
 
-        // Gender selection validation function
-        fun validateGenderSelection(position: Int): Boolean {
-            return if (position == 0) {
-                false
-            } else {
-                true
-            }
-        }
-
-        // Initialize Spinner with validation
+        // Initialize Spinner
         genderSpinner.setSelection(0)
-        genderSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                validateGenderSelection(position)
-            }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {
-                // Do nothing
-            }
-        }
-
-        signupBtn.setOnClickListener {
+        registerBtn.setOnClickListener {
             val email = emailEt.text.toString().trim()
             val password = passwordEt.text.toString().trim()
             val confirmPassword = confirmPasswordEt.text.toString().trim()
@@ -110,40 +88,37 @@ class Register : AppCompatActivity() {
             if (validateInput(email, password, confirmPassword, firstName, lastName, birthdate, contact, address, gender)) {
                 val registerRequest = RegisterRequest(firstName, lastName, email, password, confirmPassword, gender, birthdate, contact, address)
 
-                ApiClient.instance.register(registerRequest).enqueue(object : Callback<RegisterResponse> {
+                RetrofitClient.instance.register(registerRequest).enqueue(object : Callback<RegisterResponse> {
                     override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
                         if (response.isSuccessful) {
                             val responseBody = response.body()
                             if (responseBody != null && responseBody.success) {
                                 Toast.makeText(this@Register, "Registration Successful!", Toast.LENGTH_SHORT).show()
 
-                                // Save registration flag in SharedPreferences
-                                val editor = sharedPreferences.edit()
-                                editor.putBoolean("isRegistered", true)
-                                editor.apply()
+                                // Save user data
+                                saveUserData(email, firstName, lastName, birthdate, contact, address, gender)
 
+                                // Redirect to MainActivity
                                 startActivity(Intent(this@Register, MainActivity::class.java))
                                 finish()
                             } else {
-                                Toast.makeText(this@Register, "Registration failed: ${responseBody?.message ?: "No message"}", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@Register, "Registration failed", Toast.LENGTH_SHORT).show()
                             }
                         } else {
-                            val errorBody = response.errorBody()?.string()
-                            Toast.makeText(this@Register, "Error: $errorBody", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this@Register, "Error", Toast.LENGTH_LONG).show()
                         }
                     }
 
                     override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                        Toast.makeText(this@Register, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@Register, "Network error", Toast.LENGTH_SHORT).show()
                     }
                 })
             }
         }
 
-        // Handle navigation for Login button
+        // Handle Login navigation
         loginTv.setOnClickListener {
-            val intent = Intent(this, Login::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, Login::class.java))
         }
     }
 
@@ -199,5 +174,23 @@ class Register : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun saveUserData(email: String, firstName: String, lastName: String, birthdate: String, contact: String, address: String, gender: String) {
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Save data using the user's email as a unique key
+        editor.putString("${email}_firstName", firstName)
+        editor.putString("${email}_lastName", lastName)
+        editor.putString("${email}_email", email)
+        editor.putString("${email}_birthdate", birthdate)
+        editor.putString("${email}_contact", contact)
+        editor.putString("${email}_address", address)
+        editor.putString("${email}_gender", gender)
+
+        // Save logged-in user
+        editor.putString("loggedInUser", email)
+        editor.apply()
     }
 }

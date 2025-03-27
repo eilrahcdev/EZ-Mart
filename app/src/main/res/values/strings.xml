@@ -1,9 +1,23 @@
 <resources>
     <string name="app_name">EZ Mart</string>
     <string-array name="gender_array">
-        <item>Select Gender</item>
+        <item>Select a gender</item>
         <item>Male</item>
         <item>Female</item>
         <item>Other</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    //strings for reset password
+    <string name="enter_otp">Enter OTP</string>
+    <string name="otp_code">*OTP Code</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="enter_the_otp_sent_to_your_email_and_set_a_new_password">Enter the OTP sent to your email and set a new password.</string>
+    <string name="new_password">*New Password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="confirm_password">*Confirm Password</string>
+    <string name="confirm_new_password">Confirm new password</string>
+    <string name="submit">Submit</string>
 </resources>

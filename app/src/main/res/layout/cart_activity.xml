@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/greysmoke"
+    android:background="@color/white"
     android:id="@+id/cart_activity">
 
     <!-- AppBar Layout -->
@@ -74,8 +74,6 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- RecyclerView for Cart Items -->
-
-    <!-- Bottom Layout -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartRecyclerView"
         android:layout_width="match_parent"
@@ -108,7 +106,8 @@
                 android:id="@+id/checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select All" />
+                android:text="Select All"
+                android:fontFamily="@font/inter"/>
 
 
             <TextView
@@ -116,28 +115,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total:"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_marginStart="15dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:fontFamily="@font/inter"
+                android:layout_weight="1"/>
 
             <TextView
                 android:id="@+id/tvTotalAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="₱ 0.00"
-                android:textSize="18sp"
-                android:textStyle="bold"
+                android:textSize="15sp"
+                android:fontFamily="@font/inter_bold"
                 android:layout_marginStart="5dp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/btnCheckout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Checkout"
+                app:cornerRadius="@dimen/dimens"
+                android:fontFamily="@font/inter_bold"
                 android:textColor="@color/white"
                 android:backgroundTint="@color/blue"
-                android:layout_marginStart="40dp"/>
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"/>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

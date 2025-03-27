@@ -9,32 +9,52 @@ object CartManager {
     private const val CART_PREFS = "cart_prefs"
     private const val CART_KEY = "cart"
 
-    fun getCart(context: Context): List<Product> {
+    fun getCart(context: Context): MutableList<Product> {
         val sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE)
         val json = sharedPreferences.getString(CART_KEY, null)
         return if (json != null) {
-            val type = object : TypeToken<List<Product>>() {}.type
+            val type = object : TypeToken<MutableList<Product>>() {}.type
             Gson().fromJson(json, type)
         } else {
-            emptyList()
+            mutableListOf()
         }
     }
 
+    fun removeFromCart(context: Context, product: Product) {
+        val cartList = getCart(context)
+        cartList.removeAll { it.id == product.id } // Remove by ID (Ensures accuracy)
+        saveCart(context, cartList)
+    }
+
+    fun removeMultipleFromCart(context: Context, products: List<Product>) {
+        val cartList = getCart(context)
+        val productIdsToRemove = products.map { it.id }
+        cartList.removeAll { it.id in productIdsToRemove } // Remove selected products
+        saveCart(context, cartList)
+    }
+
     fun addToCart(context: Context, product: Product) {
-        val cartList = getCart(context).toMutableList()
+        val cartList = getCart(context)
+
+        // Ensure product quantity is at least 1
+        if (product.quantity <= 0) {
+            product.quantity = 1
+        }
 
         // Check if the product already exists in the cart
-        val existingProduct = cartList.find { it.name == product.name }
+        val existingProduct = cartList.find { it.id == product.id }
 
         if (existingProduct != null) {
-            // Increase quantity if the product already exists
-            existingProduct.quantity += product.quantity
+            existingProduct.quantity += product.quantity // Increase quantity if exists
         } else {
-            // Add new product if not found
-            cartList.add(product)
+            cartList.add(product) // Add new product if not found
         }
 
         saveCart(context, cartList)
+    }
+
+    fun updateCart(context: Context, updatedCart: List<Product>) {
+        saveCart(context, updatedCart) // Saves modified cart list
     }
 
     fun clearCart(context: Context) {
@@ -42,7 +62,7 @@ object CartManager {
         sharedPreferences.edit().remove(CART_KEY).apply()
     }
 
-    private fun saveCart(context: Context, cartList: List<Product>) {
+    fun saveCart(context: Context, cartList: List<Product>) {
         val sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         val json = Gson().toJson(cartList)

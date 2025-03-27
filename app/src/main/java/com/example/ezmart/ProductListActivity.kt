@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ezmart.api.ApiClient
+import com.example.ezmart.api.RetrofitClient
 import com.example.ezmart.models.ProductResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -36,7 +36,7 @@ class ProductListActivity : AppCompatActivity() {
 
     // Now accepts category as parameter
     private fun fetchProducts(category: String) {
-        ApiClient.instance.getProductsByCategory(category).enqueue(object : Callback<ProductResponse> {
+        RetrofitClient.instance.getProductsByCategory(category).enqueue(object : Callback<ProductResponse> {
             override fun onResponse(call: Call<ProductResponse>, response: Response<ProductResponse>) {
                 if (response.isSuccessful && response.body()?.success == true) {
                     val products = response.body()?.products ?: emptyList()

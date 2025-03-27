@@ -32,69 +32,67 @@ class CartAdapter(
     override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val product = cartList[position]
 
-        // Load image using Glide
         Glide.with(holder.itemView.context)
-            .load(product.image)
+            .load(product.image) // URL
             .into(holder.productImage)
 
         holder.productName.text = product.name
-        holder.productPrice.text = "₱ %.2f".format(product.price)
+        holder.productPrice.text = "₱ %.2f".format(product.price * product.quantity)
         holder.quantityText.text = product.quantity.toString()
 
+        // Prevent multiple calls to onCheckedChanged when setting the state
         holder.selectCheckBox.setOnCheckedChangeListener(null)
         holder.selectCheckBox.isChecked = product.isSelected
 
+        // Apply blue tint to checkbox
         holder.selectCheckBox.buttonTintList =
             ContextCompat.getColorStateList(holder.itemView.context, R.color.blue)
 
+        // Checkbox click event
         holder.selectCheckBox.setOnCheckedChangeListener { _, isChecked ->
             product.isSelected = isChecked
             onTotalAmountUpdated(getTotalAmount())
         }
 
+        // Plus button: Increase quantity
         holder.btnPlus.setOnClickListener {
             product.quantity++
             holder.quantityText.text = product.quantity.toString()
-            notifyItemChanged(position)
+            holder.productPrice.text = "₱ %.2f".format(product.price * product.quantity)
             onTotalAmountUpdated(getTotalAmount())
         }
 
+        // Minus button: Decrease quantity (but not below 1)
         holder.btnMinus.setOnClickListener {
             if (product.quantity > 1) {
                 product.quantity--
                 holder.quantityText.text = product.quantity.toString()
-                notifyItemChanged(position)
+                holder.productPrice.text = "₱ %.2f".format(product.price * product.quantity)
                 onTotalAmountUpdated(getTotalAmount())
             }
         }
     }
 
-
-    fun updateCart(newCartList: List<Product>) {
-        cartList.clear()
-        cartList.addAll(newCartList)
+    // Remove selected items from cart
+    fun removeSelectedItems(context: Context) {
+        cartList.removeAll { it.isSelected }
+        CartManager.updateCart(context, cartList) // Save updated cart
         notifyDataSetChanged()
         onTotalAmountUpdated(getTotalAmount())
     }
 
-    fun clearCart(context: Context) {
-        cartList.clear()
-        CartManager.clearCart(context)
-        notifyDataSetChanged()
-        onTotalAmountUpdated(0.0)
-    }
-
     fun selectAllItems(isChecked: Boolean) {
-        for (item in cartList) {
-            item.isSelected = isChecked
-        }
+        cartList.forEach { it.isSelected = isChecked }
         notifyDataSetChanged()
         onTotalAmountUpdated(getTotalAmount())
     }
 
     fun getTotalAmount(): Double {
+        return cartList.filter { it.isSelected }.sumOf { it.price * it.quantity }
+    }
+
+    fun getSelectedItems(): List<Product> {
         return cartList.filter { it.isSelected }
-            .sumOf { it.price * it.quantity }
     }
 
     override fun getItemCount(): Int = cartList.size

@@ -15,7 +15,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ezmart.api.ApiClient
+import com.example.ezmart.api.RetrofitClient
 import com.example.ezmart.models.ProductResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -108,7 +108,7 @@ class SearchActivity : AppCompatActivity() {
 
     // Search products directly from API based on user input
     private fun performSearch(query: String) {
-        val apiService = ApiClient.instance
+        val apiService = RetrofitClient.instance
         val call = apiService.searchProducts(query)
 
         call.enqueue(object : Callback<ProductResponse> {

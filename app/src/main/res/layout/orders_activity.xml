@@ -7,6 +7,7 @@
     android:background="@color/white"
     android:id="@+id/orders_activity">
 
+    <!-- AppBar + TabLayout Combined -->
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBar_orders"
         android:layout_width="match_parent"
@@ -16,98 +17,88 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Toolbar -->
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/ordersTb"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            android:theme="?actionBarTheme">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/ordersTb"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent"
-                android:theme="?actionBarTheme"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            <ImageButton
+                android:id="@+id/backBtn_orders"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/arrow_back_blue"/>
 
-                <ImageButton
-                    android:id="@+id/backBtn_orders"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="20dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:src="@drawable/arrow_back_blue"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/ordersTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/inter_bold"
+                android:text=" My Orders"
+                android:textColor="@color/blue"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/ordersTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/inter_bold"
-                    android:text=" My Orders"
-                    android:textColor="@color/blue"
-                    android:textSize="20sp" />
+        </androidx.appcompat.widget.Toolbar>
 
-            </androidx.appcompat.widget.Toolbar>
+        <!-- TabLayout Inside AppBar -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/ordersTabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg2"
+            android:elevation="10dp"
+            app:tabIndicatorColor="@color/blue"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/blue"
+            app:tabTextColor="@color/black">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_pending"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pending" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_processing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Processing" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_completed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Completed" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_cancelled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancelled" />
+        </com.google.android.material.tabs.TabLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/ordersTabLayout"
+    <!-- ViewPager2 for Tabs -->
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/ordersViewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@color/white"
-        android:elevation="10dp"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBar_orders"
-        app:tabIndicatorColor="@color/blue"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/blue"
-        app:tabTextColor="@color/black">
+        app:layout_constraintTop_toBottomOf="@id/appBar_orders"
+        app:layout_constraintBottom_toTopOf="@id/customBottomNav"/>
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tab_pending"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pending" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tab_completed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Completed" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tab_cancelled"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cancelled" />
-    </com.google.android.material.tabs.TabLayout>
-
-            <!-- ViewPager2 for Tabs -->
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/ordersViewPager"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ordersTabLayout" />
-
-
+    <!-- Custom Bottom Navigation -->
     <LinearLayout
         android:id="@+id/customBottomNav"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_gravity="bottom"
         android:background="@color/white"
         android:orientation="horizontal"
         android:padding="5dp"

@@ -3,7 +3,7 @@ package com.example.ezmart
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.ezmart.api.ApiClient
+import com.example.ezmart.api.RetrofitClient
 import com.example.ezmart.models.ProductResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -23,10 +23,10 @@ class ProductViewModel : ViewModel() {
     fun fetchProducts(category: String? = null) {
         val call: Call<ProductResponse> = if (category.isNullOrEmpty()) {
             // Fetch all products by passing empty category
-            ApiClient.instance.getProductsByCategory("")
+            RetrofitClient.instance.getProductsByCategory("")
         } else {
             // Fetch products for a specific category
-            ApiClient.instance.getProductsByCategory(category)
+            RetrofitClient.instance.getProductsByCategory(category)
         }
 
         call.enqueue(object : Callback<ProductResponse> {
