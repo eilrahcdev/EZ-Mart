@@ -1,9 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/checkout_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/checkout_activity"
     android:orientation="vertical"
     android:background="@color/white">
 
@@ -13,175 +11,167 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/appbar_background"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:elevation="10dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/checkoutTb"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:elevation="10dp">
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            android:theme="?actionBarTheme"
+            android:elevation="15dp">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/checkoutTb"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent"
-                android:theme="?actionBarTheme"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:elevation="15dp">
+            <ImageButton
+                android:id="@+id/backBtn_checkout"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/arrow_back_blue" />
 
-                <ImageButton
-                    android:id="@+id/backBtn_checkout"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="20dp"
-                    android:background="?attr/selectableItemBackground"
-                    android:src="@drawable/arrow_back_blue"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/checkoutTv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_bold"
+                android:layout_gravity="center"
+                android:text="Checkout"
+                android:textColor="@color/blue"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/checkoutTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter_bold"
-                    android:layout_gravity="center"
-                    android:text="Checkout"
-                    android:textColor="@color/blue"
-                    android:textSize="20sp" />
-
-            </androidx.appcompat.widget.Toolbar>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- Product List -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/checkout_recycler_view"
+    <!-- Scrollable Content -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/bg2"
-        android:elevation="5dp"
-        android:padding="10dp"
-        android:scrollbars="vertical" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
 
-    <!-- Shipping Option -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="10dp">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Shipping Option"
-            android:textSize="16sp"
-            android:fontFamily="@font/inter_bold"
-            android:layout_weight="1"/>
+            android:orientation="vertical"
+            android:padding="10dp">
 
-        <TextView
-            android:id="@+id/shipping_option"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="For Pick-up Only"
-            android:fontFamily="@font/inter"
-            android:textSize="14sp"
-            android:layout_weight="1"
-            android:textColor="@color/black" />
-    </LinearLayout>
-
-    <!-- Payment Option -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Payment Option"
-            android:textSize="16sp"
-            android:fontFamily="@font/inter_bold"
-            android:layout_marginTop="16dp" />
-
-        <RadioGroup
-            android:id="@+id/payment_options"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <RadioButton
-                android:id="@+id/cash_on_pickup"
-                android:layout_width="wrap_content"
+            <!-- Product List -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/checkout_recycler_view"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="Cash on Pick-up"
-                android:fontFamily="@font/inter"
-                android:buttonTint="@color/blue"
-                android:textColor="@color/black"/>
-            <RadioButton
-                android:id="@+id/gcash"
-                android:layout_width="wrap_content"
+                android:background="@drawable/bg2"
+                android:elevation="5dp"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:nestedScrollingEnabled="false"/>
+
+            <!-- Shipping Option -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="G Cash"
-                android:fontFamily="@font/inter"
-                android:buttonTint="@color/blue"
-                android:textColor="@color/black"/>
-            <RadioButton
-                android:id="@+id/paymaya"
-                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Shipping Option"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/inter_bold"/>
+
+                <TextView
+                    android:id="@+id/shipping_option"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="For Pick-up Only"
+                    android:fontFamily="@font/inter"
+                    android:textSize="14sp"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <!-- Payment Option -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text="PayMaya"
-                android:fontFamily="@font/inter"
-                android:buttonTint="@color/blue"
-                android:textColor="@color/black"/>
-        </RadioGroup>
-    </LinearLayout>
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Payment Option"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/inter_bold" />
+
+                <RadioGroup
+                    android:id="@+id/payment_options"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RadioButton
+                        android:id="@+id/cash_on_pickup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="Cash on Pick-up"
+                        android:fontFamily="@font/inter"
+                        android:buttonTint="@color/blue"
+                        android:textColor="@color/black"/>
+                    <RadioButton
+                        android:id="@+id/gcash"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="G Cash"
+                        android:fontFamily="@font/inter"
+                        android:buttonTint="@color/blue"
+                        android:textColor="@color/black"/>
+                    <RadioButton
+                        android:id="@+id/paymaya"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
+                        android:text="PayMaya"
+                        android:fontFamily="@font/inter"
+                        android:buttonTint="@color/blue"
+                        android:textColor="@color/black"/>
+                </RadioGroup>
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <!-- Total Amount & Place Order Button -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="end"
+        android:background="@color/white"
+        android:padding="10dp">
 
         <TextView
             android:id="@+id/total_amount"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_marginStart="15dp"
             android:layout_height="wrap_content"
             android:text="Total: ₱ 0.00"
             android:textSize="15sp"
             android:layout_weight="1"
             android:fontFamily="@font/inter_bold"
-            android:textColor="@color/black"
-            android:layout_marginEnd="10dp"
-            android:layout_marginStart="110dp"/>
+            android:textColor="@color/black" />
 
         <Button
             android:id="@+id/place_order_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:text="Place Order"
             android:fontFamily="@font/inter_bold"
             android:textColor="@color/white"
-            android:backgroundTint="@color/blue"
-            app:cornerRadius="@dimen/dimens" />
+            android:backgroundTint="@color/blue"/>
     </LinearLayout>
 
 </LinearLayout>

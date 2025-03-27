@@ -2,7 +2,6 @@ package com.example.ezmart
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.util.Log
@@ -25,7 +24,6 @@ class Checkout : AppCompatActivity() {
 
     private lateinit var checkoutRecyclerView: RecyclerView
     private lateinit var checkoutAdapter: CheckoutAdapter
-    private lateinit var sharedPreferences: SharedPreferences
     private var productList: MutableList<Product> = mutableListOf()
 
     @SuppressLint("MissingInflatedId")
@@ -33,9 +31,6 @@ class Checkout : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.checkout_activity)
-
-        // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.checkout_activity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -60,10 +55,12 @@ class Checkout : AppCompatActivity() {
         checkoutRecyclerView.adapter = checkoutAdapter
 
         // Update total amount
-        updateTotalAmount()
+        val totalAmountTextView = findViewById<TextView>(R.id.total_amount)
+        totalAmountTextView.text = "Total: ₱ %.2f".format(calculateTotalAmount())
 
         // Place order button
-        findViewById<Button>(R.id.place_order_button).setOnClickListener {
+        val placeOrderButton = findViewById<Button>(R.id.place_order_button)
+        placeOrderButton.setOnClickListener {
             placeOrder()
         }
 
@@ -74,21 +71,14 @@ class Checkout : AppCompatActivity() {
         }
 
         // Payment method radio button modifications
-        setupPaymentMethodRadioButtons()
-    }
+        val cashOnPickupRb = findViewById<RadioButton>(R.id.cash_on_pickup)
+        val gcash = findViewById<RadioButton>(R.id.gcash)
+        val paymaya = findViewById<RadioButton>(R.id.paymaya)
 
-    private fun setupPaymentMethodRadioButtons() {
         val radioButtonColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.blue))
-        findViewById<RadioButton>(R.id.cash_on_pickup).buttonTintList = radioButtonColor
-        findViewById<RadioButton>(R.id.gcash).buttonTintList = radioButtonColor
-        findViewById<RadioButton>(R.id.paymaya).buttonTintList = radioButtonColor
-
-        // Set default selection
-        findViewById<RadioButton>(R.id.cash_on_pickup).isChecked = true
-    }
-
-    private fun updateTotalAmount() {
-        findViewById<TextView>(R.id.total_amount).text = "Total: ₱ %.2f".format(calculateTotalAmount())
+        cashOnPickupRb.buttonTintList = radioButtonColor
+        gcash.buttonTintList = radioButtonColor
+        paymaya.buttonTintList = radioButtonColor
     }
 
     private fun calculateTotalAmount(): Double {
@@ -97,6 +87,8 @@ class Checkout : AppCompatActivity() {
 
     private fun getSelectedProducts(): List<Product> {
         val products = intent.getParcelableArrayListExtra<Product>("selected_products")
+
+        // Debugging log
         Log.d("CheckoutActivity", "Received products: ${products?.size ?: 0}")
 
         if (products.isNullOrEmpty()) {
@@ -107,7 +99,8 @@ class Checkout : AppCompatActivity() {
     }
 
     private fun getSelectedPaymentMethod(): String {
-        return when (findViewById<RadioGroup>(R.id.payment_options).checkedRadioButtonId) {
+        val paymentOptions = findViewById<RadioGroup>(R.id.payment_options)
+        return when (paymentOptions.checkedRadioButtonId) {
             R.id.cash_on_pickup -> "Cash on Pick-up"
             R.id.gcash -> "Gcash"
             R.id.paymaya -> "Paymaya"
@@ -115,10 +108,13 @@ class Checkout : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun placeOrder() {
         val paymentMethod = getSelectedPaymentMethod()
-        val userEmail = sharedPreferences.getString("loggedInUser", null) ?: run {
+
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val userEmail = sharedPreferences.getString("loggedInUser", null)
+
+        if (userEmail.isNullOrEmpty()) {
             Toast.makeText(this, "Error: User email is missing!", Toast.LENGTH_LONG).show()
             return
         }
@@ -126,70 +122,59 @@ class Checkout : AppCompatActivity() {
         val order = OrderModel(
             id = System.currentTimeMillis().toString(),
             email = userEmail,
-            customerName = sharedPreferences.getString("userName", "Customer") ?: "Customer",
+            customerName = "Customer Name",
             products = productList,
             totalAmount = calculateTotalAmount(),
             status = "Pending",
-            paymentMethod = paymentMethod,
-            action = "place"
+            paymentMethod = paymentMethod
         )
 
         saveOrder(order)
+        removeCheckedOutProducts()
+
+        Toast.makeText(this, "Order Placed Successfully!", Toast.LENGTH_SHORT).show()
+
+        // Redirect to My Orders page
+        startActivity(Intent(this, Orders::class.java))
+        finish()
     }
 
-    private fun saveOrder(order: OrderModel) {
-        RetrofitClient.instance.placeOrder(order).enqueue(object : Callback<OrderResponse> {
+    private fun saveOrder(orderRequest: OrderModel) {
+        val apiService = RetrofitClient.instance
+
+        apiService.placeOrder(orderRequest).enqueue(object : Callback<OrderResponse> {
             override fun onResponse(call: Call<OrderResponse>, response: Response<OrderResponse>) {
                 if (response.isSuccessful) {
-                    response.body()?.let { apiResponse ->
-                        if (apiResponse.success) {
-                            // Save order locally with explicit status
-                            val savedOrder = order.copy(status = "Pending")
-                            OrderManager.saveOrders(this@Checkout, listOf(savedOrder))
+                    val apiResponse = response.body()
+                    if (apiResponse != null && apiResponse.success) {
+                        Log.d("CheckoutActivity", "Order saved successfully for Email: ${orderRequest.email}")
 
-                            // Update UI
-                            runOnUiThread {
-                                Toast.makeText(this@Checkout, "Order Placed Successfully!", Toast.LENGTH_SHORT).show()
-                                startActivity(Intent(this@Checkout, Orders::class.java))
-                                finish()
-                            }
-                        } else {
-                            handleOrderError(apiResponse.error ?: "Unknown error")
-                        }
-                    } ?: handleOrderError("Empty response body")
+                        removeCheckedOutProducts()
+                        Toast.makeText(this@Checkout, "Order Placed Successfully!", Toast.LENGTH_SHORT).show()
+
+                        // Redirect to My Orders page
+                        startActivity(Intent(this@Checkout, Orders::class.java))
+                        finish()
+                    } else {
+                        Log.e("CheckoutActivity", "Failed to save order: ${apiResponse?.error ?: "Unknown error"}")
+                        Toast.makeText(this@Checkout, "Failed to place order!", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
-                    handleOrderError("API Error: ${response.code()}")
+                    Log.e("CheckoutActivity", "API Error: ${response.code()} - ${response.errorBody()?.string()}")
+                    Toast.makeText(this@Checkout, "API Error: Unable to place order", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<OrderResponse>, t: Throwable) {
-                handleOrderError("Network error: ${t.localizedMessage}")
+                Log.e("CheckoutActivity", "API call failed: ${t.localizedMessage}")
+                Toast.makeText(this@Checkout, "Network error. Try again later.", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
-    private fun handleSuccessfulOrder(order: OrderModel) {
-        Log.d("CheckoutActivity", "Order saved successfully for Email: ${order.email}")
-        removeCheckedOutProducts()
-        Toast.makeText(this@Checkout, "Order Placed Successfully!", Toast.LENGTH_SHORT).show()
-        startActivity(Intent(this@Checkout, Orders::class.java))
-        finish()
-    }
-
-    private fun handleOrderError(error: String) {
-        Log.e("CheckoutActivity", "Failed to save order: $error")
-        Toast.makeText(
-            this@Checkout,
-            "Failed to place order: $error",
-            Toast.LENGTH_LONG
-        ).show()
-    }
-
     private fun removeCheckedOutProducts() {
         val cartList = CartManager.getCart(this).toMutableList()
-        cartList.removeAll { cartItem ->
-            productList.any { it.name == cartItem.name }
-        }
+        cartList.removeAll { cartItem -> productList.any { it.name == cartItem.name } }
         CartManager.clearCart(this)
         CartManager.saveCart(this, cartList)
     }

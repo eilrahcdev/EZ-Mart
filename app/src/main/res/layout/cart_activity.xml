@@ -21,7 +21,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:elevation="10dp">
 
             <androidx.appcompat.widget.Toolbar
@@ -79,70 +79,76 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:padding="8dp"
+        android:clipToPadding="false"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@id/bottom_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar_Cart"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintBottom_toTopOf="@id/bottom_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
+    <!-- Bottom Layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:orientation="horizontal"
             android:padding="10dp"
-            android:gravity="center_vertical"
-            tools:ignore="MissingConstraints">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <!-- Select All Checkbox -->
             <CheckBox
                 android:id="@+id/checkBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Select All"
-                android:fontFamily="@font/inter"/>
+                android:fontFamily="@font/inter"
+                android:text="Select All" />
 
-
+            <!-- Total Text -->
             <TextView
                 android:id="@+id/tvTotal_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total:"
-                android:textSize="15sp"
                 android:layout_marginStart="15dp"
-                android:textColor="@color/black"
                 android:fontFamily="@font/inter"
-                android:layout_weight="1"/>
+                android:text="Total:"
+                android:textColor="@color/black"
+                android:textSize="15sp" />
 
+            <!-- Total Amount (Fixed Width) -->
             <TextView
                 android:id="@+id/tvTotalAmount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="₱ 0.00"
-                android:textSize="15sp"
-                android:fontFamily="@font/inter_bold"
                 android:layout_marginStart="5dp"
+                android:fontFamily="@font/inter_bold"
+                android:gravity="start"
+                android:minWidth="100dp"
+                android:text="₱ 0.00"
                 android:textColor="@color/black"
-                android:layout_weight="1" />
+                android:textSize="14sp" />
 
+            <!-- Checkout Button (Fixed Width) -->
             <Button
                 android:id="@+id/btnCheckout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Checkout"
-                app:cornerRadius="@dimen/dimens"
-                android:fontFamily="@font/inter_bold"
-                android:textColor="@color/white"
                 android:backgroundTint="@color/blue"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1"/>
+                android:fontFamily="@font/inter_bold"
+                android:text="Checkout"
+                android:textColor="@color/white"
+                app:cornerRadius="10dp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

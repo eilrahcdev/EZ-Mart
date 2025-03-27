@@ -1,6 +1,5 @@
 package com.example.ezmart
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ezmart.models.OrderModel
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 
 class PendingOrdersFragment : Fragment() {
 
@@ -47,13 +44,14 @@ class PendingOrdersFragment : Fragment() {
     }
 
     private fun loadOrders() {
-        val orders = OrderManager.getOrders(requireContext())
-        pendingOrders.clear()
-        pendingOrders.addAll(orders.filter {
-            it.status.equals("Pending", ignoreCase = true)
-        })
+        // Retrieve orders from OrderManager
+        val ordersList = OrderManager.getOrders(requireContext())
 
-        // Update UI
+        // Filter only pending orders
+        pendingOrders.clear()
+        pendingOrders.addAll(ordersList.filter { it.status == "Pending" })
+
+        // Show/Hide empty state text
         if (pendingOrders.isEmpty()) {
             orderRecyclerView.visibility = View.GONE
             emptyTextView.visibility = View.VISIBLE
@@ -61,6 +59,7 @@ class PendingOrdersFragment : Fragment() {
             orderRecyclerView.visibility = View.VISIBLE
             emptyTextView.visibility = View.GONE
         }
+
         orderAdapter.notifyDataSetChanged()
     }
 }

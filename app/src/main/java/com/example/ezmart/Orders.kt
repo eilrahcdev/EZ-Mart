@@ -1,7 +1,6 @@
 package com.example.ezmart
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -21,7 +20,6 @@ import com.example.ezmart.api.RetrofitClient
 import com.example.ezmart.models.OrderModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -66,7 +64,9 @@ class Orders : AppCompatActivity() {
     }
 
     private fun fetchOrders() {
-        val userEmail = sharedPreferences.getString("loggedInUser", null) ?: run {
+        val userEmail = sharedPreferences.getString("loggedInUser", null)
+
+        if (userEmail.isNullOrEmpty()) {
             Toast.makeText(this, "Error: User email is missing!", Toast.LENGTH_LONG).show()
             return
         }
@@ -75,36 +75,20 @@ class Orders : AppCompatActivity() {
 
         apiService.getOrders(userEmail).enqueue(object : Callback<List<OrderModel>> {
             override fun onResponse(call: Call<List<OrderModel>>, response: Response<List<OrderModel>>) {
-                if (response.isSuccessful) {
-                    response.body()?.let { orders ->
-                        Log.d("OrdersActivity", "Fetched ${orders.size} orders")
-                        // Save orders to shared preferences
-                        saveOrdersToPrefs(orders)
-                        setupViewPager(orders)
-                    } ?: run {
-                        Log.e("OrdersActivity", "Empty response body")
-                        Toast.makeText(this@Orders, "No orders found", Toast.LENGTH_SHORT).show()
-                    }
+                if (response.isSuccessful && response.body() != null) {
+                    val orders = response.body()!!
+                    Log.d("OrdersActivity", "Fetched ${orders.size} orders")
+
+                    setupViewPager(orders)
                 } else {
-                    Log.e("OrdersActivity", "Failed to fetch orders: ${response.code()}")
-                    Toast.makeText(this@Orders, "Failed to fetch orders", Toast.LENGTH_SHORT).show()
+                    Log.e("OrdersActivity", "Failed to fetch orders")
                 }
             }
 
             override fun onFailure(call: Call<List<OrderModel>>, t: Throwable) {
                 Log.e("OrdersActivity", "API call failed: ${t.message}")
-                Toast.makeText(this@Orders, "Network error. Please try again.", Toast.LENGTH_SHORT).show()
             }
         })
-    }
-
-    private fun saveOrdersToPrefs(orders: List<OrderModel>) {
-        val sharedPreferences = getSharedPreferences("orders_pref", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        val gson = Gson()
-        val json = gson.toJson(orders)
-        editor.putString("orders", json)
-        editor.apply()
     }
 
     private fun setupViewPager(orders: List<OrderModel>) {

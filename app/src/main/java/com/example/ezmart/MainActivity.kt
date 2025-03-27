@@ -31,6 +31,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingService
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -50,6 +51,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var freshProduceRecyclerView: RecyclerView
     private lateinit var meatsRecyclerView: RecyclerView
     private lateinit var householdRecyclerView: RecyclerView
+    private lateinit var bevergesRecyclerView: RecyclerView
+    private lateinit var dairyRecyclerView: RecyclerView
 
     private lateinit var unbeatableAdapter: ProductAdapter
     private lateinit var featuredAdapter: ProductAdapter
@@ -59,6 +62,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var freshProduceAdapter: ProductAdapter
     private lateinit var meatsAdapter: ProductAdapter
     private lateinit var householdAdapter: ProductAdapter
+    private lateinit var bevergesAdapter: ProductAdapter
+    private lateinit var dairyAdapter: ProductAdapter
 
     private lateinit var viewModel: ProductViewModel
 
@@ -85,15 +90,15 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Get FCM Token for testing
+        //Get FCM Token for Testing
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val token = task.result
-                println("FCM Token: $token") // Log the token for testing
+                println("FCM Token: $token")
             } else {
-                println("Failed to get FCM Token: ${task.exception}")
+                println("Failed to get FCM token: ${task.exception}")
+                }
             }
-        }
 
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[ProductViewModel::class.java]
@@ -120,6 +125,8 @@ class MainActivity : AppCompatActivity() {
         freshProduceRecyclerView = findViewById(R.id.freshproduceRv)
         meatsRecyclerView = findViewById(R.id.meatsandseafoodsRv)
         householdRecyclerView = findViewById(R.id.householdessentialsRv)
+        bevergesRecyclerView = findViewById(R.id.beveragesRv)
+        dairyRecyclerView = findViewById(R.id.dairyandpastryRv)
 
         // Set unique LayoutManagers for each RecyclerView
         fun setupRecyclerView(recyclerView: RecyclerView) {
@@ -140,6 +147,8 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView(freshProduceRecyclerView)
         setupRecyclerView(meatsRecyclerView)
         setupRecyclerView(householdRecyclerView)
+        setupRecyclerView(bevergesRecyclerView)
+        setupRecyclerView(dairyRecyclerView)
 
 // Initialize Adapters
         unbeatableAdapter = ProductAdapter(this, emptyList())
@@ -150,6 +159,8 @@ class MainActivity : AppCompatActivity() {
         freshProduceAdapter = ProductAdapter(this, emptyList())
         meatsAdapter = ProductAdapter(this, emptyList())
         householdAdapter = ProductAdapter(this, emptyList())
+        bevergesAdapter = ProductAdapter(this, emptyList())
+        dairyAdapter = ProductAdapter(this, emptyList())
 
 // Set Adapters
         unbeatableRecyclerView.adapter = unbeatableAdapter
@@ -160,6 +171,8 @@ class MainActivity : AppCompatActivity() {
         freshProduceRecyclerView.adapter = freshProduceAdapter
         meatsRecyclerView.adapter = meatsAdapter
         householdRecyclerView.adapter = householdAdapter
+        bevergesRecyclerView.adapter = bevergesAdapter
+        dairyRecyclerView.adapter = dairyAdapter
 
 // Fetch products from the API
         viewModel.fetchProducts()
@@ -174,6 +187,8 @@ class MainActivity : AppCompatActivity() {
             freshProduceAdapter.updateProductList(limitProducts(products.filter { it.category == "Fresh Produce" }))
             meatsAdapter.updateProductList(limitProducts(products.filter { it.category == "Meats and Seafoods" }))
             householdAdapter.updateProductList(limitProducts(products.filter { it.category == "Household Essentials" }))
+            bevergesAdapter.updateProductList(limitProducts(products.filter { it.category == "Beverages" }))
+            dairyAdapter.updateProductList(limitProducts(products.filter { it.category == "Dairy and Pastry" }))
         }
 
 // Observe error messages

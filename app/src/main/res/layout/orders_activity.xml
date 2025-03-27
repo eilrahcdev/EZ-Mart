@@ -50,7 +50,7 @@
             android:id="@+id/ordersTabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg2"
+            android:background="@drawable/bg3"
             android:elevation="10dp"
             app:tabIndicatorColor="@color/blue"
             app:tabMode="fixed"

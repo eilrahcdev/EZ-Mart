@@ -133,43 +133,45 @@ class Register : AppCompatActivity() {
         address: String,
         gender: String
     ): Boolean {
-        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            showToast("Please enter a valid email address")
-            return false
+        return when {
+            email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+                showToast("Please enter a valid email address")
+                false
+            }
+            password.length !in 8..15 -> {
+                showToast("Password must be between 8 and 15 characters")
+                false
+            }
+            password != confirmPassword -> {
+                showToast("Passwords do not match")
+                false
+            }
+            firstName.isEmpty() || !firstName.matches(Regex("^[a-zA-Z]+$")) -> {
+                showToast("First name must contain only letters")
+                false
+            }
+            lastName.isEmpty() || !lastName.matches(Regex("^[a-zA-Z]+$")) -> {
+                showToast("Last name must contain only letters")
+                false
+            }
+            birthdate.isEmpty() || !birthdate.matches(Regex("^\\d{4}-\\d{2}-\\d{2}\$")) -> {
+                showToast("Birthdate must be in format YYYY-MM-DD")
+                false
+            }
+            phone.isEmpty() || !phone.matches(Regex("^[0-9]+$")) -> {
+                showToast("Phone number must contain only digits")
+                false
+            }
+            address.isEmpty() -> {
+                showToast("Address is required")
+                false
+            }
+            gender == "Select a gender" -> {
+                showToast("Please select a valid gender")
+                false
+            }
+            else -> true
         }
-        if (password.length !in 8..15) {
-            showToast("Password must be between 8 and 15 characters")
-            return false
-        }
-        if (password != confirmPassword) {
-            showToast("Passwords do not match")
-            return false
-        }
-        if (firstName.isEmpty() || !firstName.matches(Regex("^[a-zA-Z]+$"))) {
-            showToast("First name must contain only letters")
-            return false
-        }
-        if (lastName.isEmpty() || !lastName.matches(Regex("^[a-zA-Z]+$"))) {
-            showToast("Last name must contain only letters")
-            return false
-        }
-        if (birthdate.isEmpty()) {
-            showToast("Birthdate is required")
-            return false
-        }
-        if (phone.isEmpty() || !phone.matches(Regex("^[0-9]+$"))) {
-            showToast("Phone number must contain only digits")
-            return false
-        }
-        if (address.isEmpty()) {
-            showToast("Address is required")
-            return false
-        }
-        if (gender == "Select a gender") {
-            showToast("Please select a valid gender")
-            return false
-        }
-        return true
     }
 
     private fun showToast(message: String) {
