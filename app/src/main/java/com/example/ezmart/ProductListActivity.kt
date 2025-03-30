@@ -1,6 +1,7 @@
 package com.example.ezmart
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,7 +25,7 @@ class ProductListActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerViewProducts)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        productAdapter = ProductAdapter(this, listOf()) // start with empty list
+        productAdapter = ProductAdapter(this, listOf())
         recyclerView.adapter = productAdapter
 
         // Get the category from intent
@@ -44,12 +45,14 @@ class ProductListActivity : AppCompatActivity() {
                     // Update RecyclerView
                     productAdapter.updateProductList(products)
                 } else {
-                    Toast.makeText(this@ProductListActivity, "Failed to load products", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ProductListActivity, "Failed to load products.", Toast.LENGTH_SHORT).show()
+                    Log.e("ProductListActivity", "API call failed: ${response.errorBody()?.string()}")
                 }
             }
 
             override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                Toast.makeText(this@ProductListActivity, "Error: ${t.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@ProductListActivity, "Something went wrong.", Toast.LENGTH_LONG).show()
+                Log.e("ProductListActivity", "API call failed: ${t.message}")
             }
         })
     }

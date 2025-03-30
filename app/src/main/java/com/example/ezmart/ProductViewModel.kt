@@ -1,5 +1,6 @@
 package com.example.ezmart
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -37,15 +38,18 @@ class ProductViewModel : ViewModel() {
                         // Update LiveData with fetched products
                         _products.value = productResponse.products
                     } else {
-                        _errorMessage.value = "Failed to fetch products: ${productResponse?.error ?: "Unknown error"}"
+                        _errorMessage.value = "Failed to fetch products, please try again later."
+                        Log.e("API Error", "Failed to fetch products: ${productResponse?.error ?: "Unknown error"}")
                     }
                 } else {
-                    _errorMessage.value = "Failed to fetch products: ${response.errorBody()?.string() ?: "Unknown error"}"
+                    _errorMessage.value = "Failed to fetch products."
+                    Log.e("API Error", "Failed to fetch products: ${response.errorBody()?.string() ?: "Unknown error"}")
                 }
             }
 
             override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                _errorMessage.value = "Network error: ${t.message}"
+                _errorMessage.value = "Network error, please try again later."
+                t.printStackTrace()
             }
         })
     }

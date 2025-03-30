@@ -29,9 +29,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
+import com.example.ezmart.utils.UserSession
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.FirebaseMessagingService
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -71,10 +71,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-        val loggedInUser = sharedPreferences.getString("loggedInUser", null)
+        val userSession = UserSession(this)
+        val loggedInUser = userSession.getUser()
 
-        // Redirect to LoginActivity if no user is logged in
         if (loggedInUser == null) {
             startActivity(Intent(this, Login::class.java))
             finish()
@@ -97,8 +96,8 @@ class MainActivity : AppCompatActivity() {
                 println("FCM Token: $token")
             } else {
                 println("Failed to get FCM token: ${task.exception}")
-                }
             }
+        }
 
         // Initialize ViewModel
         viewModel = ViewModelProvider(this)[ProductViewModel::class.java]

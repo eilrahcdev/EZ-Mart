@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.ezmart.api.RetrofitClient
+import com.example.ezmart.auth.ResetPasswordActivity
 import com.google.android.material.textfield.TextInputEditText
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -46,7 +47,7 @@ class ForgotPassword : AppCompatActivity() {
 
         // Initialize progress dialog
         progressDialog = ProgressDialog(this).apply {
-            setMessage("Sending reset link...")
+            setMessage("Sending otp...")
             setCancelable(false)
         }
 
@@ -84,10 +85,12 @@ class ForgotPassword : AppCompatActivity() {
                 showToast("Email field cannot be empty.")
                 false
             }
+
             !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
                 showToast("Please enter a valid email address.")
                 false
             }
+
             else -> true
         }
     }
@@ -106,31 +109,35 @@ class ForgotPassword : AppCompatActivity() {
         val request = mapOf("email" to email)
 
         // Make Retrofit API call
-        RetrofitClient.instance.requestPasswordReset(request).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                // Hide progress dialog
-                progressDialog.dismiss()
+        RetrofitClient.instance.sendOtp(request)
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    // Hide progress dialog
+                    progressDialog.dismiss()
 
-                if (response.isSuccessful) {
-                    // Handle success
-                    showToast("Password reset link sent to your email.")
-                    val intent = Intent(this@ForgotPassword, Login::class.java)
-                    startActivity(intent)
-                    finish() // Close the current activity
-                } else {
-                    // Handle error response
-                    val errorBody = response.errorBody()?.string() ?: "Unknown error"
-                    showToast("Failed to send reset link: $errorBody")
+                    if (response.isSuccessful) {
+                        // Handle success - now navigate to OTP verification
+                        showToast("OTP sent to your email")
+                        val intent =
+                            Intent(this@ForgotPassword, ResetPasswordActivity::class.java).apply {
+                                putExtra("email", email)
+                            }
+                        startActivity(intent)
+                        finish() // Close the current activity
+                    } else {
+                        // Handle error response
+                        val errorBody = response.errorBody()?.string() ?: "Unknown error"
+                        showToast("Failed to send OTP: $errorBody")
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                // Hide progress dialog
-                progressDialog.dismiss()
-
-                // Handle network failure
-                showToast("Network error. Please check your connection.")
-            }
-        })
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    progressDialog.dismiss()
+                    showToast("Network error. Please check your connection.")
+                }
+            })
     }
 }

@@ -120,7 +120,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Email Address"
-                android:textColorHint="@color/blue"
+                android:fontFamily="@font/inter"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -158,7 +158,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Create password"
-                android:textColorHint="@color/blue"
+                android:fontFamily="@font/inter"
                 android:inputType="textPassword"
                 android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -196,7 +196,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Confirm Password"
-                android:textColorHint="@color/blue"
+                android:fontFamily="@font/inter"
                 android:inputType="textPassword"
                 android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -259,7 +259,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="First Name"
-                android:textColorHint="@color/blue"
+                android:fontFamily="@font/inter"
                 android:inputType="textPersonName"
                 android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -295,7 +295,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Last Name"
-                android:textColorHint="@color/blue"
+                android:fontFamily="@font/inter"
                 android:inputType="textPersonName"
                 android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -319,7 +319,8 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="290dp"
             android:layout_marginEnd="20dp"
-            android:padding="15dp"
+            android:padding="17dp"
+            android:fontFamily="@font/inter"
             android:background="@drawable/gender_bg"
             android:entries="@array/gender_array" />
 
@@ -354,7 +355,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="YYYY-MM-DD"
-                android:textColorHint="@color/blue"
+                android:fontFamily="@font/inter"
                 android:inputType="date"
                 android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -389,7 +390,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="09XXXXXXXXX"
-                android:textColorHint="@color/blue"
+                android:fontFamily="@font/inter"
                 android:inputType="phone|number"
                 android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -425,7 +426,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="City, Province"
-                android:textColorHint="@color/blue"
+                android:fontFamily="@font/inter"
                 android:inputType="textPostalAddress"
                 android:textColor="@color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
@@ -444,7 +445,6 @@
             android:textColor="@color/white"
             app:cornerRadius="@dimen/dimens"
             android:elevation="15dp"
-            android:translationZ="10dp"
             android:padding="12dp"/>
 
         <LinearLayout

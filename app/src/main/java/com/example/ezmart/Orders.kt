@@ -2,7 +2,6 @@ package com.example.ezmart
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
@@ -17,9 +16,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ezmart.api.RetrofitClient
+import com.example.ezmart.models.OrderCancelRequest
+import com.example.ezmart.models.OrderListResponse
 import com.example.ezmart.models.OrderModel
+import com.example.ezmart.utils.UserSession
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,8 +31,8 @@ class Orders : AppCompatActivity() {
 
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
-    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var ordersPagerAdapter: OrdersPagerAdapter
+    private lateinit var userSession: UserSession
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,11 +50,19 @@ class Orders : AppCompatActivity() {
         tabLayout = findViewById(R.id.ordersTabLayout)
         viewPager = findViewById(R.id.ordersViewPager)
 
-        // Initialize SharedPreferences
-        sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        // Initialize UserSession
+        userSession = UserSession(this)
+
+        // Check if user is logged in
+        val loggedInUser = userSession.getUser()
+        if (loggedInUser == null) {
+            startActivity(Intent(this, Login::class.java))
+            finish()
+            return
+        }
 
         // Fetch Orders
-        fetchOrders()
+        fetchOrders(loggedInUser.id)
 
         // Back Button Functionality
         findViewById<ImageButton>(R.id.backBtn_orders).setOnClickListener {
@@ -63,42 +74,49 @@ class Orders : AppCompatActivity() {
         setupNavigation()
     }
 
-    private fun fetchOrders() {
-        val userEmail = sharedPreferences.getString("loggedInUser", null)
+    private fun fetchOrders(userId: Int) {
+        Log.d("OrdersActivity", "Fetching orders for user ID: $userId")
 
-        if (userEmail.isNullOrEmpty()) {
-            Toast.makeText(this, "Error: User email is missing!", Toast.LENGTH_LONG).show()
-            return
-        }
+        RetrofitClient.instance.getOrders(userId.toString()).enqueue(object : Callback<OrderListResponse> {
+            override fun onResponse(call: Call<OrderListResponse>, response: Response<OrderListResponse>) {
+                if (response.isSuccessful) {
+                    val orderResponse = response.body()
+                    val orders = orderResponse?.orders ?: emptyList() // Ensure non-null list
 
-        val apiService = RetrofitClient.instance
+                    // Log fetched orders
+                    orders.forEach { order ->
+                        Log.d("OrdersActivity", "Order ID: ${order.id}, Status: ${order.status}")
+                    }
 
-        apiService.getOrders(userEmail).enqueue(object : Callback<List<OrderModel>> {
-            override fun onResponse(call: Call<List<OrderModel>>, response: Response<List<OrderModel>>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val orders = response.body()!!
                     Log.d("OrdersActivity", "Fetched ${orders.size} orders")
-
                     setupViewPager(orders)
                 } else {
-                    Log.e("OrdersActivity", "Failed to fetch orders")
+                    Log.e("OrdersActivity", "Failed: ${response.code()} ${response.errorBody()?.string()}")
+                    setupViewPager(emptyList()) // Show empty UI
                 }
             }
 
-            override fun onFailure(call: Call<List<OrderModel>>, t: Throwable) {
-                Log.e("OrdersActivity", "API call failed: ${t.message}")
+            override fun onFailure(call: Call<OrderListResponse>, t: Throwable) {
+                Log.e("OrdersActivity", "API call failed: ${t.message}", t)
             }
         })
     }
 
+
     private fun setupViewPager(orders: List<OrderModel>) {
-        ordersPagerAdapter = OrdersPagerAdapter(this, orders)
+        val pendingOrders = orders.filter { it.status == "Pending" }
+        val processingOrders = orders.filter { it.status == "To Pay" }
+        val completedOrders = orders.filter { it.status == "Completed" }
+        val cancelledOrders = orders.filter { it.status == "Cancelled" }
+
+        ordersPagerAdapter = OrdersPagerAdapter(this, pendingOrders, processingOrders, completedOrders, cancelledOrders)
         viewPager.adapter = ordersPagerAdapter
 
+        // Set up TabLayout with ViewPager2
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
                 0 -> "Pending"
-                1 -> "Processing"
+                1 -> "To Pay"
                 2 -> "Completed"
                 3 -> "Cancelled"
                 else -> ""

@@ -64,10 +64,10 @@
                 android:text="Pending" />
 
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_processing"
+                android:id="@+id/tab_topay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Processing" />
+                android:text="To Pay" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/tab_completed"

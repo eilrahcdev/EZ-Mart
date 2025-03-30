@@ -20,6 +20,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/arrow_back_blue"
+            android:background="?android:attr/selectableItemBackground"
             android:padding="5dp"
             android:layout_gravity="center_vertical" />
 
@@ -41,6 +42,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/search_25"
+            android:background="?attr/selectableItemBackground"
             android:padding="5dp"
             android:layout_gravity="center_vertical"
             app:tint="@color/blue" />

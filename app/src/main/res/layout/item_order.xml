@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="10dp"
     android:layout_margin="5dp"
@@ -10,10 +11,11 @@
 
     <TextView
         android:id="@+id/product_name"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Product/s: "
         android:fontFamily="@font/inter_bold"
+        android:text="Product/s: "
         android:textSize="15sp" />
 
     <TextView
@@ -33,4 +35,30 @@
         android:text="Payment Method: "
         android:textColor="@color/black"
         android:textSize="14sp" />
+    <Button
+        android:id="@+id/pay_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="Pay"
+        android:textSize="17sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/inter_bold"
+        app:cornerRadius="@dimen/dimens"
+        android:backgroundTint="@color/blue"
+        android:layout_marginTop="5dp"
+        android:visibility="gone" />
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="Cancel"
+        android:textSize="17sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/inter_bold"
+        app:cornerRadius="@dimen/dimens"
+        android:backgroundTint="@color/blue"
+        android:layout_marginTop="5dp"
+        android:visibility="gone" />
 </LinearLayout>
