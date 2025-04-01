@@ -55,7 +55,7 @@ class FreshProduce : AppCompatActivity() {
         // Setup RecyclerView
         recyclerView = findViewById(R.id.freshproduceRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productAdapter = ProductAdapter(this, emptyList()) // Empty initial list
+        productAdapter = ProductAdapter(this, emptyList())
         recyclerView.adapter = productAdapter
 
         // Observe products LiveData

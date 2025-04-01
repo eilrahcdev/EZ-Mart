@@ -29,7 +29,5 @@ class SearchHistoryAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return historyList.size
-    }
+    override fun getItemCount(): Int = historyList.size
 }

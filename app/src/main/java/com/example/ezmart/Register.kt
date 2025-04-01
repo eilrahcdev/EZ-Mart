@@ -1,17 +1,14 @@
 package com.example.ezmart
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.util.Patterns
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -19,6 +16,8 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.ezmart.api.RetrofitClient
 import com.example.ezmart.models.RegisterRequest
 import com.example.ezmart.models.RegisterResponse
+import com.example.ezmart.models.User
+import com.example.ezmart.utils.UserSession
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,23 +25,20 @@ import retrofit2.Response
 
 class Register : AppCompatActivity() {
 
-    @SuppressLint("MissingInflatedId")
+    private lateinit var userSession: UserSession
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        userSession = UserSession(this)
 
-        // Check if user is already logged in
-        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-        val loggedInUser = sharedPreferences.getString("loggedInUser", null)
-
-        if (loggedInUser != null) {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+        if (userSession.isLoggedIn()) {
+            Log.d("RegisterActivity", "User already logged in. Redirecting to MainActivity.")
+            navigateToMainActivity()
             return
         }
 
-        enableEdgeToEdge()
         setContentView(R.layout.register_activity)
-
+        enableEdgeToEdge()
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.register_activity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -61,7 +57,6 @@ class Register : AppCompatActivity() {
         val registerBtn = findViewById<Button>(R.id.registerBtn)
         val loginTv = findViewById<TextView>(R.id.loginTv_register)
 
-        // Apply SpannableString to loginTv
         val spannable = SpannableString("Already have an account? Login")
         spannable.setSpan(
             ForegroundColorSpan(Color.BLUE),
@@ -70,9 +65,6 @@ class Register : AppCompatActivity() {
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         loginTv.text = spannable
-
-        // Initialize Spinner
-        genderSpinner.setSelection(0)
 
         registerBtn.setOnClickListener {
             val email = emailEt.text.toString().trim()
@@ -86,113 +78,92 @@ class Register : AppCompatActivity() {
             val gender = genderSpinner.selectedItem.toString()
 
             if (validateInput(email, password, confirmPassword, firstName, lastName, birthdate, contact, address, gender)) {
-                val registerRequest = RegisterRequest(firstName, lastName, email, password, confirmPassword, gender, birthdate, contact, address)
+                val registerRequest = RegisterRequest(firstName, lastName, email, password, confirmPassword, contact, gender, birthdate, address)
 
                 RetrofitClient.instance.register(registerRequest).enqueue(object : Callback<RegisterResponse> {
                     override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
-                        if (response.isSuccessful) {
-                            val responseBody = response.body()
-                            if (responseBody != null && responseBody.success) {
-                                Toast.makeText(this@Register, "Registration Successful!", Toast.LENGTH_SHORT).show()
+                        val registerResponse = response.body()
 
-                                // Save user data
-                                saveUserData(email, firstName, lastName, birthdate, contact, address, gender)
-
-                                // Redirect to MainActivity
-                                startActivity(Intent(this@Register, MainActivity::class.java))
-                                finish()
-                            } else {
-                                Toast.makeText(this@Register, "Registration failed", Toast.LENGTH_SHORT).show()
-                            }
+                        if (response.isSuccessful && registerResponse?.success == true) {
+                            showToast("Registration Successful! ✅")
+                            saveUserData(registerResponse)
+                            navigateToMainActivity()
                         } else {
-                            Toast.makeText(this@Register, "Error", Toast.LENGTH_LONG).show()
+                            showToast(registerResponse?.message ?: "Registration failed ❌")
                         }
                     }
 
                     override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                        Toast.makeText(this@Register, "Network error", Toast.LENGTH_SHORT).show()
+                        showToast("Network error: ${t.message} ❌")
+                        Log.e("RegisterActivity", "Registration API failed: ${t.message}")
                     }
                 })
             }
         }
 
-        // Handle Login navigation
         loginTv.setOnClickListener {
             startActivity(Intent(this, Login::class.java))
         }
+
     }
 
-    private fun validateInput(
-        email: String,
-        password: String,
-        confirmPassword: String,
-        firstName: String,
-        lastName: String,
-        birthdate: String,
-        phone: String,
-        address: String,
-        gender: String
-    ): Boolean {
+    private fun validateInput(email: String, password: String, confirmPassword: String, firstName: String, lastName: String, birthdate: String, phone: String, address: String, gender: String): Boolean {
         return when {
             email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                showToast("Please enter a valid email address")
-                false
+                showToast("Please enter a valid email address ❌"); false
             }
             password.length !in 8..15 -> {
-                showToast("Password must be between 8 and 15 characters")
-                false
+                showToast("Password must be between 8 and 15 characters ❌"); false
             }
             password != confirmPassword -> {
-                showToast("Passwords do not match")
-                false
+                showToast("Passwords do not match ❌"); false
             }
             firstName.isEmpty() || !firstName.matches(Regex("^[a-zA-Z]+$")) -> {
-                showToast("First name must contain only letters")
-                false
+                showToast("First name must contain only letters ❌"); false
             }
             lastName.isEmpty() || !lastName.matches(Regex("^[a-zA-Z]+$")) -> {
-                showToast("Last name must contain only letters")
-                false
+                showToast("Last name must contain only letters ❌"); false
             }
-            birthdate.isEmpty() || !birthdate.matches(Regex("^\\d{4}-\\d{2}-\\d{2}\$")) -> {
-                showToast("Birthdate must be in format YYYY-MM-DD")
-                false
+            birthdate.isEmpty() -> {
+                showToast("Birthdate is required ❌"); false
             }
             phone.isEmpty() || !phone.matches(Regex("^[0-9]+$")) -> {
-                showToast("Phone number must contain only digits")
-                false
+                showToast("Phone number must contain only digits ❌"); false
             }
             address.isEmpty() -> {
-                showToast("Address is required")
-                false
+                showToast("Address is required ❌"); false
             }
             gender == "Select a gender" -> {
-                showToast("Please select a valid gender")
-                false
+                showToast("Please select a valid gender ❌"); false
             }
             else -> true
         }
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    private fun saveUserData(response: RegisterResponse) {
+        val user = User(
+            id = response.id,
+            first_name = response.firstName,
+            last_name = response.lastName,
+            email = response.email,
+            birthdate = response.birthdate,
+            contact = response.contact,
+            address = response.address,
+            gender = response.gender,
+            fcmToken = null // Can be updated later
+        )
+        userSession.saveUser(user)
+        Log.d("RegisterActivity", "User session saved: ${response.id}")
     }
 
-    private fun saveUserData(email: String, firstName: String, lastName: String, birthdate: String, contact: String, address: String, gender: String) {
-        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
+    private fun navigateToMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
 
-        // Save data using the user's email as a unique key
-        editor.putString("${email}_firstName", firstName)
-        editor.putString("${email}_lastName", lastName)
-        editor.putString("${email}_email", email)
-        editor.putString("${email}_birthdate", birthdate)
-        editor.putString("${email}_contact", contact)
-        editor.putString("${email}_address", address)
-        editor.putString("${email}_gender", gender)
-
-        // Save logged-in user
-        editor.putString("loggedInUser", email)
-        editor.apply()
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }

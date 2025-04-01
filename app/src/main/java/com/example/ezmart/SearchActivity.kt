@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ezmart.api.RetrofitClient
 import com.example.ezmart.models.ProductResponse
+import com.example.ezmart.utils.UserSession
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,9 +32,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var historyAdapter: SearchHistoryAdapter
     private lateinit var productAdapter: ProductAdapter
+    private lateinit var userSession: UserSession
 
     private val searchHistory = mutableListOf<String>()
     private val productList = mutableListOf<Product>()
+    private var userEmail: String? = null  // Store user email to manage history properly
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +52,20 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryRecyclerView = findViewById(R.id.searchHistoryRecyclerView)
         productRecyclerView = findViewById(R.id.productRecyclerView)
 
+        // Initialize UserSession
+        userSession = UserSession(this)
+        userEmail = userSession.getUser()?.email
+
+        // Ensure user email is available
+        if (userEmail == null) {
+            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        // Initialize SharedPreferences
         sharedPreferences = getSharedPreferences("SearchPrefs", Context.MODE_PRIVATE)
+
         loadSearchHistory()
 
         // Setup RecyclerViews
@@ -84,25 +101,28 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    // Save search history
+    // Save search history specific to each user
     private fun saveSearchHistory(query: String) {
         if (!searchHistory.contains(query)) {
             searchHistory.add(0, query)
-            sharedPreferences.edit().putStringSet("history", searchHistory.toSet()).apply()
+            val historyKey = "history_$userEmail"
+            sharedPreferences.edit().putStringSet(historyKey, searchHistory.toSet()).apply()
             historyAdapter.notifyDataSetChanged()
         }
     }
 
-    // Load search history from SharedPreferences
+    // Load search history specific to each user
     private fun loadSearchHistory() {
         searchHistory.clear()
-        searchHistory.addAll(sharedPreferences.getStringSet("history", emptySet())!!.toList())
+        val historyKey = "history_$userEmail"
+        searchHistory.addAll(sharedPreferences.getStringSet(historyKey, emptySet())!!.toList())
     }
 
-    // Clear search history
+    // Clear search history for the logged-in user
     private fun clearSearchHistory() {
         searchHistory.clear()
-        sharedPreferences.edit().remove("history").apply()
+        val historyKey = "history_$userEmail"
+        sharedPreferences.edit().remove(historyKey).apply()
         historyAdapter.notifyDataSetChanged()
     }
 
@@ -128,7 +148,7 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                Toast.makeText(this@SearchActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Log.e("SearchActivity", "Error loading products", t)
             }
         })
     }

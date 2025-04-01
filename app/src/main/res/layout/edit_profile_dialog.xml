@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Edit Profile"
+        android:fontFamily="@font/inter_bold"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -41,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="First Name"
-            android:textColorHint="@color/blue"
+            android:fontFamily="@font/inter"
             android:inputType="textPersonName"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -69,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Last Name"
-            android:textColorHint="@color/blue"
+            android:fontFamily="@font/inter"
             android:inputType="textPersonName"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -89,8 +90,9 @@
         android:id="@+id/genderSpinner_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
         android:layout_marginTop="10dp"
-        android:padding="15dp"
+        android:padding="17dp"
         android:background="@drawable/gender_bg"
         android:entries="@array/gender_array" />
 
@@ -117,7 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="YYYY-MM-DD"
-            android:textColorHint="@color/blue"
+            android:fontFamily="@font/inter"
             android:inputType="date"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -145,7 +147,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="09XXXXXXXXX"
-            android:textColorHint="@color/blue"
+            android:fontFamily="@font/inter"
             android:inputType="phone|number"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -173,7 +175,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="City, Province"
-            android:textColorHint="@color/blue"
+            android:fontFamily="@font/inter"
             android:inputType="textPostalAddress"
             android:textColor="@color/black"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -194,7 +196,7 @@
             android:layout_marginEnd="10dp"
             android:text="Cancel"
             android:padding="5dp"
-            android:textColor="@color/black"
+            android:textColor="@color/blue"
             android:fontFamily="@font/inter_bold"
             android:textSize="15sp"
             android:backgroundTint="@color/white"

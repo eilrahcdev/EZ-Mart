@@ -154,11 +154,7 @@ class ModalBottomSheet : AppCompatActivity() {
 
     private fun buyNow() {
         selectedProduct?.let {
-            val productId = it.id
             val quantity = quantityBuyNow
-
-            reduceStock(productId, quantity)
-
             val selectedProductsList = arrayListOf(it.copy(quantity = quantityBuyNow))
 
             val intent = Intent(this, Checkout::class.java).apply {
@@ -178,9 +174,7 @@ class ModalBottomSheet : AppCompatActivity() {
 
         RetrofitClient.instance.reduceStock(request).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
-                    Toast.makeText(this@ModalBottomSheet, "Stock updated!", Toast.LENGTH_SHORT).show()
-                } else {
+                if (!response.isSuccessful) {
                     val errorBody = response.errorBody()?.string()
                     Toast.makeText(this@ModalBottomSheet, "Failed to update stock! Error: $errorBody", Toast.LENGTH_LONG).show()
                 }
@@ -191,4 +185,5 @@ class ModalBottomSheet : AppCompatActivity() {
             }
         })
     }
+
 }

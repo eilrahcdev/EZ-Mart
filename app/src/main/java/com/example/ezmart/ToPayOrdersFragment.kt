@@ -1,7 +1,7 @@
 package com.example.ezmart
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,23 +17,24 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CompletedOrdersFragment : Fragment(), OrderUpdateListener {
+class ToPayOrdersFragment : Fragment(), OrderUpdateListener {
 
     companion object {
-        fun newInstance(): CompletedOrdersFragment {
-            return CompletedOrdersFragment()
+        fun newInstance(): ToPayOrdersFragment {
+            return ToPayOrdersFragment()
         }
     }
 
     private lateinit var orderRecyclerView: RecyclerView
     private lateinit var orderAdapter: OrderAdapter
     private lateinit var emptyTextView: TextView
-    private var completedOrders: MutableList<OrderModel> = mutableListOf()
+    private var toPayOrders: MutableList<OrderModel> = mutableListOf()
 
+    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.fragment_completed_orders, container, false)
+        val view = inflater.inflate(R.layout.fragment_to_pay_orders, container, false)
 
         // Initialize Views
         orderRecyclerView = view.findViewById(R.id.recyclerView_orders)
@@ -41,66 +42,62 @@ class CompletedOrdersFragment : Fragment(), OrderUpdateListener {
 
         orderRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        // Initialize Adapter with OrderUpdateListener
-        orderAdapter = OrderAdapter(completedOrders, requireContext(), this)
+        // Pass context & OrderUpdateListener to OrderAdapter
+        orderAdapter = OrderAdapter(toPayOrders, requireContext(), this)
         orderRecyclerView.adapter = orderAdapter
 
-        // Load Completed Orders
-        loadCompletedOrders()
+        // Load To Pay Orders
+        loadToPayOrders()
 
         return view
     }
 
     override fun onResume() {
         super.onResume()
-        loadCompletedOrders() // Refresh the list on fragment resume
+        loadToPayOrders()
     }
 
-    private fun loadCompletedOrders() {
+    private fun loadToPayOrders() {
         val userSession = UserSession(requireContext())
         val user = userSession.getUser()
 
         if (user == null) {
-            showEmptyMessage("Please log in to view orders")
+            showEmptyMessage("User is not logged in.")
             return
         }
 
         RetrofitClient.instance.getOrders(user.id.toString()).enqueue(object : Callback<OrderListResponse> {
             override fun onResponse(call: Call<OrderListResponse>, response: Response<OrderListResponse>) {
                 if (response.isSuccessful && response.body() != null) {
-                    Log.d("CompletedOrdersFragment", "Response: ${response.body()}")
+                    val orderResponse = response.body()!!
 
-                    val ordersList = response.body()?.orders ?: emptyList()
+                    if (orderResponse.success) {
+                        val ordersList = orderResponse.orders
+                        val filteredOrders = ordersList.filter { it.status == "To Pay" }
 
-                    // Filter orders with "Completed" status
-                    val filteredOrders = ordersList.filter { it.status.equals("Completed", ignoreCase = true) }
+                        // Update RecyclerView
+                        toPayOrders.clear()
+                        toPayOrders.addAll(filteredOrders)
+                        orderAdapter.notifyDataSetChanged()
 
-                    // Update RecyclerView
-                    completedOrders.clear()
-                    completedOrders.addAll(filteredOrders)
-                    orderAdapter.notifyDataSetChanged()
-
-                    // Update UI
-                    updateEmptyState()
+                        // Show/hide empty message
+                        if (toPayOrders.isEmpty()) {
+                            showEmptyMessage("No orders to pay.")
+                        } else {
+                            showOrders()
+                        }
+                    } else {
+                        showEmptyMessage("No orders found.")
+                    }
                 } else {
-                    Log.e("CompletedOrdersFragment", "Failed: ${response.code()} ${response.errorBody()?.string()}")
-                    showEmptyMessage("Failed to load completed orders")
+                    showEmptyMessage("Failed to load orders.")
                 }
             }
 
             override fun onFailure(call: Call<OrderListResponse>, t: Throwable) {
-                Log.e("CompletedOrdersFragment", "API call failed: ${t.message}", t)
-                showEmptyMessage("Failed to load completed orders. Please try again later.")
+                showEmptyMessage("Error: ${t.message}")
             }
         })
-    }
-
-    private fun updateEmptyState() {
-        if (completedOrders.isEmpty()) {
-            showEmptyMessage("No completed orders found.")
-        } else {
-            showOrders()
-        }
     }
 
     private fun showEmptyMessage(message: String) {
@@ -115,13 +112,13 @@ class CompletedOrdersFragment : Fragment(), OrderUpdateListener {
     }
 
     override fun onOrderCancelled(order: OrderModel) {
-        // Remove order from the list dynamically if needed
-        completedOrders.removeAll { it.id == order.id }
+        // Remove the canceled order from the list
+        toPayOrders.removeAll { it.id == order.id }
         orderAdapter.notifyDataSetChanged()
 
-        // Update UI
-        if (completedOrders.isEmpty()) {
-            showEmptyMessage("No completed orders found.")
+        // Show empty message if no more "To Pay" orders
+        if (toPayOrders.isEmpty()) {
+            showEmptyMessage("No orders to pay.")
         }
     }
 }

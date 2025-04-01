@@ -61,7 +61,7 @@ class OnboardScreen : AppCompatActivity() {
     private fun markOnboardingSeen() {
         val sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        editor.putBoolean("is_first_time", false) // Mark onboarding as seen
+        editor.putBoolean("is_first_time", false)
         editor.apply()
     }
 }
