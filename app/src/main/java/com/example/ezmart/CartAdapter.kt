@@ -59,15 +59,22 @@ class CartAdapter(
             product.quantity++
             holder.quantityText.text = product.quantity.toString()
             holder.productPrice.text = "₱ %.2f".format(product.price * product.quantity)
+
+            // Update the cart in shared preferences
+            CartManager.updateCart(holder.itemView.context, cartList)
+            notifyDataSetChanged() // Refresh UI
             onTotalAmountUpdated(getTotalAmount())
         }
 
-        // Minus button: Decrease quantity (but not below 1)
         holder.btnMinus.setOnClickListener {
             if (product.quantity > 1) {
                 product.quantity--
                 holder.quantityText.text = product.quantity.toString()
                 holder.productPrice.text = "₱ %.2f".format(product.price * product.quantity)
+
+                // Update the cart in shared preferences
+                CartManager.updateCart(holder.itemView.context, cartList)
+                notifyDataSetChanged() // Refresh UI
                 onTotalAmountUpdated(getTotalAmount())
             }
         }

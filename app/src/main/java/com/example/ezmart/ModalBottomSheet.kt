@@ -8,14 +8,7 @@ import android.widget.*
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.ezmart.api.ProductStock
-import com.example.ezmart.api.RetrofitClient
-import com.example.ezmart.api.StockUpdateRequest
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 @Suppress("DEPRECATION")
 class ModalBottomSheet : AppCompatActivity() {
@@ -23,9 +16,9 @@ class ModalBottomSheet : AppCompatActivity() {
     private lateinit var actionAddToCartBtn: Button
     private lateinit var actionBuyNowBtn: Button
     private var bottomSheetDialog: BottomSheetDialog? = null
-    private var selectedProduct: Product? = null // Store selected product
-    private var quantityAddToCart: Int = 1 // Default quantity for Add to Cart
-    private var quantityBuyNow: Int = 1 // Default quantity for Buy Now
+    private var selectedProduct: Product? = null
+    private var quantityAddToCart: Int = 1
+    private var quantityBuyNow: Int = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,17 +137,15 @@ class ModalBottomSheet : AppCompatActivity() {
     }
 
     private fun addToCart() {
-        selectedProduct?.let {
-            CartManager.addToCart(this, it)
-            reduceStock(it.id, quantityAddToCart)
-            Toast.makeText(this, "${it.name} added to cart!", Toast.LENGTH_SHORT).show()
+        selectedProduct?.let { product ->
+            CartManager.addToCart(this, product, quantityAddToCart)  // Pass correct quantity
+            Toast.makeText(this, "${product.name} added to cart!", Toast.LENGTH_SHORT).show()
             bottomSheetDialog?.dismiss()
         }
     }
 
     private fun buyNow() {
         selectedProduct?.let {
-            val quantity = quantityBuyNow
             val selectedProductsList = arrayListOf(it.copy(quantity = quantityBuyNow))
 
             val intent = Intent(this, Checkout::class.java).apply {
@@ -165,25 +156,4 @@ class ModalBottomSheet : AppCompatActivity() {
             bottomSheetDialog?.dismiss()
         }
     }
-
-    private fun reduceStock(productId: Int, quantity: Int) {
-        val request = StockUpdateRequest(
-            action = "reduce_stock",
-            products = listOf(ProductStock(productId, quantity))
-        )
-
-        RetrofitClient.instance.reduceStock(request).enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (!response.isSuccessful) {
-                    val errorBody = response.errorBody()?.string()
-                    Toast.makeText(this@ModalBottomSheet, "Failed to update stock! Error: $errorBody", Toast.LENGTH_LONG).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(this@ModalBottomSheet, "Error: ${t.message}", Toast.LENGTH_LONG).show()
-            }
-        })
-    }
-
 }

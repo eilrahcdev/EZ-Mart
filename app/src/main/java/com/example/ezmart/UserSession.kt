@@ -9,10 +9,9 @@ class UserSession(context: Context) {
     private val prefs: SharedPreferences = context.getSharedPreferences("UserSession", Context.MODE_PRIVATE)
     private val editor: SharedPreferences.Editor = prefs.edit()
 
-    // Save user data including FCM token
     fun saveUser(user: User) {
         with(editor) {
-            putString("id", user.id.toString())
+            putInt("id", user.id) // Store id as an Integer
             putString("first_name", user.first_name)
             putString("last_name", user.last_name)
             putString("email", user.email)
@@ -20,26 +19,26 @@ class UserSession(context: Context) {
             putString("contact", user.contact)
             putString("address", user.address)
             putString("gender", user.gender)
-            putString("fcm_token", user.fcmToken)
-            apply() // Save changes asynchronously
+            putString("fcm_token", user.fcmToken ?: "") // Avoid null issues
+            apply()
         }
     }
 
     // Retrieve user data
     fun getUser(): User? {
-        val idString = prefs.getString("id", null) ?: return null
-        val id = idString.toIntOrNull() ?: return null
+        val id = prefs.getInt("id", -1) // Get id as an Integer
+        if (id == -1) return null // If id is not found, return null
 
         return User(
-            id,
-            prefs.getString("first_name", "") ?: "",
-            prefs.getString("last_name", "") ?: "",
-            prefs.getString("email", "") ?: "",
-            prefs.getString("birthdate", "") ?: "",
-            prefs.getString("contact", "") ?: "",
-            prefs.getString("address", "") ?: "",
-            prefs.getString("gender", "") ?: "",
-            prefs.getString("fcm_token", null)
+            id = id,
+            first_name = prefs.getString("first_name", "") ?: "",
+            last_name = prefs.getString("last_name", "") ?: "",
+            email = prefs.getString("email", "") ?: "",
+            birthdate = prefs.getString("birthdate", "") ?: "",
+            contact = prefs.getString("contact", "") ?: "",
+            address = prefs.getString("address", "") ?: "",
+            gender = prefs.getString("gender", "") ?: "",
+            fcmToken = prefs.getString("fcm_token", "")
         )
     }
 
@@ -54,12 +53,12 @@ class UserSession(context: Context) {
     // Check if user is logged in
     fun isLoggedIn(): Boolean = prefs.contains("id")
 
-    // Clear all session data, including user data and FCM token
+    // Clear all session data
     fun clearSession() {
         editor.clear().apply()
     }
 
-    // Update specific user details
+    // Update user data
     fun updateUser(updatedUser: User) {
         saveUser(updatedUser)
     }

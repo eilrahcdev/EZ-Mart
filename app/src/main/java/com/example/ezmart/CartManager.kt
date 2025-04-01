@@ -1,17 +1,27 @@
 package com.example.ezmart
 
 import android.content.Context
+import com.example.ezmart.utils.UserSession
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 object CartManager {
 
     private const val CART_PREFS = "cart_prefs"
-    private const val CART_KEY = "cart"
 
+    // 🔹 Get a unique cart key based on the logged-in user's email
+    private fun getCartKey(context: Context): String {
+        val userSession = UserSession(context)
+        val userEmail = userSession.getUser()?.email ?: "guest" // Default for guest users
+        return "cart_$userEmail" // Cart is now stored per user
+    }
+
+    // 🔹 Retrieve cart for the current user
     fun getCart(context: Context): MutableList<Product> {
         val sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE)
-        val json = sharedPreferences.getString(CART_KEY, null)
+        val cartKey = getCartKey(context) // Get the cart key for the logged-in user
+        val json = sharedPreferences.getString(cartKey, null)
+
         return if (json != null) {
             val type = object : TypeToken<MutableList<Product>>() {}.type
             Gson().fromJson(json, type)
@@ -20,34 +30,26 @@ object CartManager {
         }
     }
 
-    fun removeFromCart(context: Context, product: Product) {
-        val cartList = getCart(context)
-        cartList.removeAll { it.id == product.id } // Remove by ID (Ensures accuracy)
-        saveCart(context, cartList)
+    // 🔹 Save cart for the current user
+    fun saveCart(context: Context, cartList: List<Product>) {
+        val sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        val cartKey = getCartKey(context) // Use unique key per user
+        val json = Gson().toJson(cartList)
+
+        editor.putString(cartKey, json)
+        editor.apply()
     }
 
-    fun removeMultipleFromCart(context: Context, products: List<Product>) {
+    fun addToCart(context: Context, product: Product, quantity: Int) {
         val cartList = getCart(context)
-        val productIdsToRemove = products.map { it.id }
-        cartList.removeAll { it.id in productIdsToRemove } // Remove selected products
-        saveCart(context, cartList)
-    }
-
-    fun addToCart(context: Context, product: Product) {
-        val cartList = getCart(context)
-
-        // Ensure product quantity is at least 1
-        if (product.quantity <= 0) {
-            product.quantity = 1
-        }
-
-        // Check if the product already exists in the cart
         val existingProduct = cartList.find { it.id == product.id }
 
         if (existingProduct != null) {
-            existingProduct.quantity += product.quantity // Increase quantity if exists
+            existingProduct.quantity += quantity
         } else {
-            cartList.add(product) // Add new product if not found
+            product.quantity = quantity
+            cartList.add(product)
         }
 
         saveCart(context, cartList)
@@ -57,16 +59,17 @@ object CartManager {
         saveCart(context, updatedCart) // Saves modified cart list
     }
 
-    fun clearCart(context: Context) {
-        val sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE)
-        sharedPreferences.edit().remove(CART_KEY).apply()
+    fun removeFromCart(context: Context, product: Product) {
+        val cartList = getCart(context)
+        cartList.removeAll { it.id == product.id }
+        saveCart(context, cartList)
     }
 
-    fun saveCart(context: Context, cartList: List<Product>) {
+    fun clearCart(context: Context) {
         val sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
-        val json = Gson().toJson(cartList)
-        editor.putString(CART_KEY, json)
-        editor.apply()
+        val cartKey = getCartKey(context) // Clear only the logged-in user's cart
+
+        editor.remove(cartKey).apply()
     }
 }

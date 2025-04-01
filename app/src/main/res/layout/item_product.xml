@@ -52,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add to Cart"
+            android:drawableLeft="@drawable/shopping_cart_15"
             android:textColor="@color/white"
             app:cornerRadius="@dimen/dimens"
             android:backgroundTint="@color/blue"
