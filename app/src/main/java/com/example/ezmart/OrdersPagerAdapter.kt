@@ -8,19 +8,21 @@ import com.example.ezmart.models.OrderModel
 class OrdersPagerAdapter(
     activity: AppCompatActivity,
     private val pendingOrders: List<OrderModel>,
-    private val processingOrders: List<OrderModel>,
+    private val topayOrders: List<OrderModel>,
+    private val paidOrders: List<OrderModel>,
     private val completedOrders: List<OrderModel>,
     private val cancelledOrders: List<OrderModel>
 ) : FragmentStateAdapter(activity) {
 
-    override fun getItemCount(): Int = 4 // Number of tabs
+    override fun getItemCount(): Int = 5 // Number of tabs
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> PendingOrdersFragment.newInstance()
             1 -> ToPayOrdersFragment.newInstance()
-            2 -> CompletedOrdersFragment.newInstance()
-            3 -> CancelledOrdersFragment.newInstance()
+            2 -> PaidOrdersFragment.newInstance()
+            3 -> CompletedOrdersFragment.newInstance()
+            4 -> CancelledOrdersFragment.newInstance()
             else -> PendingOrdersFragment.newInstance()
         }
     }

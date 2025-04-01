@@ -63,56 +63,65 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Product details -->
+
+    <!-- Bottom buttons -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/productDetailsLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/actionLinearLayout"
+        android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@id/bottomBarLayout"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="16dp">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/actionLinearLayout"
+        app:layout_constraintVertical_bias="0.0">
 
         <TextView
             android:id="@+id/action_productNameTv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:fontFamily="@font/inter_bold"
             android:text="Product Name"
             android:textColor="@color/black"
-            android:textSize="18sp"
-            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/action_stockTv"
-            app:layout_constraintHorizontal_chainStyle="packed" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/action_stockTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Stock: 0"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/inter"
+            android:text="Stock: 0"
             android:textSize="15sp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/action_productNameTv" />
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/action_productNameTv" />
 
         <TextView
             android:id="@+id/action_productPriceTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:fontFamily="@font/inter_bold"
             android:text="₱ 0.00"
             android:textColor="@color/blue"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/action_productNameTv"
-            app:layout_constraintVertical_bias="0.029" />
+            app:layout_constraintTop_toBottomOf="@+id/action_stockTv"
+            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Bottom buttons -->
     <LinearLayout
         android:id="@+id/bottomBarLayout"
         android:layout_width="match_parent"

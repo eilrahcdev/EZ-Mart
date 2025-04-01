@@ -28,10 +28,9 @@ class Profile : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userSession = UserSession(this)
-        val user = userSession.getUser()
 
+        val user = userSession.getUser()
         if (user == null) {
-            Log.d("ProfileActivity", "User not logged in. Redirecting to Login.")
             startActivity(Intent(this, Login::class.java))
             finish()
             return
@@ -40,13 +39,17 @@ class Profile : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.profile_activity)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.profile_activity)) { v, insets ->
+        fetchUserProfile() // Ensure API call is made
+        loadUserData() // Load data into TextView
+
+    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.profile_activity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        loadUserData()
+        // Fetch user profile from backend
+        fetchUserProfile()
 
         findViewById<ImageButton>(R.id.backBtn_profile).setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
@@ -64,17 +67,42 @@ class Profile : AppCompatActivity() {
         setupNavigation()
     }
 
-    private fun loadUserData() {
+    private fun fetchUserProfile() {
         val user = userSession.getUser()
-
         if (user == null) {
-            Log.d("ProfileActivity", "User data is null, redirecting to login.")
             startActivity(Intent(this, Login::class.java))
             finish()
             return
         }
 
-        Log.d("ProfileActivity", "User Data Loaded: ${user.first_name}, ${user.email}")
+        RetrofitClient.instance.getProfile(user.email).enqueue(object : Callback<ProfileResponse> {
+            override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
+                Log.d("ProfileActivity", "Response code: ${response.code()}")
+                Log.d("ProfileActivity", "Response body: ${response.body()}")
+
+                if (response.isSuccessful && response.body()?.success == true) {
+                    val updatedUser = response.body()!!.user
+                    userSession.updateUser(updatedUser)
+                    loadUserData()
+                } else {
+                    Log.e("ProfileActivity", "Failed to fetch user data")
+                }
+            }
+
+            override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+                Log.e("ProfileActivity", "Error fetching profile: ${t.message}")
+            }
+        })
+    }
+
+    private fun loadUserData() {
+        val user = userSession.getUser()
+
+        if (user == null) {
+            startActivity(Intent(this, Login::class.java))
+            finish()
+            return
+        }
 
         findViewById<TextView>(R.id.firstnameTv).text = user.first_name
         findViewById<TextView>(R.id.lastnameTv).text = user.last_name
@@ -85,8 +113,6 @@ class Profile : AppCompatActivity() {
         findViewById<TextView>(R.id.genderTv).text = user.gender
     }
 
-
-    // Show edit profile dialog
     private fun showEditProfileDialog() {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.edit_profile_dialog)
@@ -96,18 +122,15 @@ class Profile : AppCompatActivity() {
         )
         dialog.setCancelable(true)
 
-        val userSession = UserSession(this)
         val user = userSession.getUser()
-
         if (user != null) {
-            val firstNameEt = dialog.findViewById<TextInputEditText>(R.id.firstnameEt_edit)
-            val lastNameEt = dialog.findViewById<TextInputEditText>(R.id.lastnameEt_edit)
-            val birthdateEt = dialog.findViewById<TextInputEditText>(R.id.birthdateEt_edit)
-            val phoneEt = dialog.findViewById<TextInputEditText>(R.id.phonenumEt_edit)
-            val addressEt = dialog.findViewById<TextInputEditText>(R.id.addressEt_edit)
+            val firstNameEt = dialog.findViewById<EditText>(R.id.firstnameEt_edit)
+            val lastNameEt = dialog.findViewById<EditText>(R.id.lastnameEt_edit)
+            val birthdateEt = dialog.findViewById<EditText>(R.id.birthdateEt_edit)
+            val phoneEt = dialog.findViewById<EditText>(R.id.phonenumEt_edit)
+            val addressEt = dialog.findViewById<EditText>(R.id.addressEt_edit)
             val genderSpinner = dialog.findViewById<Spinner>(R.id.genderSpinner_edit)
 
-            // Pre-fill fields with current user data
             firstNameEt.setText(user.first_name)
             lastNameEt.setText(user.last_name)
             birthdateEt.setText(user.birthdate)
@@ -119,18 +142,14 @@ class Profile : AppCompatActivity() {
             genderSpinner.setSelection(if (genderIndex >= 0) genderIndex else 0)
 
             dialog.findViewById<Button>(R.id.saveButton).setOnClickListener {
-                val updatedUser = user.copy(
-                    first_name = firstNameEt.text.toString().trim(),
-                    last_name = lastNameEt.text.toString().trim(),
-                    birthdate = birthdateEt.text.toString().trim(),
-                    contact = phoneEt.text.toString().trim(),
-                    address = addressEt.text.toString().trim(),
-                    gender = genderSpinner.selectedItem.toString()
+                updateProfile(
+                    firstNameEt.text.toString().trim(),
+                    lastNameEt.text.toString().trim(),
+                    birthdateEt.text.toString().trim(),
+                    phoneEt.text.toString().trim(),
+                    addressEt.text.toString().trim(),
+                    genderSpinner.selectedItem.toString()
                 )
-
-                userSession.updateUser(updatedUser)
-
-                Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             }
 
@@ -151,7 +170,6 @@ class Profile : AppCompatActivity() {
                 .enqueue(object : Callback<ProfileResponse> {
                     override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
                         if (response.isSuccessful && response.body()?.success == true) {
-                            // Create a new updated user object
                             val updatedUser = it.copy(
                                 first_name = firstName,
                                 last_name = lastName,
@@ -160,10 +178,7 @@ class Profile : AppCompatActivity() {
                                 address = address,
                                 gender = gender
                             )
-
-                            // Save updated user session
                             userSession.updateUser(updatedUser)
-
                             loadUserData()
                             Toast.makeText(this@Profile, "Profile updated successfully", Toast.LENGTH_SHORT).show()
                         } else {
@@ -178,7 +193,6 @@ class Profile : AppCompatActivity() {
         }
     }
 
-    // Show logout confirmation dialog
     private fun showLogoutDialog() {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.logout_dialogbox)
@@ -188,42 +202,29 @@ class Profile : AppCompatActivity() {
         )
         dialog.setCancelable(false)
 
-        val btnDialogYes: Button = dialog.findViewById(R.id.btn_yes)
-        val btnDialogNo: Button = dialog.findViewById(R.id.btn_no)
-
-        btnDialogYes.setOnClickListener {
+        dialog.findViewById<Button>(R.id.btn_yes).setOnClickListener {
             dialog.dismiss()
             logoutUser(this)
         }
 
-        btnDialogNo.setOnClickListener {
+        dialog.findViewById<Button>(R.id.btn_no).setOnClickListener {
             dialog.dismiss()
         }
 
         dialog.show()
     }
 
-    // Logout function
     private fun logoutUser(context: Context) {
-        val sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-
-        // Clear all saved user data
-        editor.clear()
-        editor.apply()
-
-        // Also clear UserSession instance if you're using it
-        val userSession = UserSession(context)
         userSession.clearSession()
-
-        Log.d("ProfileActivity", "User logged out. Redirecting to Login.")
-
-        // Redirect to Login & prevent going back to the previous activity
         val intent = Intent(context, Login::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)
     }
 
+    override fun onResume() {
+        super.onResume()
+        fetchUserProfile()
+    }
 
     // Setup bottom navigation
     private fun setupNavigation() {
@@ -278,10 +279,5 @@ class Profile : AppCompatActivity() {
         listOf(R.id.homeText, R.id.categoriesText, R.id.ordersText, R.id.profileText).forEach {
             findViewById<TextView>(it).setTextColor(ContextCompat.getColor(this, R.color.black))
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        loadUserData()
     }
 }

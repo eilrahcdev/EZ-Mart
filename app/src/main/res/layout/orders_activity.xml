@@ -29,6 +29,7 @@
                 android:id="@+id/backBtn_orders"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_gravity="start"
                 android:layout_marginStart="20dp"
                 android:background="?attr/selectableItemBackground"
                 android:src="@drawable/arrow_back_blue"/>
@@ -43,6 +44,15 @@
                 android:textColor="@color/blue"
                 android:textSize="20sp" />
 
+            <ImageButton
+                android:id="@+id/notification"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:background="?attr/selectableItemBackground"
+                android:src="@drawable/notifications_25"/>
+
         </androidx.appcompat.widget.Toolbar>
 
         <!-- TabLayout Inside AppBar -->
@@ -53,7 +63,7 @@
             android:background="@drawable/bg3"
             android:elevation="10dp"
             app:tabIndicatorColor="@color/blue"
-            app:tabMode="fixed"
+            app:tabMode="scrollable"
             app:tabSelectedTextColor="@color/blue"
             app:tabTextColor="@color/black">
 
@@ -68,6 +78,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="To Pay" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_paid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Paid" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/tab_completed"

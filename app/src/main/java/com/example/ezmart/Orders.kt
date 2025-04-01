@@ -8,7 +8,6 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -16,13 +15,11 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ezmart.api.RetrofitClient
-import com.example.ezmart.models.OrderCancelRequest
 import com.example.ezmart.models.OrderListResponse
 import com.example.ezmart.models.OrderModel
 import com.example.ezmart.utils.UserSession
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,6 +28,7 @@ class Orders : AppCompatActivity() {
 
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
+    private lateinit var notification: ImageButton
     private lateinit var ordersPagerAdapter: OrdersPagerAdapter
     private lateinit var userSession: UserSession
 
@@ -49,6 +47,11 @@ class Orders : AppCompatActivity() {
         // Initialize Views
         tabLayout = findViewById(R.id.ordersTabLayout)
         viewPager = findViewById(R.id.ordersViewPager)
+        notification = findViewById(R.id.notification)
+        notification.setOnClickListener {
+            startActivity(Intent(this, Notifications::class.java))
+            finish()
+        }
 
         // Initialize UserSession
         userSession = UserSession(this)
@@ -105,11 +108,12 @@ class Orders : AppCompatActivity() {
 
     private fun setupViewPager(orders: List<OrderModel>) {
         val pendingOrders = orders.filter { it.status == "Pending" }
-        val processingOrders = orders.filter { it.status == "To Pay" }
+        val topayOrders = orders.filter { it.status == "To Pay" }
+        val paidOrders = orders.filter { it.status == "Paid" }
         val completedOrders = orders.filter { it.status == "Completed" }
         val cancelledOrders = orders.filter { it.status == "Cancelled" }
 
-        ordersPagerAdapter = OrdersPagerAdapter(this, pendingOrders, processingOrders, completedOrders, cancelledOrders)
+        ordersPagerAdapter = OrdersPagerAdapter(this, pendingOrders, topayOrders, paidOrders, completedOrders, cancelledOrders)
         viewPager.adapter = ordersPagerAdapter
 
         // Set up TabLayout with ViewPager2
@@ -117,8 +121,9 @@ class Orders : AppCompatActivity() {
             tab.text = when (position) {
                 0 -> "Pending"
                 1 -> "To Pay"
-                2 -> "Completed"
-                3 -> "Cancelled"
+                2 -> "Paid"
+                3 -> "Completed"
+                4 -> "Cancelled"
                 else -> ""
             }
         }.attach()

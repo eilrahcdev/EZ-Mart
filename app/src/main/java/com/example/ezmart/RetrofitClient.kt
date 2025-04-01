@@ -90,6 +90,10 @@ object RetrofitClient {
             @Field("gender") gender: String
         ): Call<ProfileResponse>
 
+        // Get user profile
+        @GET("get_profile.php")
+        fun getProfile(@Query("email") email: String): Call<ProfileResponse>
+
         // Reduce stock when product is bought
         @POST("WEB-SM/api/productapi.php")
         fun reduceStock(@Body request: StockUpdateRequest): Call<ResponseBody>
@@ -106,5 +110,13 @@ object RetrofitClient {
         @FormUrlEncoded
         @POST("WEB-SM/api/cancel_order.php")
         fun cancelOrder(@Field("order_id") orderId: String): Call<ApiResponse>
+
+        // Get notifications
+        @GET("WEB-SM/api/get_notification.php")
+        fun getNotifications(): Call<List<NotificationModel>>
+
+        // Save notification to database
+        @POST("WEB-SM/api/save_notification.php")
+        fun saveNotification(@Body request: Map<String, String>): Call<ResponseBody>
     }
 }

@@ -10,6 +10,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -64,9 +65,23 @@ class ProductAdapter(
 
     // Function to show Add to Cart Bottom Sheet
     private fun showAddToCartBottomSheet(product: Product) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.bottomsheet_addtocart, null)
-        val bottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetDialogTheme)
+        val activity = context as? AppCompatActivity
+        if (activity == null || activity.isFinishing) {
+            return // Prevent crash if context is invalid
+        }
+
+        val dialogView = LayoutInflater.from(activity).inflate(R.layout.bottomsheet_addtocart, null)
+        val bottomSheetDialog = BottomSheetDialog(activity, R.style.BottomSheetDialogTheme)
         bottomSheetDialog.setContentView(dialogView)
+
+        // Ensure it expands properly
+        bottomSheetDialog.setOnShowListener { dialog ->
+            val d = dialog as BottomSheetDialog
+            val bottomSheet = d.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+            bottomSheet?.post {
+                d.behavior.peekHeight = bottomSheet.height
+            }
+        }
 
         // Bind product details in BottomSheet
         val productImage: ImageView = dialogView.findViewById(R.id.productIv)
@@ -79,7 +94,7 @@ class ProductAdapter(
         val confirmAddToCartBtn: Button = dialogView.findViewById(R.id.addToCartBtn)
 
         // Set product details
-        Glide.with(context).load(product.image).into(productImage)
+        Glide.with(activity).load(product.image).into(productImage)
         productName.text = product.name
         productPrice.text = "₱ %.2f".format(product.price)
         productStock.text = "Stock: ${product.stock}"
@@ -104,11 +119,12 @@ class ProductAdapter(
 
         // Handle Add to Cart Confirmation
         confirmAddToCartBtn.setOnClickListener {
-            CartManager.addToCart(context, product)
+            CartManager.addToCart(context, product, quantity)
             bottomSheetDialog.dismiss()
             Toast.makeText(context, "${product.name} added to cart", Toast.LENGTH_SHORT).show()
         }
 
+        // **SHOW DIALOG**
         bottomSheetDialog.show()
     }
 }
