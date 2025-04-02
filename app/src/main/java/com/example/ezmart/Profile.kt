@@ -14,8 +14,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
+import com.example.ezmart.api.RetrofitClient
+import com.example.ezmart.models.ProfileResponse
 import com.example.ezmart.utils.UserSession
 import com.example.ezmart.viewmodels.ProfileViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import kotlin.toString
 
 class Profile : AppCompatActivity() {
     private lateinit var userSession: UserSession
@@ -72,6 +78,24 @@ class Profile : AppCompatActivity() {
         })
     }
 
+    private fun loadUserData() {
+        val user = userSession.getUser()
+
+        if (user == null) {
+            startActivity(Intent(this, Login::class.java))
+            finish()
+            return
+        }
+
+        findViewById<TextView>(R.id.firstnameTv).text = user.first_name
+        findViewById<TextView>(R.id.lastnameTv).text = user.last_name
+        findViewById<TextView>(R.id.emailTv).text = user.email
+        findViewById<TextView>(R.id.dateofbirthTv).text = user.birthdate
+        findViewById<TextView>(R.id.phonenumberTv).text = user.contact
+        findViewById<TextView>(R.id.addressTv).text = user.address
+        findViewById<TextView>(R.id.genderTv).text = user.gender
+    }
+
     private fun showEditProfileDialog() {
         val dialog = Dialog(this)
         dialog.setContentView(R.layout.edit_profile_dialog)
@@ -101,8 +125,7 @@ class Profile : AppCompatActivity() {
             genderSpinner.setSelection(if (genderIndex >= 0) genderIndex else 0)
 
             dialog.findViewById<Button>(R.id.saveButton).setOnClickListener {
-                profileViewModel.updateProfile(
-                    user.email,
+                updateProfile(
                     firstNameEt.text.toString().trim(),
                     lastNameEt.text.toString().trim(),
                     birthdateEt.text.toString().trim(),
@@ -111,24 +134,6 @@ class Profile : AppCompatActivity() {
                     genderSpinner.selectedItem.toString()
                 )
                 dialog.dismiss()
-                profileViewModel.updateProfile(
-                    user.email,
-                    firstNameEt.text.toString().trim(),
-                    lastNameEt.text.toString().trim(),
-                    birthdateEt.text.toString().trim(),
-                    phoneEt.text.toString().trim(),
-                    addressEt.text.toString().trim(),
-                    genderSpinner.selectedItem.toString()
-                )
-                // Observe update success
-                profileViewModel.updateSuccess.observe(this) { success ->
-                    if (success) {
-                        Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show()
-                        dialog.dismiss()
-                    } else {
-                        Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show()
-                    }
-                }
             }
 
             dialog.findViewById<Button>(R.id.cancelButton).setOnClickListener {
@@ -160,6 +165,36 @@ class Profile : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+    private fun updateProfile(firstName: String, lastName: String, birthdate: String, contact: String, address: String, gender: String) {
+        val user = userSession.getUser()
+        user?.let {
+            RetrofitClient.instance.updateProfile(it.email, firstName, lastName, birthdate, contact, address, gender)
+                .enqueue(object : Callback<ProfileResponse> {
+                    override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
+                        if (response.isSuccessful && response.body()?.success == true) {
+                            val updatedUser = it.copy(
+                                first_name = firstName,
+                                last_name = lastName,
+                                birthdate = birthdate,
+                                contact = contact,
+                                address = address,
+                                gender = gender
+                            )
+                            userSession.updateUser(updatedUser)
+                            loadUserData()
+                            Toast.makeText(this@Profile, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this@Profile, "Failed to update profile", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
+                        Toast.makeText(this@Profile, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+        }
     }
 
     private fun logoutUser(context: Context) {
