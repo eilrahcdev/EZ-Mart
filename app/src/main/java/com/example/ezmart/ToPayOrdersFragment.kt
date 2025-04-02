@@ -2,6 +2,7 @@ package com.example.ezmart
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,95 +31,86 @@ class ToPayOrdersFragment : Fragment(), OrderUpdateListener {
     private lateinit var emptyTextView: TextView
     private var toPayOrders: MutableList<OrderModel> = mutableListOf()
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_to_pay_orders, container, false)
 
-        // Initialize Views
         orderRecyclerView = view.findViewById(R.id.recyclerView_orders)
         emptyTextView = view.findViewById(R.id.emptyOrdersTextView)
 
         orderRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        // Pass context & OrderUpdateListener to OrderAdapter
+        // Pass context first, then listener
         orderAdapter = OrderAdapter(toPayOrders, requireContext(), this)
         orderRecyclerView.adapter = orderAdapter
 
-        // Load To Pay Orders
-        loadToPayOrders()
+        loadOrders()
 
         return view
     }
 
     override fun onResume() {
         super.onResume()
-        loadToPayOrders()
+        loadOrders()
     }
 
-    private fun loadToPayOrders() {
+    private fun loadOrders() {
         val userSession = UserSession(requireContext())
         val user = userSession.getUser()
 
         if (user == null) {
-            showEmptyMessage("User is not logged in.")
+            showErrorMessage("User is not logged in.")
             return
         }
 
         RetrofitClient.instance.getOrders(user.id.toString()).enqueue(object : Callback<OrderListResponse> {
             override fun onResponse(call: Call<OrderListResponse>, response: Response<OrderListResponse>) {
                 if (response.isSuccessful && response.body() != null) {
-                    val orderResponse = response.body()!!
+                    val ordersList = response.body()!!.orders
 
-                    if (orderResponse.success) {
-                        val ordersList = orderResponse.orders
-                        val filteredOrders = ordersList.filter { it.status == "To Pay" }
+                    toPayOrders.clear()
+                    toPayOrders.addAll(ordersList.filter { it.status.equals("To Pay", ignoreCase = true) })
 
-                        // Update RecyclerView
-                        toPayOrders.clear()
-                        toPayOrders.addAll(filteredOrders)
-                        orderAdapter.notifyDataSetChanged()
-
-                        // Show/hide empty message
-                        if (toPayOrders.isEmpty()) {
-                            showEmptyMessage("No orders to pay.")
-                        } else {
-                            showOrders()
-                        }
-                    } else {
-                        showEmptyMessage("No orders found.")
-                    }
+                    updateUI()
                 } else {
-                    showEmptyMessage("Failed to load orders.")
+                    showErrorMessage("No orders to pay found.")
                 }
             }
 
             override fun onFailure(call: Call<OrderListResponse>, t: Throwable) {
-                showEmptyMessage("Error: ${t.message}")
+                Log.e("ToPayOrdersFragment", "Error loading orders: ${t.message}", t)
+                showErrorMessage("Error: ${t.message}")
             }
         })
     }
 
-    private fun showEmptyMessage(message: String) {
+    private fun updateUI() {
+        if (toPayOrders.isEmpty()) {
+            orderRecyclerView.visibility = View.GONE
+            emptyTextView.visibility = View.VISIBLE
+        } else {
+            orderRecyclerView.visibility = View.VISIBLE
+            emptyTextView.visibility = View.GONE
+        }
+        orderAdapter.notifyDataSetChanged()
+    }
+
+    private fun showErrorMessage(message: String) {
         emptyTextView.text = message
         emptyTextView.visibility = View.VISIBLE
         orderRecyclerView.visibility = View.GONE
     }
 
-    private fun showOrders() {
-        emptyTextView.visibility = View.GONE
-        orderRecyclerView.visibility = View.VISIBLE
+    override fun onOrderCancelled(order: OrderModel) {
+        toPayOrders.remove(order)
+        orderAdapter.notifyDataSetChanged()
+        updateUI()
     }
 
-    override fun onOrderCancelled(order: OrderModel) {
-        // Remove the canceled order from the list
-        toPayOrders.removeAll { it.id == order.id }
-        orderAdapter.notifyDataSetChanged()
-
-        // Show empty message if no more "To Pay" orders
-        if (toPayOrders.isEmpty()) {
-            showEmptyMessage("No orders to pay.")
-        }
+    override fun onOrderCompleted(order: OrderModel) {
+        // Implement your logic for when an order is completed
+        // You can log, update UI, or any other action you want to perform here
+        Log.d("ToPayOrdersFragment", "Order completed: ${order.id}")
     }
 }

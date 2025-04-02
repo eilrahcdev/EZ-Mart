@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.ezmart.R
 import com.example.ezmart.SplashScreen
 import com.example.ezmart.api.RetrofitClient
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -28,20 +29,47 @@ class MyFirebaseService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d("FCM_MESSAGE", "Message received: ${remoteMessage.data}")
 
-        val title = remoteMessage.notification?.title ?: remoteMessage.data["title"] ?: "New Notification"
-        val body = remoteMessage.notification?.body ?: remoteMessage.data["body"] ?: "You have a new message."
+        val title = remoteMessage.data["title"] ?: "New Notification"
+        val body = remoteMessage.data["body"] ?: "You have a new message."
 
+        // Log to confirm receipt of notification
+        Log.d("FCM_MESSAGE", "Notification received with title: $title, body: $body")
+
+        // Save notification to database
+        saveNotificationToServer(body)
+
+        // Display the notification
         sendNotification(title, body)
-        saveNotificationToServer(body)  // Save notification to database
+    }
+
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        Log.d("FCM_TOKEN", "New token: $token")
+        sendTokenToServer(token)
+    }
+
+    private fun sendTokenToServer(token: String) {
+        val apiService = RetrofitClient.instance
+        val request = mapOf("token" to token)
+
+        apiService.updateToken(request).enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    Log.d("FCM_TOKEN", "Token saved successfully: ${response.body()?.string()}")
+                } else {
+                    Log.e("FCM_TOKEN", "Failed to save token: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e("FCM_TOKEN", "Error saving token", t)
+            }
+        })
     }
 
     private fun saveNotificationToServer(message: String) {
         val apiService = RetrofitClient.instance
-
-        val request = mapOf(
-            "message" to message,
-            "status" to "unread"
-        )
+        val request = mapOf("message" to message, "status" to "unread")
 
         apiService.saveNotification(request).enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -89,6 +117,7 @@ class MyFirebaseService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+            .setSmallIcon(R.drawable.ez_logo)
 
         NotificationManagerCompat.from(this).notify(notificationId, notificationBuilder.build())
     }

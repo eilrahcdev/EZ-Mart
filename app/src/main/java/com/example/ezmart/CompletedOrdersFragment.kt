@@ -124,4 +124,10 @@ class CompletedOrdersFragment : Fragment(), OrderUpdateListener {
             showEmptyMessage("No completed orders found.")
         }
     }
+
+    override fun onOrderCompleted(order: OrderModel) {
+        // Implement your logic for when an order is completed
+        // You can log, update UI, or any other action you want to perform here
+        Log.d("CompletedOrdersFragment", "Order completed: ${order.id}")
+    }
 }

@@ -61,4 +61,17 @@
         android:backgroundTint="@color/blue"
         android:layout_marginTop="5dp"
         android:visibility="gone" />
+    <Button
+        android:id="@+id/order_received_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="Order Received"
+        android:textSize="17sp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/inter_bold"
+        app:cornerRadius="@dimen/dimens"
+        android:backgroundTint="@color/blue"
+        android:layout_marginTop="5dp"
+        android:visibility="gone" />
 </LinearLayout>

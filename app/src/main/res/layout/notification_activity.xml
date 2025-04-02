@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:id="@+id/notification_activity">
+    android:id="@+id/notification_activity"
+    android:fitsSystemWindows="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,16 +22,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/appbar_background"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:fitsSystemWindows="true">
 
             <!-- Toolbar -->
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/notificationTb"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_marginTop="15dp"
                 android:background="@android:color/transparent"
                 android:theme="?attr/actionBarTheme">
 
@@ -38,7 +36,6 @@
                     android:id="@+id/backBtn_notification"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:layout_gravity="start"
                     android:layout_marginStart="20dp"
                     android:background="?attr/selectableItemBackground"
                     android:src="@drawable/arrow_back_blue" />
@@ -49,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:fontFamily="@font/inter_bold"
-                    android:text=" Notifications"
+                    android:text="Notifications"
                     android:textColor="@color/blue"
                     android:textSize="20sp" />
             </androidx.appcompat.widget.Toolbar>
@@ -71,7 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="No notifications available"
+            android:text="No notifications available."
             android:textColor="@color/black"
             android:textSize="16sp"
             android:visibility="gone"

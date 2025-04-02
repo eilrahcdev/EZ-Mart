@@ -1,6 +1,5 @@
 package com.example.ezmart
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -9,22 +8,19 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.example.ezmart.api.RetrofitClient
-import com.example.ezmart.models.ProfileResponse
+import androidx.lifecycle.Observer
 import com.example.ezmart.utils.UserSession
-import com.google.android.material.textfield.TextInputEditText
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.ezmart.viewmodels.ProfileViewModel
 
 class Profile : AppCompatActivity() {
     private lateinit var userSession: UserSession
+    private val profileViewModel: ProfileViewModel by viewModels()
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         userSession = UserSession(this)
@@ -39,17 +35,14 @@ class Profile : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.profile_activity)
 
-        fetchUserProfile() // Ensure API call is made
-        loadUserData() // Load data into TextView
-
-    ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.profile_activity)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.profile_activity)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Fetch user profile from backend
-        fetchUserProfile()
+        observeProfileData()
+        profileViewModel.fetchProfile(user.email) // Fetch profile on start
 
         findViewById<ImageButton>(R.id.backBtn_profile).setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
@@ -67,50 +60,16 @@ class Profile : AppCompatActivity() {
         setupNavigation()
     }
 
-    private fun fetchUserProfile() {
-        val user = userSession.getUser()
-        if (user == null) {
-            startActivity(Intent(this, Login::class.java))
-            finish()
-            return
-        }
-
-        RetrofitClient.instance.getProfile(user.email).enqueue(object : Callback<ProfileResponse> {
-            override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
-                Log.d("ProfileActivity", "Response code: ${response.code()}")
-                Log.d("ProfileActivity", "Response body: ${response.body()}")
-
-                if (response.isSuccessful && response.body()?.success == true) {
-                    val updatedUser = response.body()!!.user
-                    userSession.updateUser(updatedUser)
-                    loadUserData()
-                } else {
-                    Log.e("ProfileActivity", "Failed to fetch user data")
-                }
-            }
-
-            override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
-                Log.e("ProfileActivity", "Error fetching profile: ${t.message}")
-            }
+    private fun observeProfileData() {
+        profileViewModel.userLiveData.observe(this, Observer { profile ->
+            findViewById<TextView>(R.id.firstnameTv).text = profile.first_name
+            findViewById<TextView>(R.id.lastnameTv).text = profile.last_name
+            findViewById<TextView>(R.id.emailTv).text = profile.email
+            findViewById<TextView>(R.id.dateofbirthTv).text = profile.birthdate
+            findViewById<TextView>(R.id.phonenumberTv).text = profile.contact
+            findViewById<TextView>(R.id.addressTv).text = profile.address
+            findViewById<TextView>(R.id.genderTv).text = profile.gender
         })
-    }
-
-    private fun loadUserData() {
-        val user = userSession.getUser()
-
-        if (user == null) {
-            startActivity(Intent(this, Login::class.java))
-            finish()
-            return
-        }
-
-        findViewById<TextView>(R.id.firstnameTv).text = user.first_name
-        findViewById<TextView>(R.id.lastnameTv).text = user.last_name
-        findViewById<TextView>(R.id.emailTv).text = user.email
-        findViewById<TextView>(R.id.dateofbirthTv).text = user.birthdate
-        findViewById<TextView>(R.id.phonenumberTv).text = user.contact
-        findViewById<TextView>(R.id.addressTv).text = user.address
-        findViewById<TextView>(R.id.genderTv).text = user.gender
     }
 
     private fun showEditProfileDialog() {
@@ -142,7 +101,8 @@ class Profile : AppCompatActivity() {
             genderSpinner.setSelection(if (genderIndex >= 0) genderIndex else 0)
 
             dialog.findViewById<Button>(R.id.saveButton).setOnClickListener {
-                updateProfile(
+                profileViewModel.updateProfile(
+                    user.email,
                     firstNameEt.text.toString().trim(),
                     lastNameEt.text.toString().trim(),
                     birthdateEt.text.toString().trim(),
@@ -151,6 +111,24 @@ class Profile : AppCompatActivity() {
                     genderSpinner.selectedItem.toString()
                 )
                 dialog.dismiss()
+                profileViewModel.updateProfile(
+                    user.email,
+                    firstNameEt.text.toString().trim(),
+                    lastNameEt.text.toString().trim(),
+                    birthdateEt.text.toString().trim(),
+                    phoneEt.text.toString().trim(),
+                    addressEt.text.toString().trim(),
+                    genderSpinner.selectedItem.toString()
+                )
+                // Observe update success
+                profileViewModel.updateSuccess.observe(this) { success ->
+                    if (success) {
+                        Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                        dialog.dismiss()
+                    } else {
+                        Toast.makeText(this, "Failed to update profile", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
 
             dialog.findViewById<Button>(R.id.cancelButton).setOnClickListener {
@@ -160,36 +138,6 @@ class Profile : AppCompatActivity() {
             dialog.show()
         } else {
             Toast.makeText(this, "User data not found!", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun updateProfile(firstName: String, lastName: String, birthdate: String, contact: String, address: String, gender: String) {
-        val user = userSession.getUser()
-        user?.let {
-            RetrofitClient.instance.updateProfile(it.email, firstName, lastName, birthdate, contact, address, gender)
-                .enqueue(object : Callback<ProfileResponse> {
-                    override fun onResponse(call: Call<ProfileResponse>, response: Response<ProfileResponse>) {
-                        if (response.isSuccessful && response.body()?.success == true) {
-                            val updatedUser = it.copy(
-                                first_name = firstName,
-                                last_name = lastName,
-                                birthdate = birthdate,
-                                contact = contact,
-                                address = address,
-                                gender = gender
-                            )
-                            userSession.updateUser(updatedUser)
-                            loadUserData()
-                            Toast.makeText(this@Profile, "Profile updated successfully", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(this@Profile, "Failed to update profile", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onFailure(call: Call<ProfileResponse>, t: Throwable) {
-                        Toast.makeText(this@Profile, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-                    }
-                })
         }
     }
 
@@ -223,7 +171,8 @@ class Profile : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        fetchUserProfile()
+        val user = userSession.getUser()
+        user?.let { profileViewModel.fetchProfile(it.email) }
     }
 
     // Setup bottom navigation

@@ -127,4 +127,10 @@ class CancelledOrdersFragment : Fragment(), OrderUpdateListener {
             showEmptyMessage("No cancelled orders found.")
         }
     }
+
+    // Empty implementation for onOrderCompleted (since this fragment doesn't handle completed orders)
+    override fun onOrderCompleted(order: OrderModel) {
+        // No-op (do nothing)
+    }
 }
+

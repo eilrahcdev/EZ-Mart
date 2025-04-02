@@ -75,7 +75,7 @@ class PaidOrdersFragment : Fragment(), OrderUpdateListener {
 
                     updateUI()
                 } else {
-                    showErrorMessage("No pending orders found.")
+                    showErrorMessage("No paid orders found.")
                 }
             }
 
@@ -107,5 +107,11 @@ class PaidOrdersFragment : Fragment(), OrderUpdateListener {
         paidOrders.remove(order)
         orderAdapter.notifyDataSetChanged()
         updateUI()
+    }
+
+    override fun onOrderCompleted(order: OrderModel) {
+        // Implement your logic for when an order is completed
+        // You can log, update UI, or any other action you want to perform here
+        Log.d("PaidOrdersFragment", "Order completed: ${order.id}")
     }
 }

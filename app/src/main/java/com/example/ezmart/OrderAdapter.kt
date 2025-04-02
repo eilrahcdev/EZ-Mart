@@ -29,6 +29,7 @@ class OrderAdapter(
         val paymentMethod: TextView = view.findViewById(R.id.payment_method)
         val payButton: Button = view.findViewById(R.id.pay_button)
         val cancelButton: Button = view.findViewById(R.id.cancel_button)
+        val receiveButton: Button = view.findViewById(R.id.order_received_button)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
@@ -67,6 +68,16 @@ class OrderAdapter(
         }
         holder.cancelButton.setOnClickListener {
             user?.let { onCancelButtonClicked(order, position) }
+        }
+
+        // Show Receive button only if order status is "Paid"
+        holder.receiveButton.visibility = if (order.status == "Paid") {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+        holder.receiveButton.setOnClickListener {
+            onReceiveOrderClicked(order, position)
         }
     }
 
@@ -133,6 +144,32 @@ class OrderAdapter(
                 showToast("Service Unavailable")
             }
         })
+    }
+
+    private fun onReceiveOrderClicked(order: OrderModel, position: Int) {
+        RetrofitClient.instance.updateOrderStatus(order.id.toString(), "Completed")
+            .enqueue(object : Callback<ApiResponse> {
+                override fun onResponse(call: Call<ApiResponse>, response: Response<ApiResponse>) {
+                    if (response.isSuccessful) {
+                        val apiResponse = response.body()
+                        if (apiResponse?.success == true) {
+                            order.status = "Completed"
+                            notifyItemChanged(position)
+                            showToast("Order received successfully")
+
+                            orderUpdateListener.onOrderCompleted(order)
+                        } else {
+                            showToast(apiResponse?.message ?: "Failed to update order")
+                        }
+                    } else {
+                        showToast("Failed to update order: Server error")
+                    }
+                }
+
+                override fun onFailure(call: Call<ApiResponse>, t: Throwable) {
+                    showToast("Service Unavailable")
+                }
+            })
     }
 
     private fun showToast(message: String) {
