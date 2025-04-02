@@ -44,15 +44,6 @@
                 android:textColor="@color/blue"
                 android:textSize="20sp" />
 
-            <ImageButton
-                android:id="@+id/notification"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="20dp"
-                android:background="?attr/selectableItemBackground"
-                android:src="@drawable/notifications_25"/>
-
         </androidx.appcompat.widget.Toolbar>
 
         <!-- TabLayout Inside AppBar -->
@@ -80,10 +71,10 @@
                 android:text="To Pay" />
 
             <com.google.android.material.tabs.TabItem
-                android:id="@+id/tab_paid"
+                android:id="@+id/tab_readytopickup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Paid" />
+                android:text="Ready To Pick Up" />
 
             <com.google.android.material.tabs.TabItem
                 android:id="@+id/tab_completed"

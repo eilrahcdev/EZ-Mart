@@ -84,7 +84,6 @@ class Checkout : AppCompatActivity() {
         }
 
         val radioButtonColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.blue))
-        findViewById<RadioButton>(R.id.cash_on_pickup).buttonTintList = radioButtonColor
         findViewById<RadioButton>(R.id.gcash).buttonTintList = radioButtonColor
         findViewById<RadioButton>(R.id.paymaya).buttonTintList = radioButtonColor
     }
@@ -98,18 +97,17 @@ class Checkout : AppCompatActivity() {
         Log.d("CheckoutActivity", "Received products: ${products?.size ?: 0}")
 
         if (products.isNullOrEmpty()) {
-            Toast.makeText(this, "Error: No products received!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "No products received!", Toast.LENGTH_LONG).show()
         }
         return products ?: emptyList()
     }
 
-    private fun getSelectedPaymentMethod(): String {
+    private fun getSelectedPaymentMethod(): String? {
         val paymentOptions = findViewById<RadioGroup>(R.id.payment_options)
         return when (paymentOptions.checkedRadioButtonId) {
-            R.id.cash_on_pickup -> "Cash on Pick-up"
             R.id.gcash -> "Gcash"
             R.id.paymaya -> "Paymaya"
-            else -> "Unknown"
+            else -> null
         }
     }
 
@@ -130,6 +128,11 @@ class Checkout : AppCompatActivity() {
 
         if (productList.isNullOrEmpty()) {
             Toast.makeText(this, "No products selected. Please add items to your cart.", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        if (paymentMethod == null) {
+            Toast.makeText(this, "Please select a payment method before placing an order.", Toast.LENGTH_SHORT).show()
             return
         }
 

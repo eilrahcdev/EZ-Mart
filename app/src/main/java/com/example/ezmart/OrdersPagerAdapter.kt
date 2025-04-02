@@ -9,7 +9,7 @@ class OrdersPagerAdapter(
     activity: AppCompatActivity,
     private val pendingOrders: List<OrderModel>,
     private val topayOrders: List<OrderModel>,
-    private val paidOrders: List<OrderModel>,
+    private val readytopickupOrders: List<OrderModel>,
     private val completedOrders: List<OrderModel>,
     private val cancelledOrders: List<OrderModel>
 ) : FragmentStateAdapter(activity) {
@@ -20,7 +20,7 @@ class OrdersPagerAdapter(
         return when (position) {
             0 -> PendingOrdersFragment.newInstance()
             1 -> ToPayOrdersFragment.newInstance()
-            2 -> PaidOrdersFragment.newInstance()
+            2 -> ReadyToPickUpOrdersFragment.newInstance()
             3 -> CompletedOrdersFragment.newInstance()
             4 -> CancelledOrdersFragment.newInstance()
             else -> PendingOrdersFragment.newInstance()

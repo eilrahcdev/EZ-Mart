@@ -103,7 +103,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Payment Option"
+                    android:text="Payment Options"
                     android:textSize="16sp"
                     android:fontFamily="@font/inter_bold" />
 
@@ -113,15 +113,6 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <RadioButton
-                        android:id="@+id/cash_on_pickup"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:text="Cash on Pick-up"
-                        android:fontFamily="@font/inter"
-                        android:buttonTint="@color/blue"
-                        android:textColor="@color/black"/>
                     <RadioButton
                         android:id="@+id/gcash"
                         android:layout_width="wrap_content"

@@ -18,11 +18,11 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PaidOrdersFragment : Fragment(), OrderUpdateListener {
+class ReadyToPickUpOrdersFragment : Fragment(), OrderUpdateListener {
 
     companion object {
-        fun newInstance(): PaidOrdersFragment {
-            return PaidOrdersFragment()
+        fun newInstance(): ReadyToPickUpOrdersFragment {
+            return ReadyToPickUpOrdersFragment()
         }
     }
 
@@ -35,7 +35,7 @@ class PaidOrdersFragment : Fragment(), OrderUpdateListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_paid_orders, container, false)
+        val view = inflater.inflate(R.layout.fragment_ready_to_pick_up_orders, container, false)
 
         orderRecyclerView = view.findViewById(R.id.recyclerView_orders)
         emptyTextView = view.findViewById(R.id.emptyOrdersTextView)
@@ -71,16 +71,16 @@ class PaidOrdersFragment : Fragment(), OrderUpdateListener {
                     val ordersList = response.body()!!.orders
 
                     paidOrders.clear()
-                    paidOrders.addAll(ordersList.filter { it.status.equals("Paid", ignoreCase = true) })
+                    paidOrders.addAll(ordersList.filter { it.status.equals("Ready To Pick Up", ignoreCase = true) })
 
                     updateUI()
                 } else {
-                    showErrorMessage("No paid orders found.")
+                    showErrorMessage("No ready-to-pick-up orders found.")
                 }
             }
 
             override fun onFailure(call: Call<OrderListResponse>, t: Throwable) {
-                Log.e("PaidOrdersFragment", "Error loading orders: ${t.message}", t)
+                Log.e("ReadyToPickUpOrdersFragment", "Error loading orders: ${t.message}", t)
                 showErrorMessage("Error: ${t.message}")
             }
         })
@@ -110,6 +110,6 @@ class PaidOrdersFragment : Fragment(), OrderUpdateListener {
     }
 
     override fun onOrderCompleted(order: OrderModel) {
-        Log.d("PaidOrdersFragment", "Order completed: ${order.id}")
+        Log.d("ReadyToPickUpOrdersFragment", "Order completed: ${order.id}")
     }
 }

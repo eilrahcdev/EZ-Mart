@@ -71,7 +71,7 @@ class OrderAdapter(
         }
 
         // Show Receive button only if order status is "Paid"
-        holder.receiveButton.visibility = if (order.status == "Paid") {
+        holder.receiveButton.visibility = if (order.status == "Ready to Pick Up") {
             View.VISIBLE
         } else {
             View.GONE

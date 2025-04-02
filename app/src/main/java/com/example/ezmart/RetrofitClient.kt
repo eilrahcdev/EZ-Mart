@@ -114,11 +114,18 @@ object RetrofitClient {
 
         // Get notifications
         @GET("EZ-WEB/api/get_notification.php")
-        fun getNotifications(): Call<List<NotificationModel>>
+        fun getNotifications(
+            @Query("user_id") userId: Int
+        ): Call<List<NotificationModel>>
 
         // Save notification to database
+        @FormUrlEncoded
         @POST("EZ-WEB/api/save_notification.php")
-        fun saveNotification(@Body request: Map<String, String>): Call<ResponseBody>
+        fun saveNotification(
+            @Field("user_id") userId: String,
+            @Field("message") message: String,
+            @Field("status") status: String = "unread"
+        ): Call<ResponseBody>
 
         // Update token
         @POST("EZ-WEB/api/update_fcm_token.php")

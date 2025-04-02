@@ -47,11 +47,6 @@ class Orders : AppCompatActivity() {
         // Initialize Views
         tabLayout = findViewById(R.id.ordersTabLayout)
         viewPager = findViewById(R.id.ordersViewPager)
-        notification = findViewById(R.id.notification)
-        notification.setOnClickListener {
-            startActivity(Intent(this, Notifications::class.java))
-            finish()
-        }
 
         // Initialize UserSession
         userSession = UserSession(this)
@@ -109,7 +104,7 @@ class Orders : AppCompatActivity() {
     private fun setupViewPager(orders: List<OrderModel>) {
         val pendingOrders = orders.filter { it.status == "Pending" }
         val topayOrders = orders.filter { it.status == "To Pay" }
-        val paidOrders = orders.filter { it.status == "Paid" }
+        val paidOrders = orders.filter { it.status == "Ready To Pick Up" }
         val completedOrders = orders.filter { it.status == "Completed" }
         val cancelledOrders = orders.filter { it.status == "Cancelled" }
 
@@ -121,7 +116,7 @@ class Orders : AppCompatActivity() {
             tab.text = when (position) {
                 0 -> "Pending"
                 1 -> "To Pay"
-                2 -> "Paid"
+                2 -> "Ready To Pick Up"
                 3 -> "Completed"
                 4 -> "Cancelled"
                 else -> ""
