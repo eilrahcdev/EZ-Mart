@@ -51,9 +51,10 @@ class CompletedOrdersFragment : Fragment(), OrderUpdateListener {
         return view
     }
 
+    // Refresh the list on fragment resume
     override fun onResume() {
         super.onResume()
-        loadCompletedOrders() // Refresh the list on fragment resume
+        loadCompletedOrders()
     }
 
     private fun loadCompletedOrders() {
@@ -126,8 +127,6 @@ class CompletedOrdersFragment : Fragment(), OrderUpdateListener {
     }
 
     override fun onOrderCompleted(order: OrderModel) {
-        // Implement your logic for when an order is completed
-        // You can log, update UI, or any other action you want to perform here
         Log.d("CompletedOrdersFragment", "Order completed: ${order.id}")
     }
 }

@@ -55,7 +55,7 @@ class DairyandPastry : AppCompatActivity(){
         // Set up RecyclerView
         recyclerView = findViewById(R.id.dairyRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productAdapter = ProductAdapter(this, emptyList()) // Initially empty
+        productAdapter = ProductAdapter(this, emptyList())
         recyclerView.adapter = productAdapter
 
         // Observe product list from ViewModel

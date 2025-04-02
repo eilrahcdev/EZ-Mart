@@ -12,7 +12,6 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -28,9 +27,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
 import com.example.ezmart.utils.UserSession
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.messaging.FirebaseMessaging
 
 @Suppress("DEPRECATION")
@@ -137,7 +134,7 @@ class MainActivity : AppCompatActivity() {
             return if (products.size > 2) products.subList(0, 2) else products
         }
 
-// Initialize RecyclerViews
+        // Initialize RecyclerViews
         setupRecyclerView(unbeatableRecyclerView)
         setupRecyclerView(featuredRecyclerView)
         setupRecyclerView(snacksRecyclerView)
@@ -149,7 +146,7 @@ class MainActivity : AppCompatActivity() {
         setupRecyclerView(bevergesRecyclerView)
         setupRecyclerView(dairyRecyclerView)
 
-// Initialize Adapters
+        // Initialize Adapters
         unbeatableAdapter = ProductAdapter(this, emptyList())
         featuredAdapter = ProductAdapter(this, emptyList())
         snacksAdapter = ProductAdapter(this, emptyList())
@@ -161,7 +158,7 @@ class MainActivity : AppCompatActivity() {
         bevergesAdapter = ProductAdapter(this, emptyList())
         dairyAdapter = ProductAdapter(this, emptyList())
 
-// Set Adapters
+        // Set Adapters
         unbeatableRecyclerView.adapter = unbeatableAdapter
         featuredRecyclerView.adapter = featuredAdapter
         snacksRecyclerView.adapter = snacksAdapter
@@ -173,10 +170,10 @@ class MainActivity : AppCompatActivity() {
         bevergesRecyclerView.adapter = bevergesAdapter
         dairyRecyclerView.adapter = dairyAdapter
 
-// Fetch products from the API
+        // Fetch products from the API
         viewModel.fetchProducts()
 
-// Observe products LiveData
+        // Observe products LiveData
         viewModel.products.observe(this) { products ->
             unbeatableAdapter.updateProductList(limitProducts(products.filter { it.category == "Unbeatable Prices" }))
             featuredAdapter.updateProductList(limitProducts(products.filter { it.category == "Featured Products" }))
@@ -190,7 +187,7 @@ class MainActivity : AppCompatActivity() {
             dairyAdapter.updateProductList(limitProducts(products.filter { it.category == "Dairy and Pastry" }))
         }
 
-// Observe error messages
+        // Observe error messages
         viewModel.errorMessage.observe(this) { errorMessage ->
             Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
         }

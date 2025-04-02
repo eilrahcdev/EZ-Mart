@@ -3,6 +3,7 @@ package com.example.ezmart
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -75,12 +76,12 @@ class Sweets : AppCompatActivity() {
                     productList.addAll(response.body()!!.products)
                     productAdapter.notifyDataSetChanged()
                 } else {
-                    Toast.makeText(this@Sweets, "Failed to load products", Toast.LENGTH_SHORT).show()
+                    Log.e("API Error", "Response not successful: ${response.code()}")
                 }
             }
 
             override fun onFailure(call: Call<ProductResponse>, t: Throwable) {
-                Toast.makeText(this@Sweets, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+                Log.e("API Error", "Network error: ${t.message}")
             }
         })
     }

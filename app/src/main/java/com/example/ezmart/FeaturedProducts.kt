@@ -54,7 +54,7 @@ class FeaturedProducts : AppCompatActivity() {
         // Setup RecyclerView
         recyclerView = findViewById(R.id.featruedRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productAdapter = ProductAdapter(this, emptyList()) // Start with empty list
+        productAdapter = ProductAdapter(this, emptyList())
         recyclerView.adapter = productAdapter
 
         // Observe products and error messages

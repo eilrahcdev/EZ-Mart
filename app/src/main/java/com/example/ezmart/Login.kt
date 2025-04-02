@@ -91,19 +91,19 @@ class Login : AppCompatActivity() {
                     Log.d("LoginActivity", "Parsed Response Body: $loginResponse")
 
                     if (response.isSuccessful && loginResponse?.success == true) {
-                        showToast("Login Successful! ✅")
+                        showToast("Login Successful!")
                         Log.d("LoginActivity", "Login successful. Saving user session.")
 
                         saveLoginState(loginResponse.user)
                         navigateToMainActivity()
                     } else {
-                        showToast(loginResponse?.message ?: "Invalid email or password ❌")
+                        showToast(loginResponse?.message ?: "Invalid email or password.")
                         Log.e("LoginActivity", "Login failed. Response Code: ${response.code()}, Message: ${loginResponse?.message}")
                     }
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    showToast("Network error: ${t.message} ❌")
+                    showToast("Network error, please try again later.")
                     Log.e("LoginActivity", "Login API call failed: ${t.message}", t)
                 }
             })

@@ -4,9 +4,15 @@ import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -21,7 +27,6 @@ import com.example.ezmart.viewmodels.ProfileViewModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import kotlin.toString
 
 class Profile : AppCompatActivity() {
     private lateinit var userSession: UserSession
@@ -105,45 +110,43 @@ class Profile : AppCompatActivity() {
         )
         dialog.setCancelable(true)
 
-        val user = userSession.getUser()
-        if (user != null) {
-            val firstNameEt = dialog.findViewById<EditText>(R.id.firstnameEt_edit)
-            val lastNameEt = dialog.findViewById<EditText>(R.id.lastnameEt_edit)
-            val birthdateEt = dialog.findViewById<EditText>(R.id.birthdateEt_edit)
-            val phoneEt = dialog.findViewById<EditText>(R.id.phonenumEt_edit)
-            val addressEt = dialog.findViewById<EditText>(R.id.addressEt_edit)
-            val genderSpinner = dialog.findViewById<Spinner>(R.id.genderSpinner_edit)
+        val firstNameEt = dialog.findViewById<EditText>(R.id.firstnameEt_edit)
+        val lastNameEt = dialog.findViewById<EditText>(R.id.lastnameEt_edit)
+        val birthdateEt = dialog.findViewById<EditText>(R.id.birthdateEt_edit)
+        val phoneEt = dialog.findViewById<EditText>(R.id.phonenumEt_edit)
+        val addressEt = dialog.findViewById<EditText>(R.id.addressEt_edit)
+        val genderSpinner = dialog.findViewById<Spinner>(R.id.genderSpinner_edit)
 
+        // Get latest profile data from ViewModel
+        profileViewModel.userLiveData.value?.let { user ->
             firstNameEt.setText(user.first_name)
             lastNameEt.setText(user.last_name)
-            birthdateEt.setText(user.birthdate)
-            phoneEt.setText(user.contact)
-            addressEt.setText(user.address)
+            birthdateEt.setText(user.birthdate ?: "")
+            phoneEt.setText(user.contact ?: "")
+            addressEt.setText(user.address ?: "")
 
             val genderArray = resources.getStringArray(R.array.gender_array)
-            val genderIndex = genderArray.indexOf(user.gender)
+            val genderIndex = genderArray.indexOf(user.gender ?: "")
             genderSpinner.setSelection(if (genderIndex >= 0) genderIndex else 0)
-
-            dialog.findViewById<Button>(R.id.saveButton).setOnClickListener {
-                updateProfile(
-                    firstNameEt.text.toString().trim(),
-                    lastNameEt.text.toString().trim(),
-                    birthdateEt.text.toString().trim(),
-                    phoneEt.text.toString().trim(),
-                    addressEt.text.toString().trim(),
-                    genderSpinner.selectedItem.toString()
-                )
-                dialog.dismiss()
-            }
-
-            dialog.findViewById<Button>(R.id.cancelButton).setOnClickListener {
-                dialog.dismiss()
-            }
-
-            dialog.show()
-        } else {
-            Toast.makeText(this, "User data not found!", Toast.LENGTH_SHORT).show()
         }
+
+        dialog.findViewById<Button>(R.id.saveButton).setOnClickListener {
+            updateProfile(
+                firstNameEt.text.toString().trim(),
+                lastNameEt.text.toString().trim(),
+                birthdateEt.text.toString().trim(),
+                phoneEt.text.toString().trim(),
+                addressEt.text.toString().trim(),
+                genderSpinner.selectedItem.toString()
+            )
+            dialog.dismiss()
+        }
+
+        dialog.findViewById<Button>(R.id.cancelButton).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun showLogoutDialog() {

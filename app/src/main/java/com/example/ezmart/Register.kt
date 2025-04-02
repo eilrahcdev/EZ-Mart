@@ -85,16 +85,16 @@ class Register : AppCompatActivity() {
                         val registerResponse = response.body()
 
                         if (response.isSuccessful && registerResponse?.success == true) {
-                            showToast("Registration Successful! ✅")
+                            showToast("Registration Successful!")
                             saveUserData(registerResponse)
                             navigateToMainActivity()
                         } else {
-                            showToast(registerResponse?.message ?: "Registration failed ❌")
+                            showToast(registerResponse?.message ?: "Registration failed. Please try again.")
                         }
                     }
 
                     override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                        showToast("Network error: ${t.message} ❌")
+                        showToast("Network error, Please try again later.")
                         Log.e("RegisterActivity", "Registration API failed: ${t.message}")
                     }
                 })
@@ -110,31 +110,31 @@ class Register : AppCompatActivity() {
     private fun validateInput(email: String, password: String, confirmPassword: String, firstName: String, lastName: String, birthdate: String, phone: String, address: String, gender: String): Boolean {
         return when {
             email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                showToast("Please enter a valid email address ❌"); false
+                showToast("Please enter a valid email address."); false
             }
             password.length !in 8..15 -> {
-                showToast("Password must be between 8 and 15 characters ❌"); false
+                showToast("Password must be between 8 and 15 characters."); false
             }
             password != confirmPassword -> {
-                showToast("Passwords do not match ❌"); false
+                showToast("Passwords do not match."); false
             }
             firstName.isEmpty() || !firstName.matches(Regex("^[a-zA-Z]+$")) -> {
-                showToast("First name must contain only letters ❌"); false
+                showToast("First name must contain only letters."); false
             }
             lastName.isEmpty() || !lastName.matches(Regex("^[a-zA-Z]+$")) -> {
-                showToast("Last name must contain only letters ❌"); false
+                showToast("Last name must contain only letters."); false
             }
             birthdate.isEmpty() -> {
-                showToast("Birthdate is required ❌"); false
+                showToast("Birthdate is required."); false
             }
             phone.isEmpty() || !phone.matches(Regex("^[0-9]+$")) -> {
-                showToast("Phone number must contain only digits ❌"); false
+                showToast("Phone number must contain only digits."); false
             }
             address.isEmpty() -> {
-                showToast("Address is required ❌"); false
+                showToast("Address is required."); false
             }
             gender == "Select a gender" -> {
-                showToast("Please select a valid gender ❌"); false
+                showToast("Please select a valid gender."); false
             }
             else -> true
         }
@@ -150,7 +150,7 @@ class Register : AppCompatActivity() {
             contact = response.contact,
             address = response.address,
             gender = response.gender,
-            fcmToken = null // Can be updated later
+            fcmToken = null
         )
         userSession.saveUser(user)
         Log.d("RegisterActivity", "User session saved: ${response.id}")

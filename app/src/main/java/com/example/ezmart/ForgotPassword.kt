@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.ezmart
 
 import android.annotation.SuppressLint
@@ -119,14 +121,14 @@ class ForgotPassword : AppCompatActivity() {
                     progressDialog.dismiss()
 
                     if (response.isSuccessful) {
-                        // Handle success - now navigate to OTP verification
+                        // Handle success, now navigate to OTP verification
                         showToast("OTP sent to your email")
                         val intent =
                             Intent(this@ForgotPassword, ResetPasswordActivity::class.java).apply {
                                 putExtra("email", email)
                             }
                         startActivity(intent)
-                        finish() // Close the current activity
+                        finish()
                     } else {
                         // Handle error response
                         val errorBody = response.errorBody()?.string() ?: "Unknown error"

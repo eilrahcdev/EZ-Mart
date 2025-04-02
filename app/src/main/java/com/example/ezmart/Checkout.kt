@@ -77,7 +77,7 @@ class Checkout : AppCompatActivity() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val token = task.result
-                userSession.saveFcmToken(token) // Save the token to the session
+                userSession.saveFcmToken(token) // Save the token to the user session
             } else {
                 Log.e("UserSession", "Failed to get FCM token", task.exception)
             }
@@ -119,17 +119,17 @@ class Checkout : AppCompatActivity() {
         val user = userSession.getUser()
 
         if (user == null) {
-            Toast.makeText(this, "Error: User session is missing!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "User is not found!", Toast.LENGTH_LONG).show()
             return
         }
 
         if (user.id <= 0) {
-            Toast.makeText(this, "Error: User ID is missing or invalid!", Toast.LENGTH_LONG).show()
+            Log.e("CheckoutActivity", "User ID is invalid or missing: ${user.id}")
             return
         }
 
         if (productList.isNullOrEmpty()) {
-            Toast.makeText(this, "Error: No products selected!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "No products selected. Please add items to your cart.", Toast.LENGTH_LONG).show()
             return
         }
 

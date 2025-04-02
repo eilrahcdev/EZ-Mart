@@ -11,7 +11,7 @@ class UserSession(context: Context) {
     private val editor: SharedPreferences.Editor = prefs.edit()
 
     fun saveUser(user: User) {
-        Log.d("UserSession", "Saving user: ID=${user.id}, Email=${user.email}") // Add this log
+        Log.d("UserSession", "Saving user: ID=${user.id}, Email=${user.email}")
 
         if (user.id <= 0) {
             Log.e("UserSession", "Error: Attempting to save an invalid user ID (${user.id})")
@@ -53,7 +53,7 @@ class UserSession(context: Context) {
     // Retrieve user data
     fun getUser(): User? {
         val id = getUserId()
-        Log.d("UserSession", "Retrieved User ID in getUser(): $id") // Add this log
+        Log.d("UserSession", "Retrieved User ID in getUser(): $id")
         if (id <= 0) return null
 
         return User(

@@ -95,7 +95,7 @@ class Orders : AppCompatActivity() {
                     setupViewPager(orders)
                 } else {
                     Log.e("OrdersActivity", "Failed: ${response.code()} ${response.errorBody()?.string()}")
-                    setupViewPager(emptyList()) // Show empty UI
+                    setupViewPager(emptyList())
                 }
             }
 

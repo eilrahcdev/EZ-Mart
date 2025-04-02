@@ -138,7 +138,7 @@ class ModalBottomSheet : AppCompatActivity() {
 
     private fun addToCart() {
         selectedProduct?.let { product ->
-            CartManager.addToCart(this, product, quantityAddToCart)  // Pass correct quantity
+            CartManager.addToCart(this, product, quantityAddToCart)
             Toast.makeText(this, "${product.name} added to cart!", Toast.LENGTH_SHORT).show()
             bottomSheetDialog?.dismiss()
         }

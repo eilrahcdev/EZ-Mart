@@ -16,7 +16,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-// Retrofit Client and API Interface combined
+// Retrofit Client and API Interface
 object RetrofitClient {
     private const val BASE_URL = "http://192.168.1.9/"
 

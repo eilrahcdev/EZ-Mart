@@ -58,7 +58,7 @@ class SearchActivity : AppCompatActivity() {
 
         // Ensure user email is available
         if (userEmail == null) {
-            Toast.makeText(this, "User not logged in", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "User not found. Log in to continue.", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
@@ -139,11 +139,11 @@ class SearchActivity : AppCompatActivity() {
                     if (filteredProducts.isNotEmpty()) {
                         productList.addAll(filteredProducts)
                     } else {
-                        Toast.makeText(this@SearchActivity, "No products found", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@SearchActivity, "No products found.", Toast.LENGTH_SHORT).show()
                     }
                     productAdapter.notifyDataSetChanged()
                 } else {
-                    Toast.makeText(this@SearchActivity, "Failed to load products", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@SearchActivity, "Failed to load products. Please try again later.", Toast.LENGTH_SHORT).show()
                 }
             }
 

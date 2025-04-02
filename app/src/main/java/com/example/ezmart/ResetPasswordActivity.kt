@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.ezmart.auth
 
 import android.annotation.SuppressLint
@@ -65,35 +67,35 @@ class ResetPasswordActivity : AppCompatActivity() {
                 false
             }
             otp.length != 6 -> {
-                showToast("OTP must be 6 digits")
+                showToast("OTP must be 6 digits.")
                 false
             }
             newPassword.isEmpty() -> {
-                showToast("New password is required")
+                showToast("New password is required.")
                 false
             }
             newPassword.length < 8 -> {
-                showToast("Password must be at least 8 characters")
+                showToast("Password must be at least 8 characters.")
                 false
             }
             !newPassword.matches(".*[A-Z].*".toRegex()) -> {
-                showToast("Password must contain at least one uppercase letter")
+                showToast("Password must contain at least one uppercase letter.")
                 false
             }
             !newPassword.matches(".*[a-z].*".toRegex()) -> {
-                showToast("Password must contain at least one lowercase letter")
+                showToast("Password must contain at least one lowercase letter.")
                 false
             }
             !newPassword.matches(".*\\d.*".toRegex()) -> {
-                showToast("Password must contain at least one number")
+                showToast("Password must contain at least one number.")
                 false
             }
             confirmPassword.isEmpty() -> {
-                showToast("Please confirm your password")
+                showToast("Please confirm your password.")
                 false
             }
             newPassword != confirmPassword -> {
-                showToast("Passwords do not match")
+                showToast("Passwords do not match.")
                 false
             }
             else -> true
@@ -120,7 +122,7 @@ class ResetPasswordActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val jsonResponse = JSONObject(responseBody)
                         if (jsonResponse.getBoolean("success")) {
-                            showToast("Password reset successful")
+                            showToast("Password reset successfully.")
                             navigateToLogin()
                         } else {
                             // This is the critical fix - handle unsuccessful responses
@@ -138,14 +140,14 @@ class ResetPasswordActivity : AppCompatActivity() {
                         showToast(errorMessage)
                     }
                 } catch (e: Exception) {
-                    showToast("Error processing response")
+                    showToast("Error processing response.")
                     Log.e("ResetPassword", "Response error", e)
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 progressDialog.dismiss()
-                showToast("Network error: ${t.message}")
+                showToast("Network error, please try again later.")
                 Log.e("ResetPassword", "Network failure", t)
             }
         })

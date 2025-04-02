@@ -1,6 +1,5 @@
 package com.example.ezmart
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -109,8 +108,6 @@ class ToPayOrdersFragment : Fragment(), OrderUpdateListener {
     }
 
     override fun onOrderCompleted(order: OrderModel) {
-        // Implement your logic for when an order is completed
-        // You can log, update UI, or any other action you want to perform here
         Log.d("ToPayOrdersFragment", "Order completed: ${order.id}")
     }
 }

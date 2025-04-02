@@ -9,14 +9,14 @@ object CartManager {
 
     private const val CART_PREFS = "cart_prefs"
 
-    // 🔹 Get a unique cart key based on the logged-in user's email
+    // Get a unique cart key based on the logged-in user's email
     private fun getCartKey(context: Context): String {
         val userSession = UserSession(context)
         val userEmail = userSession.getUser()?.email ?: "guest" // Default for guest users
-        return "cart_$userEmail" // Cart is now stored per user
+        return "cart_$userEmail" // Cart is stored per user
     }
 
-    // 🔹 Retrieve cart for the current user
+    // Retrieve cart for the current user
     fun getCart(context: Context): MutableList<Product> {
         val sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE)
         val cartKey = getCartKey(context) // Get the cart key for the logged-in user
@@ -30,7 +30,7 @@ object CartManager {
         }
     }
 
-    // 🔹 Save cart for the current user
+    // Save cart for the current user
     fun saveCart(context: Context, cartList: List<Product>) {
         val sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
@@ -69,7 +69,6 @@ object CartManager {
         val sharedPreferences = context.getSharedPreferences(CART_PREFS, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         val cartKey = getCartKey(context) // Clear only the logged-in user's cart
-
         editor.remove(cartKey).apply()
     }
 }

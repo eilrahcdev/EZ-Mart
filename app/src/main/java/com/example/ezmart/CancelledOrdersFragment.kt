@@ -51,9 +51,10 @@ class CancelledOrdersFragment : Fragment(), OrderUpdateListener {
         return view
     }
 
+    // Refresh the list on fragment resume
     override fun onResume() {
         super.onResume()
-        loadCancelledOrders() // Refresh the list on fragment resume
+        loadCancelledOrders()
     }
 
     private fun loadCancelledOrders() {
@@ -87,7 +88,7 @@ class CancelledOrdersFragment : Fragment(), OrderUpdateListener {
                     updateEmptyState()
                 } else {
                     Log.e("CancelledOrdersFragment", "Failed: ${response.code()} ${response.errorBody()?.string()}")
-                    showEmptyMessage("Failed to load cancelled orders")
+                    showEmptyMessage("Failed to load cancelled orders.")
                 }
             }
 
@@ -128,9 +129,9 @@ class CancelledOrdersFragment : Fragment(), OrderUpdateListener {
         }
     }
 
-    // Empty implementation for onOrderCompleted (since this fragment doesn't handle completed orders)
+    // Empty implementation for onOrderCompleted
     override fun onOrderCompleted(order: OrderModel) {
-        // No-op (do nothing)
+        Log.d("CancelledOrdersFragment", "Order completed: ${order.id}")
     }
 }
 

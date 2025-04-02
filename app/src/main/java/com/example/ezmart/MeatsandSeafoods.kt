@@ -40,7 +40,7 @@ class MeatsandSeafoods : AppCompatActivity() {
         // Set up RecyclerView
         recyclerView = findViewById(R.id.meatsandseafoodsRv)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productAdapter = ProductAdapter(this, emptyList()) // Initially empty
+        productAdapter = ProductAdapter(this, emptyList())
         recyclerView.adapter = productAdapter
 
         // Observe products data
